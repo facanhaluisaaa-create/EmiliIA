@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.log
+.env
+.env.*
+!.env.example
+apps/api/data/*.db
+apps/api/data/*.db-*
+apps/api/data/.dev-encryption-key
+.DS_Store
