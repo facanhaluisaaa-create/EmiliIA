@@ -4,10 +4,11 @@ Aplicação web privada para a gestão administrativa do consultório da psicól
 Emília Sobral de Toledo Villena (CRP 06/203728), de uso interno da psicóloga e da
 secretária Lígia.
 
-> **Estado atual: Etapas 1 e 2 concluídas** — identidade visual, navegação,
-> autenticação, dashboard, cadastro de pacientes e agenda, tudo com dados
-> fictícios. Nenhuma integração externa está conectada e nenhum dado real de
-> paciente é utilizado.
+> **Estado atual: Etapas 1 a 6 implementadas.** Todos os módulos estão
+> navegáveis e funcionais com dados fictícios. As integrações Google e WhatsApp
+> estão implementadas e testadas contra APIs simuladas; o uso com credenciais
+> reais depende da configuração descrita em `docs/PRODUCAO.md` e deve ser
+> validado com dados de teste antes de qualquer dado real.
 
 ## Visão geral
 
@@ -16,11 +17,13 @@ secretária Lígia.
 | Frontend (`apps/web`) | React 18, TypeScript, Vite, Tailwind CSS, Radix UI (componentes acessíveis), lucide-react |
 | Backend (`apps/api`) | Node.js 20+, Express, TypeScript, SQLite (better-sqlite3), zod |
 | Autenticação | Sessões no servidor com cookie `httpOnly` + `SameSite=Strict`, senhas com bcrypt, MFA TOTP (aplicativo autenticador), limite de tentativas, verificação de origem (CSRF), auditoria |
-| Dados sensíveis | Segredos MFA e registros clínicos criptografados com AES-256-GCM; acesso clínico restrito à psicóloga ou a autorização específica |
+| Dados sensíveis | Segredos MFA, tokens Google e registros clínicos criptografados com AES-256-GCM; acesso clínico restrito à psicóloga ou a autorização específica, com prazo e motivo |
+| Integrações | Google Sheets, Agenda/Meet e Drive via OAuth 2.0 no servidor; WhatsApp Business Cloud API com envio manual e confirmado |
+| Produção | Frontend servido pela própria API, Dockerfile, checklist em `docs/PRODUCAO.md` |
 
-Todas as integrações externas (Google Sheets, Agenda, Drive, WhatsApp) passarão
-pelo backend com credenciais protegidas por variáveis de ambiente. Elas estão
-**previstas** para as Etapas 4 e 5 e aparecem na interface como "Não conectada".
+Todas as integrações externas passam pelo backend com credenciais em variáveis
+de ambiente. Sem credenciais configuradas elas aparecem como "Não conectada" e
+nada é sincronizado nem enviado.
 
 ## Como executar
 
@@ -78,13 +81,14 @@ apps/
       audit/         # registro de auditoria
       db/            # schema.sql, conexão, seed fictício
       middleware/    # helmet, CSRF por origem, erros
-      modules/       # dashboard, pacientes, agenda, configurações
+      integrations/  # cliente Google (OAuth), Sheets, Calendar, Drive, WhatsApp
+      modules/       # dashboard, pacientes, agenda, financeiro, documentos, relatórios, comunicação, configurações
   web/
     src/
       auth/          # contexto de autenticação e proteção de rotas
       components/ui/ # botões, inputs, cartões, badges, indicadores, marca
       layout/        # app shell (sidebar, barra superior, navegação móvel)
-      features/      # pacientes (lista, ficha, formulário) e agenda (dia/semana/mês)
+      features/      # pacientes, agenda, financeiro, documentos, relatórios, comunicação, integrações, usuários
       pages/         # login, dashboard, configurações, módulos previstos
 docs/preview/        # capturas de tela da Etapa 1
 ```
@@ -119,10 +123,24 @@ o que o perfil não pode acessar.
 
 1. **Etapa 1 — concluída:** identidade visual, navegação, autenticação (senha + MFA), dashboard com dados fictícios, configurações de segurança e auditoria.
 2. **Etapa 2 — concluída:** cadastro de pacientes (responsável financeiro, contato de emergência, detecção de duplicidade, histórico administrativo) e agenda com visões diária, semanal e mensal, consultas únicas/semanais/quinzenais, verificação de conflitos e cancelamento de séries.
-3. Etapa 3: financeiro, documentos e relatórios (demonstrativos em PDF).
-4. Etapa 4: integrações com Google Sheets (mapeamento, prévia e confirmação), Google Agenda/Meet e Google Drive.
-5. Etapa 5: comunicação via API oficial do WhatsApp Business, sempre com autorização prévia.
-6. Etapa 6: testes de segurança, permissões, sincronização e validação para produção.
+3. **Etapa 3 — concluída:** cobranças por competência com geração mensal a partir das sessões realizadas, pagamentos parciais/integrais, comprovantes e notas vinculados, demonstrativo em PDF; documentos por paciente e mês (upload local ou link); relatórios com filtros e exportação CSV/PDF.
+4. **Etapa 4 — concluída:** conta Google única (OAuth no servidor). Sheets: leitura da estrutura, mapeamento sugerido, prévia classificada, confirmação explícita, identificadores estáveis por linha, conflitos e envio de volta preservando fórmulas. Agenda: eventos com Meet e títulos com iniciais. Drive: espelhamento em `emilIA/Paciente/Mês`.
+5. **Etapa 5 — concluída:** modelos com variáveis, pré-visualização, sugestões, envio manual com confirmação, habilitação restrita à psicóloga, histórico e webhook de status. Sem envio automático.
+6. **Etapa 6 — concluída:** gestão de contas (senha temporária com troca obrigatória, desativação, redefinição), autorizações de acesso clínico por paciente/prazo com revogação, limite global de requisições, dependências atualizadas, frontend servido pela API em produção, Dockerfile e checklist.
+
+## Integrações: como conectar
+
+1. **Google:** crie um cliente OAuth 2.0 "Aplicativo da Web" no Google Cloud com as APIs Sheets, Calendar e Drive habilitadas e a URL de redirecionamento `<API_PUBLIC_URL>/api/integrations/google/callback`. Defina `GOOGLE_CLIENT_ID` e `GOOGLE_CLIENT_SECRET` e use "Conectar conta Google" em Configurações → Integrações. O assistente de planilha fica em Configurações → Integrações → Google Sheets.
+2. **WhatsApp:** defina `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` e `WHATSAPP_VERIFY_TOKEN` (Cloud API da Meta), aponte o webhook para `/api/communication/whatsapp/webhook` e habilite o envio em Comunicação (apenas a psicóloga).
+
+As integrações foram validadas com APIs simuladas nos testes automatizados. O primeiro uso com credenciais reais deve ser feito com dados de teste.
+
+## Produção
+
+Veja `docs/PRODUCAO.md` (checklist completo) e o `Dockerfile`. Em resumo:
+`NODE_ENV=production`, HTTPS por proxy reverso, `APP_ENCRYPTION_KEY` própria,
+`WEB_ORIGIN`/`API_PUBLIC_URL` com o domínio público, volume persistente em
+`DATABASE_PATH` e `SEED_DEMO=false` para iniciar sem dados fictícios.
 
 ## Avisos
 

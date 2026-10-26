@@ -2,7 +2,7 @@
   "name": "emiliia",
   "version": "0.1.0",
   "private": true,
-  "description": "emilIA — Sistema de Gestão do Espaço Psicológico Revisitare",
+  "description": "emilIA \u2014 Sistema de Gest\u00e3o do Espa\u00e7o Psicol\u00f3gico Revisitare",
   "workspaces": [
     "apps/*"
   ],
@@ -19,5 +19,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
   }
 }
