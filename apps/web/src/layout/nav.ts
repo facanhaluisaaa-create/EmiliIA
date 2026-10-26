@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  HelpCircle,
   CalendarDays,
   FolderOpen,
   LayoutDashboard,
@@ -27,6 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/comunicacao", label: "Comunicação", icon: MessageSquareText, permission: "communication:read" },
   { to: "/relatorios", label: "Relatórios", icon: BarChart3, permission: "reports:read" },
   { to: "/configuracoes", label: "Configurações", icon: Settings, permission: "settings:read" },
+  { to: "/ajuda", label: "Ajuda", icon: HelpCircle, permission: "dashboard:read" },
 ];
 
 export const MOBILE_PRIMARY = ["/", "/pacientes", "/agenda", "/financeiro"];

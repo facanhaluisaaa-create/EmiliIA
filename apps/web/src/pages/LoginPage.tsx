@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 import { ApiError } from "@/lib/api";
+import { isDemo } from "@/demo/install";
 
 export function LoginPage() {
   const { status, login, verifyMfa } = useAuth();
@@ -28,6 +29,19 @@ export function LoginPage() {
   }, [step]);
 
   if (status === "authenticated") return <Navigate to={from} replace />;
+
+  async function quickLogin(who: "emilia" | "ligia") {
+    setError(null);
+    setBusy(true);
+    try {
+      const r = await login(`${who}@emiliia.local`, `${who}-demo-2026`);
+      if (!r.mfaRequired) navigate(from, { replace: true });
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Não foi possível entrar.");
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function submitCredentials(e: FormEvent) {
     e.preventDefault();
@@ -86,8 +100,15 @@ export function LoginPage() {
             <form onSubmit={submitCredentials} className="card space-y-5 p-7" noValidate>
               <div>
                 <h1 className="text-3xl">Entrar</h1>
-                <p className="mt-1 text-sm text-ink-muted">Acesso restrito à equipe do consultório.</p>
+                <p className="mt-1 text-sm text-ink-muted">{isDemo ? "Demonstração: escolha quem você quer ser." : "Acesso restrito à equipe do consultório."}</p>
               </div>
+              {isDemo && (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <Button type="button" size="lg" onClick={() => quickLogin("emilia")} loading={busy}>Entrar como Emília</Button>
+                  <Button type="button" size="lg" variant="secondary" onClick={() => quickLogin("ligia")} loading={busy}>Entrar como Lígia</Button>
+                  <p className="text-xs text-ink-muted sm:col-span-2">Emília vê tudo, inclusive a área clínica. Lígia vê apenas o administrativo. Nada sai do seu navegador.</p>
+                </div>
+              )}
               <Input
                 label="E-mail"
                 type="email"

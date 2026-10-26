@@ -5,7 +5,8 @@ import { defineConfig } from "vite";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  base: mode === "demo" ? "./" : "/",
   plugins: [react()],
   resolve: { alias: { "@": path.resolve(root, "src") } },
   server: {
@@ -15,5 +16,5 @@ export default defineConfig({
       "/api": { target: "http://localhost:3001", changeOrigin: false },
     },
   },
-  build: { outDir: "dist", sourcemap: false },
-});
+  build: { outDir: mode === "demo" ? "dist-demo" : "dist", sourcemap: false },
+}));

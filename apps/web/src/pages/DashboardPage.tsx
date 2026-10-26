@@ -1,4 +1,4 @@
-import { AlertCircle, ArrowRight, Cake, CalendarCheck2, CalendarClock, CircleDollarSign, ClipboardList, Clock, Sparkles, Video, MapPin, Users } from "lucide-react";
+import { AlertCircle, ArrowRight, Cake, CalendarCheck2, CalendarClock, CalendarPlus, CircleDollarSign, ClipboardList, Clock, HelpCircle, MessageSquareText, Sparkles, UserPlus, Video, MapPin, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { APPOINTMENT_TONE, Badge } from "@/components/ui/Badge";
@@ -180,8 +180,27 @@ export function DashboardPage() {
             {greeting()}, {data ? data.greetingName : <Skeleton className="inline-block h-8 w-28 align-middle" />}
           </h1>
         </div>
-        <DemoBanner />
+        <div className="flex items-center gap-2">
+          <DemoBanner />
+          <Link to="/ajuda" className="inline-flex shrink-0 items-center gap-1 rounded-xl border border-line bg-white px-3 py-2 text-xs font-medium text-forest hover:bg-sage-100" title="Como fazer">
+            <HelpCircle className="h-3.5 w-3.5" aria-hidden /> Ajuda
+          </Link>
+        </div>
       </header>
+
+      {/* Ações rápidas */}
+      <nav aria-label="Ações rápidas" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          { to: "/agenda", label: "Marcar consulta", icon: CalendarPlus, primary: true },
+          { to: "/pacientes", label: "Novo paciente", icon: UserPlus },
+          { to: "/financeiro", label: "Registrar pagamento", icon: CircleDollarSign },
+          { to: "/comunicacao", label: "Confirmar consultas", icon: MessageSquareText },
+        ].map((a) => (
+          <Link key={a.to} to={a.to} className={cn("flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-sm font-medium transition-colors", a.primary ? "border-forest bg-forest text-cream hover:bg-forest-700" : "border-line bg-white text-forest hover:border-sage-400 hover:bg-sage-100")}>
+            <a.icon className="h-5 w-5 shrink-0" strokeWidth={1.75} aria-hidden /> {a.label}
+          </Link>
+        ))}
+      </nav>
 
       {/* Indicadores */}
       <section aria-label="Indicadores" className="stagger grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">

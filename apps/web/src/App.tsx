@@ -1,5 +1,7 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { isDemo } from "./demo/install";
+import { HelpPage } from "./pages/HelpPage";
 import { AuthProvider } from "./auth/AuthContext";
 import { RequireAuth } from "./auth/RequireAuth";
 import { AppShell } from "./layout/AppShell";
@@ -17,8 +19,9 @@ import { SettingsPage } from "./pages/SettingsPage";
 import { SheetsImportPage } from "./features/integrations/SheetsImportPage";
 
 export function App() {
+  const Router = isDemo ? HashRouter : BrowserRouter;
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
         <Tooltip.Provider delayDuration={200}>
           <Routes>
@@ -35,6 +38,7 @@ export function App() {
                 <Route path="/relatorios" element={<ReportsPage />} />
                 <Route path="/configuracoes" element={<SettingsPage />} />
                 <Route path="/configuracoes/planilha" element={<SheetsImportPage />} />
+                <Route path="/ajuda" element={<HelpPage />} />
                 <Route path="/inicio" element={<Navigate to="/" replace />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
@@ -42,6 +46,6 @@ export function App() {
           </Routes>
         </Tooltip.Provider>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }

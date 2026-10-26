@@ -8,3 +8,4 @@ apps/api/data/*.db
 apps/api/data/*.db-*
 apps/api/data/.dev-encryption-key
 .DS_Store
+apps/web/dist-demo/
