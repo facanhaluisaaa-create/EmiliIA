@@ -6,7 +6,7 @@ import { AppShell } from "./layout/AppShell";
 import { DashboardPage } from "./pages/DashboardPage";
 import { LoginPage } from "./pages/LoginPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { CommunicationPage } from "./pages/ModulePages";
+import { CommunicationPage } from "./features/communication/CommunicationPage";
 import { DocumentsPage } from "./features/documents/DocumentsPage";
 import { FinancePage } from "./features/finance/FinancePage";
 import { ReportsPage } from "./features/reports/ReportsPage";

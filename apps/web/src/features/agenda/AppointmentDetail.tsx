@@ -1,4 +1,4 @@
-import { Check, CircleSlash, Pencil, Repeat, UserX, Video, MapPin, XCircle } from "lucide-react";
+import { Check, CircleSlash, MessageSquareText, Pencil, Repeat, UserX, Video, MapPin, XCircle } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/auth/AuthContext";
@@ -97,6 +97,11 @@ export function AppointmentDetail({
                 <Button size="sm" variant="secondary" onClick={() => onEdit(a)}>
                   <Pencil className="h-4 w-4" aria-hidden /> Editar / remarcar
                 </Button>
+                {open && can("communication:read") && (
+                  <Link to={`/comunicacao?paciente=${a.patientId}&consulta=${a.id}`}>
+                    <Button size="sm" variant="secondary"><MessageSquareText className="h-4 w-4" aria-hidden /> Mensagem</Button>
+                  </Link>
+                )}
                 {open && (
                   <Button size="sm" variant="ghost" className="text-status-bad" loading={busy === "canceladathis"} onClick={() => setStatus("cancelada")}>
                     <XCircle className="h-4 w-4" aria-hidden /> Cancelar
