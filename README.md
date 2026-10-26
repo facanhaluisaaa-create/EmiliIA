@@ -27,9 +27,11 @@ nada é sincronizado nem enviado.
 
 ## Como colocar no ar (sem conhecimento técnico)
 
-1. Crie uma conta gratuita em [render.com](https://render.com).
-2. Clique em **New +** → **Blueprint**, conecte este repositório no GitHub e escolha o branch `etapa-1-fundacao`.
-3. Confirme. Em alguns minutos o Render entrega um endereço `https://emiliia-xxxx.onrender.com`.
+[![Publicar no Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/facanhaluisaaa-create/EmiliIA)
+
+1. Clique no botão acima e entre no Render com sua conta Google (ou crie uma conta).
+2. Confirme a criação do serviço **emiliia**. O plano Starter (cerca de US$ 7 por mês) é necessário por causa do disco onde ficam os dados.
+3. Em alguns minutos o Render entrega um endereço `https://emiliia-xxxx.onrender.com`.
 4. No painel do Render, abra **Environment** e copie os valores gerados de `SEED_PASSWORD_EMILIA` e `SEED_PASSWORD_LIGIA`: são as senhas iniciais das contas `emilia@emiliia.local` e `ligia@emiliia.local`.
 5. Entre, troque as senhas em Configurações → Segurança e ative a verificação em duas etapas.
 
