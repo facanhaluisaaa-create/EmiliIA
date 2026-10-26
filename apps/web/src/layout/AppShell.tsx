@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown, LogOut, Menu, MoreHorizontal, ShieldCheck, UserRound, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth/AuthContext";
 import { Avatar } from "@/components/ui/Avatar";
@@ -117,7 +117,18 @@ function UserMenu({ compact = false }: { compact?: boolean }) {
 
 export function AppShell() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [tick, setTick] = useState(0);
   const { can } = useAuth();
+
+  // Na versão compartilhada, recarrega a tela quando outra pessoa grava (exceto com um diálogo aberto).
+  useEffect(() => {
+    const onRefresh = () => {
+      if (document.querySelector("[role='dialog']")) return;
+      setTick((t) => t + 1);
+    };
+    window.addEventListener("emiliia:refresh", onRefresh);
+    return () => window.removeEventListener("emiliia:refresh", onRefresh);
+  }, []);
 
   return (
     <div className="min-h-screen bg-cream lg:flex">
@@ -167,7 +178,7 @@ export function AppShell() {
 
       {/* Conteúdo */}
       <main className="min-w-0 flex-1 px-4 pb-24 pt-5 sm:px-6 lg:ml-64 lg:px-10 lg:pb-10 lg:pt-8">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-6xl" key={tick}>
           <Outlet />
         </div>
       </main>

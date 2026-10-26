@@ -4,9 +4,41 @@
  * deste dispositivo. Nada sai do navegador.
  */
 import { buildSeed, dateKey, DEFAULT_TEMPLATES, monthKey, nowIso, uid, type DemoState } from "./data";
+import { connectShared, type SharedStore } from "./storage";
 
 const STORAGE_KEY = "emiliia-demo-v1";
-let state: DemoState = load();
+let state: DemoState = buildSeed();
+let store: SharedStore | null = null;
+export type Mode = "local" | "shared";
+export function getMode(): Mode { return store ? "shared" : "local"; }
+export function hasViewer(): boolean { return Boolean((window as unknown as { claude?: { use?: unknown } }).claude?.use); }
+
+/** Estado vazio para uso real (sem pacientes fictícios). */
+function buildEmpty(): DemoState {
+  const s = buildSeed();
+  return { ...s, users: [], patients: [], responsibles: [], appointments: [], payments: [], documents: [], clinical: [], grants: [], audit: [], messages: [], syncLog: [], session: null, templates: DEFAULT_TEMPLATES.map((t) => ({ ...t, id: uid(), updated_at: nowIso() })) };
+}
+
+/** Liga o banco compartilhado quando disponível; senão usa o sandbox local. */
+export async function initStore(): Promise<Mode> {
+  try {
+    store = await connectShared();
+  } catch { store = null; }
+  if (store) {
+    state = buildEmpty();
+    await store.load(state);
+    if (!state.templates.length) state.templates = DEFAULT_TEMPLATES.map((t) => ({ ...t, id: uid(), updated_at: nowIso() }));
+    store.watch(state, () => window.dispatchEvent(new CustomEvent("emiliia:refresh")));
+    return "shared";
+  }
+  state = load();
+  return "local";
+}
+
+export function getDocumentUrl(id: string): string | null {
+  const d = state.documents.find((x) => x.id === id);
+  return d?.url ?? null;
+}
 
 function load(): DemoState {
   try {
@@ -35,7 +67,12 @@ const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLo
 const digits = (s: string | null | undefined) => (s ?? "").replace(/\D/g, "");
 const clean = (s: string) => s.replace(" (fictício)", "");
 
+function sharedUser(): DemoState["users"][number] {
+  const v = store!.viewer;
+  return { id: v.id, name: v.name || (v.isOwner ? "Psicóloga" : "Equipe"), email: "", role: v.isOwner ? "psychologist" : "secretary", password: "", mfaEnabled: false, active: true, mustChangePassword: false, lastLoginAt: null, createdAt: nowIso() };
+}
 function currentUser() {
+  if (store) return sharedUser();
   if (!state.session) throw new HttpError(401, "Sessão não autenticada.");
   const u = state.users.find((x) => x.id === state.session!.userId && x.active);
   if (!u) throw new HttpError(401, "Sessão não autenticada.");
@@ -49,13 +86,13 @@ function requirePerm(p: string) {
   return u;
 }
 function audit(userId: string | null, action: string, details?: unknown, outcome = "ok", entity?: string, entityId?: string) {
-  const user = state.users.find((u) => u.id === userId);
-  state.audit.unshift({ id: (state.audit[0]?.id ?? 0) + 1, at: nowIso(), user_id: userId, user_name: user?.name ?? null, action, entity: entity ?? null, entity_id: entityId ?? null, details: details ? JSON.stringify(details) : null, ip: "navegador", outcome });
+  const user = store ? (userId ? { name: ROLE_LABELS[sharedUser().role] } : undefined) : state.users.find((u) => u.id === userId);
+  state.audit.unshift({ id: (Number(state.audit[0]?.id ?? 0) + 1), at: nowIso(), user_id: userId, user_name: user?.name ?? null, action, entity: entity ?? null, entity_id: entityId ?? null, details: details ? JSON.stringify(details) : null, ip: "navegador", outcome });
 }
 const patientName = (id: string) => state.patients.find((p) => p.id === id)?.full_name ?? "—";
 
 function serializeUser(u: DemoState["users"][number]) {
-  return { id: u.id, name: u.name, email: u.email, role: u.role, roleLabel: ROLE_LABELS[u.role], mfaEnabled: u.mfaEnabled, mfaVerified: state.session?.mfaVerified ?? false, mustChangePassword: u.mustChangePassword, permissions: PERMS[u.role], sessionExpiresAt: new Date(Date.now() + 8 * 3600_000).toISOString() };
+  return { id: u.id, name: u.name, email: u.email, role: u.role, roleLabel: ROLE_LABELS[u.role], mfaEnabled: u.mfaEnabled, mfaVerified: store ? true : (state.session?.mfaVerified ?? false), mustChangePassword: u.mustChangePassword, permissions: PERMS[u.role], sessionExpiresAt: new Date(Date.now() + 8 * 3600_000).toISOString() };
 }
 function serializePatient(p: DemoState["patients"][number]) {
   const rs = state.responsibles.filter((r) => r.patient_id === p.id);
@@ -69,7 +106,7 @@ function serializePayment(p: DemoState["payments"][number]) {
   return { id: p.id, patientId: p.patient_id, patientName: patientName(p.patient_id), appointmentId: null, referenceMonth: p.reference_month, description: p.description, amountCents: p.amount_cents, paidCents: p.paid_cents, openCents: Math.max(0, p.amount_cents - p.paid_cents), dueDate: p.due_date, paidAt: p.paid_at, method: p.method, status: p.status, receiptDocumentId: p.receipt_document_id, invoiceDocumentId: p.invoice_document_id, notes: p.notes, createdAt: p.created_at };
 }
 function serializeDoc(d: DemoState["documents"][number]) {
-  return { id: d.id, patientId: d.patient_id, patientName: d.patient_id ? patientName(d.patient_id) : null, kind: d.kind, title: d.title, referenceMonth: d.reference_month, storage: d.storage, hasFile: d.storage === "local", driveFileId: null, url: d.url, mimeType: d.mime_type, sizeBytes: d.size_bytes, paymentId: d.payment_id, confidential: false, archivedAt: d.archived_at, createdAt: d.created_at };
+  return { id: d.id, patientId: d.patient_id, patientName: d.patient_id ? patientName(d.patient_id) : null, kind: d.kind, title: d.title, referenceMonth: d.reference_month, storage: d.storage, hasFile: d.storage === "local" || Boolean(d.url), driveFileId: null, url: d.url, mimeType: d.mime_type, sizeBytes: d.size_bytes, paymentId: d.payment_id, confidential: false, archivedAt: d.archived_at, createdAt: d.created_at };
 }
 function computeStatus(amount: number, paid: number, due: string, current: string) {
   if (current === "cancelado") return current;
@@ -114,19 +151,22 @@ const routes: Array<[string, RegExp, Handler]> = [];
 const on = (method: string, pattern: RegExp, h: Handler) => routes.push([method, pattern, h]);
 
 // ---- Autenticação -----------------------------------------------------------
+const SHARED_ONLY = (msg: string) => () => { if (store) throw new HttpError(400, msg); return undefined; };
+const ACCOUNT_MSG = "Na versão compartilhada, a identificação é feita pela conta Claude de cada pessoa. Senhas e verificação em duas etapas ficam na conta Claude.";
 on("POST", /^\/auth\/login$/, (_m, _q, b) => {
+  if (store) return { ok: true, mfaRequired: false };
   const u = state.users.find((x) => x.email === String(b.email ?? "").toLowerCase().trim());
   if (!u || u.password !== b.password || !u.active) { audit(null, "auth.login.failed", { email: b.email }, "failed"); throw new HttpError(401, "E-mail ou senha incorretos."); }
   state.session = { userId: u.id, mfaVerified: !u.mfaEnabled }; u.lastLoginAt = nowIso(); audit(u.id, u.mfaEnabled ? "auth.login.password_ok" : "auth.login");
   return { ok: true, mfaRequired: u.mfaEnabled };
 });
 on("POST", /^\/auth\/mfa\/verify$/, (_m, _q, b) => { if (!state.session) throw new HttpError(401, "Sessão não autenticada."); if (!/^\d{6}$/.test(String(b.code ?? "").trim())) throw new HttpError(401, "Código inválido. Na demonstração, qualquer código de 6 dígitos é aceito."); state.session.mfaVerified = true; audit(state.session.userId, "auth.login"); return { ok: true, user: serializeUser(currentUser()) }; });
-on("POST", /^\/auth\/logout$/, () => { if (state.session) audit(state.session.userId, "auth.logout"); state.session = null; return { ok: true }; });
+on("POST", /^\/auth\/logout$/, () => { if (store) throw new HttpError(400, "Para sair, feche a página ou saia da sua conta Claude."); if (state.session) audit(state.session.userId, "auth.logout"); state.session = null; return { ok: true }; });
 on("GET", /^\/auth\/me$/, () => ({ user: serializeUser(currentUser()) }));
-on("POST", /^\/auth\/mfa\/setup$/, () => { currentUser(); const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><rect width='220' height='220' fill='#fff'/><rect x='20' y='20' width='60' height='60' fill='#1D2924'/><rect x='140' y='20' width='60' height='60' fill='#1D2924'/><rect x='20' y='140' width='60' height='60' fill='#1D2924'/><text x='110' y='118' font-size='12' text-anchor='middle' fill='#65776C' font-family='sans-serif'>QR simulado</text></svg>`; return { qrDataUrl: `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`, manualKey: "DEMO-CHAVE-SIMULADA-2026" }; });
-on("POST", /^\/auth\/mfa\/enable$/, (_m, _q, b) => { const u = currentUser(); if (!/^\d{6}$/.test(String(b.code ?? "").trim())) throw new HttpError(400, "Código inválido. Na demonstração, use qualquer código de 6 dígitos."); u.mfaEnabled = true; state.session!.mfaVerified = true; audit(u.id, "auth.mfa.enabled"); return { ok: true }; });
+on("POST", /^\/auth\/mfa\/setup$/, () => { SHARED_ONLY(ACCOUNT_MSG)(); currentUser(); const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><rect width='220' height='220' fill='#fff'/><rect x='20' y='20' width='60' height='60' fill='#1D2924'/><rect x='140' y='20' width='60' height='60' fill='#1D2924'/><rect x='20' y='140' width='60' height='60' fill='#1D2924'/><text x='110' y='118' font-size='12' text-anchor='middle' fill='#65776C' font-family='sans-serif'>QR simulado</text></svg>`; return { qrDataUrl: `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`, manualKey: "DEMO-CHAVE-SIMULADA-2026" }; });
+on("POST", /^\/auth\/mfa\/enable$/, (_m, _q, b) => { SHARED_ONLY(ACCOUNT_MSG)(); const u = currentUser(); if (!/^\d{6}$/.test(String(b.code ?? "").trim())) throw new HttpError(400, "Código inválido. Na demonstração, use qualquer código de 6 dígitos."); u.mfaEnabled = true; state.session!.mfaVerified = true; audit(u.id, "auth.mfa.enabled"); return { ok: true }; });
 on("POST", /^\/auth\/mfa\/disable$/, (_m, _q, b) => { const u = currentUser(); if (u.password !== b.password || !/^\d{6}$/.test(String(b.code ?? ""))) throw new HttpError(400, "Senha ou código inválidos."); u.mfaEnabled = false; audit(u.id, "auth.mfa.disabled"); return { ok: true }; });
-on("POST", /^\/auth\/password$/, (_m, _q, b) => { const u = currentUser(); if (u.password !== b.currentPassword) throw new HttpError(400, "Senha atual incorreta."); const n = String(b.newPassword ?? ""); if (n.length < 10 || !/[a-zA-Z]/.test(n) || !/\d/.test(n)) throw new HttpError(400, "A senha deve ter pelo menos 10 caracteres, com letras e números."); u.password = n; u.mustChangePassword = false; audit(u.id, "auth.password.changed"); return { ok: true }; });
+on("POST", /^\/auth\/password$/, (_m, _q, b) => { SHARED_ONLY(ACCOUNT_MSG)(); const u = currentUser(); if (u.password !== b.currentPassword) throw new HttpError(400, "Senha atual incorreta."); const n = String(b.newPassword ?? ""); if (n.length < 10 || !/[a-zA-Z]/.test(n) || !/\d/.test(n)) throw new HttpError(400, "A senha deve ter pelo menos 10 caracteres, com letras e números."); u.password = n; u.mustChangePassword = false; audit(u.id, "auth.password.changed"); return { ok: true }; });
 on("GET", /^\/auth\/sessions$/, () => { currentUser(); return { sessions: [{ id: "atual", created_at: nowIso(), last_seen_at: nowIso(), expires_at: nowIso(), ip: "navegador", user_agent: navigator.userAgent, current: true }] }; });
 on("POST", /^\/auth\/sessions\/revoke-others$/, () => { currentUser(); return { ok: true }; });
 
@@ -188,7 +228,7 @@ on("PUT", /^\/patients\/([^/]+)$/, (m, _q, b) => {
 });
 on("GET", /^\/patients\/([^/]+)\/clinical$/, (m) => {
   const u = currentUser();
-  const allowed = PERMS[u.role].includes("clinical:read") || state.grants.some((g) => g.user_id === u.id && !g.revoked_at && (!g.expires_at || g.expires_at > nowIso()) && (!g.patient_id || g.patient_id === m[1]));
+  const allowed = store ? store.viewer.isOwner : PERMS[u.role].includes("clinical:read") || state.grants.some((g) => g.user_id === u.id && !g.revoked_at && (!g.expires_at || g.expires_at > nowIso()) && (!g.patient_id || g.patient_id === m[1]));
   if (!allowed) { audit(u.id, "clinical.access.denied", undefined, "denied", "patient", m[1]); throw new HttpError(403, "Informações clínicas exigem autorização específica da psicóloga responsável."); }
   audit(u.id, "clinical.access", undefined, "ok", "patient", m[1]);
   return { records: state.clinical.filter((c) => c.patient_id === m[1]).map((c) => ({ id: c.id, kind: c.kind, createdAt: c.created_at, authorId: "", content: c.content })) };
@@ -239,12 +279,18 @@ on("PATCH", /^\/finance\/payments\/([^/]+)\/documents$/, (m, _q, b) => { require
 
 // ---- Documentos ----------------------------------------------------------------
 on("GET", /^\/documents$/, (_m, q) => { requirePerm("documents:read"); const pid = q.get("patientId") ?? "", month = q.get("month") ?? "", kind = q.get("kind") ?? "", arch = q.get("archived") === "1"; const list = state.documents.filter((d) => (!pid || d.patient_id === pid) && (!month || d.reference_month === month) && (!kind || d.kind === kind) && (arch || !d.archived_at)).sort((a, b) => (b.reference_month ?? "").localeCompare(a.reference_month ?? "") || patientName(a.patient_id ?? "").localeCompare(patientName(b.patient_id ?? "")) || b.created_at.localeCompare(a.created_at)); const months = [...new Set(state.documents.map((d) => d.reference_month).filter(Boolean) as string[])].sort().reverse(); return { documents: list.map(serializeDoc), months }; });
-on("POST", /^\/documents$/, (_m, _q, b, form) => {
+on("POST", /^\/documents$/, async (_m, _q, b, form) => {
   const u = requirePerm("documents:write"); const get = (k: string) => (form ? String(form.get(k) ?? "") : String(b[k] ?? ""));
   const file = form?.get("file"); const hasFile = file instanceof File && file.size > 0; const url = get("url");
   if (!hasFile && !url) throw new HttpError(400, "Envie um arquivo ou informe um link.");
   if (hasFile && !["application/pdf", "image/jpeg", "image/png", "image/webp"].includes((file as File).type)) throw new HttpError(400, "Arquivo inválido. Envie PDF, JPG, PNG ou WebP de até 15 MB.");
-  const d = { id: uid(), patient_id: get("patientId") || null, kind: get("kind") || "outro", title: get("title") || "Documento", reference_month: get("referenceMonth") || null, url: url || null, storage: hasFile ? "local" : "link", mime_type: hasFile ? (file as File).type : null, size_bytes: hasFile ? (file as File).size : null, payment_id: get("paymentId") || null, archived_at: null, created_at: nowIso() };
+  let uploadedUrl: string | null = null;
+  if (hasFile && store) {
+    const up = await store.uploadFile(file as File);
+    if (!up) throw new HttpError(400, "Envio de arquivos indisponível para o seu nível de acesso. Peça à dona da página para liberar ou informe um link.");
+    uploadedUrl = up.url;
+  }
+  const d = { id: uid(), patient_id: get("patientId") || null, kind: get("kind") || "outro", title: get("title") || "Documento", reference_month: get("referenceMonth") || null, url: uploadedUrl ?? (url || null), storage: hasFile ? (store ? "asset" : "local") : "link", mime_type: hasFile ? (file as File).type : null, size_bytes: hasFile ? (file as File).size : null, payment_id: get("paymentId") || null, archived_at: null, created_at: nowIso() };
   state.documents.push(d);
   if (d.payment_id) { const p = state.payments.find((x) => x.id === d.payment_id); if (p) { if (d.kind === "nota_fiscal") p.invoice_document_id = d.id; else p.receipt_document_id = d.id; } }
   audit(u.id, "document.created", { kind: d.kind }, "ok", "document", d.id); return { document: serializeDoc(d) };
@@ -285,12 +331,13 @@ on("PUT", /^\/communication\/settings$/, (_m, _q, b) => { const u = requirePerm(
 on("GET", /^\/communication\/suggestions$/, () => { requirePerm("communication:read"); const t = today(); const in2 = addDaysKey(t, 2), tomorrow = addDaysKey(t, 1), in3 = addDaysKey(t, 3); const row = (a: DemoState["appointments"][number]) => { const p = state.patients.find((x) => x.id === a.patient_id)!; return { appointment_id: a.id, patient_id: p.id, full_name: p.full_name, phone: p.phone, starts_at: a.starts_at, modality: a.modality }; }; const nowLocal = new Date().toISOString().slice(0, 19); return { confirmations: state.appointments.filter((a) => a.status === "agendada" && a.starts_at >= nowLocal.slice(0, 10) && a.starts_at.slice(0, 10) <= in2).sort((a, b) => a.starts_at.localeCompare(b.starts_at)).map(row), reminders: state.appointments.filter((a) => a.status === "confirmada" && a.starts_at.slice(0, 10) === tomorrow).map(row), charges: state.payments.filter((p) => ["pendente", "parcial", "atrasado"].includes(p.status) && p.due_date <= in3).sort((a, b) => a.due_date.localeCompare(b.due_date)).map((p) => { const pt = state.patients.find((x) => x.id === p.patient_id)!; return { payment_id: p.id, patient_id: pt.id, full_name: pt.full_name, phone: pt.phone, reference_month: p.reference_month, open_cents: p.amount_cents - p.paid_cents, due_date: p.due_date }; }) }; });
 
 // ---- Configurações ---------------------------------------------------------------
-on("GET", /^\/settings\/users$/, () => { requirePerm("settings:read"); return { users: state.users.map((u) => ({ id: u.id, name: u.name, email: u.email, role: u.role, roleLabel: ROLE_LABELS[u.role], mfaEnabled: u.mfaEnabled, active: u.active, lastLoginAt: u.lastLoginAt, createdAt: u.createdAt })) }; });
-on("POST", /^\/settings\/users$/, (_m, _q, b) => { const me = requirePerm("users:manage"); const email = String(b.email ?? "").toLowerCase().trim(); if (!b.name || !email.includes("@")) throw new HttpError(400, "Informe nome, e-mail válido e perfil."); if (state.users.some((u) => u.email === email)) throw new HttpError(409, "Já existe uma conta com este e-mail."); const temp = `emiliia-${uid().slice(0, 8)}`; const id = uid(); state.users.push({ id, name: b.name, email, role: b.role, password: temp, mfaEnabled: false, active: true, mustChangePassword: true, lastLoginAt: null, createdAt: nowIso() }); audit(me.id, "user.created", { role: b.role }, "ok", "user", id); return { id, temporaryPassword: temp }; });
-on("PATCH", /^\/settings\/users\/([^/]+)$/, (m, _q, b) => { const me = requirePerm("users:manage"); const u = state.users.find((x) => x.id === m[1]); if (!u) throw new HttpError(404, "Usuário não encontrado."); if (u.id === me.id && (b.active === false || (b.role && b.role !== "psychologist"))) throw new HttpError(400, "Você não pode desativar a própria conta nem remover o próprio perfil de psicóloga."); if (b.name !== undefined) u.name = b.name; if (b.role !== undefined) u.role = b.role; if (b.active !== undefined) u.active = b.active; audit(me.id, "user.updated", b, "ok", "user", u.id); return { ok: true }; });
-on("POST", /^\/settings\/users\/([^/]+)\/reset-password$/, (m) => { const me = requirePerm("users:manage"); const u = state.users.find((x) => x.id === m[1]); if (!u) throw new HttpError(404, "Usuário não encontrado."); const temp = `emiliia-${uid().slice(0, 8)}`; u.password = temp; u.mustChangePassword = true; u.mfaEnabled = false; audit(me.id, "user.password_reset", undefined, "ok", "user", u.id); return { temporaryPassword: temp }; });
+const SHARE_MSG = "Na versão compartilhada, quem pode usar o sistema é definido pelo botão Compartilhar da página: convide a Lígia por e-mail como Editora. A dona da página é a psicóloga; as demais pessoas entram como secretaria.";
+on("GET", /^\/settings\/users$/, () => { requirePerm("settings:read"); if (store) { const me = sharedUser(); return { users: [{ id: me.id, name: me.name, email: me.role === "psychologist" ? "dona da página" : "convidada", role: me.role, roleLabel: ROLE_LABELS[me.role], mfaEnabled: true, active: true, lastLoginAt: nowIso(), createdAt: me.createdAt }] }; } return { users: state.users.map((u) => ({ id: u.id, name: u.name, email: u.email, role: u.role, roleLabel: ROLE_LABELS[u.role], mfaEnabled: u.mfaEnabled, active: u.active, lastLoginAt: u.lastLoginAt, createdAt: u.createdAt })) }; });
+on("POST", /^\/settings\/users$/, (_m, _q, b) => { const me = requirePerm("users:manage"); SHARED_ONLY(SHARE_MSG)(); const email = String(b.email ?? "").toLowerCase().trim(); if (!b.name || !email.includes("@")) throw new HttpError(400, "Informe nome, e-mail válido e perfil."); if (state.users.some((u) => u.email === email)) throw new HttpError(409, "Já existe uma conta com este e-mail."); const temp = `emiliia-${uid().slice(0, 8)}`; const id = uid(); state.users.push({ id, name: b.name, email, role: b.role, password: temp, mfaEnabled: false, active: true, mustChangePassword: true, lastLoginAt: null, createdAt: nowIso() }); audit(me.id, "user.created", { role: b.role }, "ok", "user", id); return { id, temporaryPassword: temp }; });
+on("PATCH", /^\/settings\/users\/([^/]+)$/, (m, _q, b) => { const me = requirePerm("users:manage"); SHARED_ONLY(SHARE_MSG)(); const u = state.users.find((x) => x.id === m[1]); if (!u) throw new HttpError(404, "Usuário não encontrado."); if (u.id === me.id && (b.active === false || (b.role && b.role !== "psychologist"))) throw new HttpError(400, "Você não pode desativar a própria conta nem remover o próprio perfil de psicóloga."); if (b.name !== undefined) u.name = b.name; if (b.role !== undefined) u.role = b.role; if (b.active !== undefined) u.active = b.active; audit(me.id, "user.updated", b, "ok", "user", u.id); return { ok: true }; });
+on("POST", /^\/settings\/users\/([^/]+)\/reset-password$/, (m) => { const me = requirePerm("users:manage"); SHARED_ONLY(ACCOUNT_MSG)(); const u = state.users.find((x) => x.id === m[1]); if (!u) throw new HttpError(404, "Usuário não encontrado."); const temp = `emiliia-${uid().slice(0, 8)}`; u.password = temp; u.mustChangePassword = true; u.mfaEnabled = false; audit(me.id, "user.password_reset", undefined, "ok", "user", u.id); return { temporaryPassword: temp }; });
 on("GET", /^\/settings\/clinical-grants$/, () => { requirePerm("settings:read"); return { grants: state.grants.map((g) => ({ ...g, user_name: state.users.find((u) => u.id === g.user_id)?.name ?? "", patient_name: g.patient_id ? patientName(g.patient_id) : null, granted_by_name: state.users.find((u) => u.id === g.granted_by)?.name ?? "" })), roleLabels: ROLE_LABELS }; });
-on("POST", /^\/settings\/clinical-grants$/, (_m, _q, b) => { const me = requirePerm("clinical:grant"); if (!b.userId || !b.reason || String(b.reason).length < 3) throw new HttpError(400, "Informe o motivo da autorização."); const id = uid(); state.grants.unshift({ id, user_id: b.userId, patient_id: b.patientId || null, granted_by: me.id, reason: b.reason, created_at: nowIso(), expires_at: b.expiresAt ? `${b.expiresAt} 23:59:59` : null, revoked_at: null }); audit(me.id, "clinical.grant.created", undefined, "ok", "clinical_access_grant", id); return { id }; });
+on("POST", /^\/settings\/clinical-grants$/, (_m, _q, b) => { const me = requirePerm("clinical:grant"); SHARED_ONLY("Na versão compartilhada, a área clínica fica guardada no espaço privado da conta da psicóloga e não pode ser aberta para outras pessoas.")(); if (!b.userId || !b.reason || String(b.reason).length < 3) throw new HttpError(400, "Informe o motivo da autorização."); const id = uid(); state.grants.unshift({ id, user_id: b.userId, patient_id: b.patientId || null, granted_by: me.id, reason: b.reason, created_at: nowIso(), expires_at: b.expiresAt ? `${b.expiresAt} 23:59:59` : null, revoked_at: null }); audit(me.id, "clinical.grant.created", undefined, "ok", "clinical_access_grant", id); return { id }; });
 on("PATCH", /^\/settings\/clinical-grants\/([^/]+)\/revoke$/, (m) => { const me = requirePerm("clinical:grant"); const g = state.grants.find((x) => x.id === m[1]); if (!g || g.revoked_at) throw new HttpError(404, "Autorização não encontrada ou já revogada."); g.revoked_at = nowIso(); audit(me.id, "clinical.grant.revoked", undefined, "ok", "clinical_access_grant", g.id); return { ok: true }; });
 on("GET", /^\/settings\/audit$/, (_m, q) => { requirePerm("audit:read"); return { entries: state.audit.slice(0, Number(q.get("limit") ?? 50)) }; });
 on("GET", /^\/settings\/integrations$/, () => { requirePerm("settings:read"); return { integrations: [] }; });
@@ -298,6 +345,16 @@ on("GET", /^\/settings\/defaults$/, () => { requirePerm("settings:read"); return
 on("PUT", /^\/settings\/defaults$/, (_m, _q, b) => { const u = requirePerm("users:manage"); for (const [k, v] of Object.entries((b.settings ?? {}) as Record<string, string>)) if (k.startsWith("clinic.") || k.startsWith("defaults.")) state.settings[k] = String(v); audit(u.id, "settings.updated"); return { ok: true }; });
 
 // ---- Despachante -----------------------------------------------------------------
+async function flush(): Promise<void> {
+  if (!store) { save(); return; }
+  try {
+    await store.persist(state);
+  } catch (err) {
+    const code = (err as { code?: string })?.code;
+    throw new HttpError(code === "quota_exceeded" ? 507 : 403, code === "quota_exceeded" ? "O espaço de dados da página está cheio." : "Você não tem permissão para gravar. Peça à dona da página para convidar você como Editora.");
+  }
+}
+
 function jsonResponse(body: unknown, status = 200): Response { return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } }); }
 
 export async function handleDemoRequest(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
@@ -312,10 +369,10 @@ export async function handleDemoRequest(input: RequestInfo | URL, init?: Request
     const match = path.match(re); if (!match) continue;
     try {
       const result = await h(match, url.searchParams, body, form);
-      if (method !== "GET") save();
+      if (method !== "GET") await flush();
       return jsonResponse(result ?? {});
     } catch (err) {
-      if (method !== "GET") save();
+      if (method !== "GET") { try { await flush(); } catch { /* erro já tratado abaixo */ } }
       if (err instanceof HttpError) return jsonResponse({ error: err.message, ...err.extra }, err.status);
       return jsonResponse({ error: "Erro interno na demonstração." }, 500);
     }

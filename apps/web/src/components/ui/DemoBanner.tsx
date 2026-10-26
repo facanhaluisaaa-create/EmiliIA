@@ -1,14 +1,14 @@
 import { FlaskConical, RotateCcw } from "lucide-react";
 import { isDemo } from "@/demo/install";
-import { resetDemo } from "@/demo/mockApi";
+import { getMode, resetDemo } from "@/demo/mockApi";
 
 /** Sinaliza que os dados exibidos são fictícios/demonstrativos. */
 export function DemoBanner({ text = "Dados fictícios de demonstração. Nenhuma integração com dados reais está ativa." }: { text?: string }) {
   return (
     <div className="flex items-center gap-2 rounded-xl border border-sage-200 bg-sage-100/70 px-3 py-2 text-xs text-forest" role="note">
       <FlaskConical className="h-3.5 w-3.5 shrink-0 text-sage-500" aria-hidden />
-      <span>{isDemo ? "Demonstração no navegador com dados fictícios. Pode mexer à vontade: tudo fica salvo só neste dispositivo." : text}</span>
-      {isDemo && (
+      <span>{isDemo ? (getMode() === "shared" ? "Dados do consultório, compartilhados entre quem tem acesso a esta página." : "Demonstração com dados fictícios. Tudo fica salvo só neste dispositivo.") : text}</span>
+      {isDemo && getMode() === "local" && (
         <button
           type="button"
           onClick={() => {

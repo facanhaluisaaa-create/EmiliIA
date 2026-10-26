@@ -1,9 +1,9 @@
-import { handleDemoRequest } from "./mockApi";
+import { getDocumentUrl, handleDemoRequest, initStore } from "./mockApi";
 
 export const isDemo = import.meta.env.VITE_DEMO === "1";
 
 /** Redireciona todas as chamadas a /api para a API simulada, sem tocar em outras requisições. */
-export function installDemo(): void {
+export async function installDemo(): Promise<void> {
   installDemoLinkGuard();
   const original = window.fetch.bind(window);
   window.fetch = (input, init) => {
@@ -11,6 +11,7 @@ export function installDemo(): void {
     if (url.startsWith("/api/") || url.startsWith(`${location.origin}/api/`)) return handleDemoRequest(input, init);
     return original(input, init);
   };
+  await initStore();
 }
 
 function toast(text: string): void {
@@ -28,6 +29,13 @@ export function installDemoLinkGuard(): void {
     const a = (e.target as HTMLElement | null)?.closest?.("a[href^='/api/']") as HTMLAnchorElement | null;
     if (!a) return;
     e.preventDefault();
+    const m = a.getAttribute("href")?.match(/^\/api\/documents\/([^/]+)\/file$/);
+    if (m) {
+      const url = getDocumentUrl(m[1]);
+      if (url) { window.open(url, "_blank", "noopener"); return; }
+      toast("Este documento não tem arquivo guardado.");
+      return;
+    }
     toast("Na demonstração, PDFs e arquivos não são gerados. No sistema instalado, este botão abre o documento.");
   });
 }

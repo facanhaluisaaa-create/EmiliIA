@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 import { ApiError } from "@/lib/api";
 import { isDemo } from "@/demo/install";
+import { hasViewer } from "@/demo/mockApi";
 
 export function LoginPage() {
   const { status, login, verifyMfa } = useAuth();
@@ -102,6 +103,9 @@ export function LoginPage() {
                 <h1 className="text-3xl">Entrar</h1>
                 <p className="mt-1 text-sm text-ink-muted">{isDemo ? "Demonstração: escolha quem você quer ser." : "Acesso restrito à equipe do consultório."}</p>
               </div>
+              {isDemo && hasViewer() && (
+                <p className="rounded-xl border border-[#EEDDB4] bg-[#FAF3E3] px-3 py-2 text-xs text-ink">Você não está identificada. Para usar os dados compartilhados do consultório, entre na sua conta Claude e abra o link de novo. Abaixo, apenas uma demonstração com dados fictícios.</p>
+              )}
               {isDemo && (
                 <div className="grid gap-2 sm:grid-cols-2">
                   <Button type="button" size="lg" onClick={() => quickLogin("emilia")} loading={busy}>Entrar como Emília</Button>
