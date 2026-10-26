@@ -1,4 +1,4 @@
-import { Check, FolderOpen, MessageSquareText, Wallet, BarChart3, type LucideIcon } from "lucide-react";
+import { Check, MessageSquareText, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { DemoBanner } from "@/components/ui/DemoBanner";
@@ -69,41 +69,6 @@ function ModulePreview({ spec }: { spec: ModuleSpec }) {
   );
 }
 
-export const FinancePage = () => (
-  <ModulePreview
-    spec={{
-      title: "Financeiro",
-      stage: 3,
-      icon: Wallet,
-      description: "Sessões realizadas, cobranças mensais, pagamentos e demonstrativos.",
-      features: [
-        "Registro de sessões realizadas e valores por sessão.",
-        "Cobranças mensais com vencimentos e pagamentos parciais ou integrais.",
-        "Vinculação de comprovantes e notas fiscais a cada registro.",
-        "Demonstrativos mensais em PDF e visão de valores recebidos, pendentes e em atraso.",
-      ],
-      note: "Notas fiscais oficiais não serão emitidas pelo sistema sem uma integração própria e homologada com a prefeitura.",
-    }}
-  />
-);
-
-export const DocumentsPage = () => (
-  <ModulePreview
-    spec={{
-      title: "Documentos",
-      stage: 3,
-      icon: FolderOpen,
-      description: "Documentos administrativos organizados por paciente e por mês.",
-      features: [
-        "Organização por paciente e competência mensal.",
-        "Visualização e vinculação de comprovantes e notas fiscais aos registros financeiros.",
-        "Preparação para armazenamento no Google Drive com credenciais protegidas no servidor.",
-      ],
-      integrations: ["Google Drive"],
-    }}
-  />
-);
-
 export const CommunicationPage = () => (
   <ModulePreview
     spec={{
@@ -118,22 +83,6 @@ export const CommunicationPage = () => (
       ],
       integrations: ["WhatsApp Business (API oficial)"],
       note: "Nenhuma mensagem será enviada automaticamente sem autorização expressa e configuração prévia da integração.",
-    }}
-  />
-);
-
-export const ReportsPage = () => (
-  <ModulePreview
-    spec={{
-      title: "Relatórios",
-      stage: 3,
-      icon: BarChart3,
-      description: "Indicadores de consultas, cancelamentos, receitas e inadimplência.",
-      features: [
-        "Consultas realizadas, cancelamentos e faltas por período.",
-        "Receitas, inadimplência e evolução mensal.",
-        "Filtros por período e exportação em PDF ou planilha.",
-      ],
     }}
   />
 );

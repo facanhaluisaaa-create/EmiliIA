@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "../config.js";
+import { runMigrations } from "./migrations.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,6 +17,7 @@ export function openDatabase(dbPath: string = config.databasePath): Database.Dat
   db.pragma("foreign_keys = ON");
   const schema = fs.readFileSync(path.join(here, "schema.sql"), "utf8");
   db.exec(schema);
+  runMigrations(db);
   instance = db;
   return db;
 }

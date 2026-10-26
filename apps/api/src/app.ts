@@ -6,6 +6,9 @@ import { errorHandler, notFound } from "./middleware/errors.js";
 import { csrfOriginCheck, helmetMiddleware, noCache } from "./middleware/security.js";
 import { agendaRouter } from "./modules/agenda/routes.js";
 import { dashboardRouter } from "./modules/dashboard/routes.js";
+import { documentsRouter } from "./modules/documents/routes.js";
+import { financeRouter } from "./modules/finance/routes.js";
+import { reportsRouter } from "./modules/reports/routes.js";
 import { patientsRouter } from "./modules/patients/routes.js";
 import { settingsRouter } from "./modules/settings/routes.js";
 
@@ -26,6 +29,9 @@ export function createApp(): express.Express {
   api.use("/dashboard", dashboardRouter);
   api.use("/patients", patientsRouter);
   api.use("/agenda", agendaRouter);
+  api.use("/finance", financeRouter);
+  api.use("/documents", documentsRouter);
+  api.use("/reports", reportsRouter);
   api.use("/settings", settingsRouter);
   api.use(notFound);
 

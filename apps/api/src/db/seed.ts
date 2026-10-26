@@ -135,7 +135,7 @@ export async function seed(): Promise<void> {
       const seriesId = newId();
       const modality = p.modality === "online" ? "online" : "presencial";
       const monday = addDays(now, -((now.getDay() + 6) % 7));
-      for (let w = -6; w <= 3; w++) {
+      for (let w = -26; w <= 3; w++) {
         if (p.freq === "quinzenal" && Math.abs(w) % 2 === 1) continue;
         const day = addDays(monday, w * 7 + (weekday - 1));
         const starts = localIso(day, hour);

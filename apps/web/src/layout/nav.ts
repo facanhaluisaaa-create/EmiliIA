@@ -22,10 +22,10 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/", label: "Início", icon: LayoutDashboard, permission: "dashboard:read" },
   { to: "/pacientes", label: "Pacientes", icon: Users, permission: "patients:read" },
   { to: "/agenda", label: "Agenda", icon: CalendarDays, permission: "agenda:read" },
-  { to: "/financeiro", label: "Financeiro", icon: Wallet, permission: "finance:read", stage: 3 },
-  { to: "/documentos", label: "Documentos", icon: FolderOpen, permission: "documents:read", stage: 3 },
+  { to: "/financeiro", label: "Financeiro", icon: Wallet, permission: "finance:read" },
+  { to: "/documentos", label: "Documentos", icon: FolderOpen, permission: "documents:read" },
   { to: "/comunicacao", label: "Comunicação", icon: MessageSquareText, permission: "communication:read", stage: 5 },
-  { to: "/relatorios", label: "Relatórios", icon: BarChart3, permission: "reports:read", stage: 3 },
+  { to: "/relatorios", label: "Relatórios", icon: BarChart3, permission: "reports:read" },
   { to: "/configuracoes", label: "Configurações", icon: Settings, permission: "settings:read" },
 ];
 

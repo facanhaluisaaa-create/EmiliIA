@@ -173,3 +173,49 @@ CREATE TABLE IF NOT EXISTS settings (
   value TEXT NOT NULL,
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- Modelos de mensagens e registro de comunicações (Etapa 5)
+CREATE TABLE IF NOT EXISTS message_templates (
+  id TEXT PRIMARY KEY,
+  key TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK (kind IN ('confirmacao', 'lembrete', 'remarcacao', 'cobranca', 'outro')),
+  body TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS messages_log (
+  id TEXT PRIMARY KEY,
+  patient_id TEXT REFERENCES patients(id),
+  appointment_id TEXT REFERENCES appointments(id),
+  payment_id TEXT REFERENCES payments(id),
+  channel TEXT NOT NULL DEFAULT 'whatsapp',
+  template_key TEXT,
+  to_phone TEXT NOT NULL,
+  body TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('rascunho', 'enviada', 'entregue', 'lida', 'falha', 'nao_enviada')),
+  provider_message_id TEXT,
+  error TEXT,
+  sent_by TEXT REFERENCES users(id),
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Vínculo entre registros locais e linhas da planilha (identificadores estáveis, Etapa 4)
+CREATE TABLE IF NOT EXISTS sheet_links (
+  id TEXT PRIMARY KEY,
+  spreadsheet_id TEXT NOT NULL,
+  sheet_title TEXT NOT NULL,
+  row_number INTEGER NOT NULL,
+  entity TEXT NOT NULL CHECK (entity IN ('patient', 'payment')),
+  entity_id TEXT NOT NULL,
+  external_key TEXT,
+  row_hash TEXT,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE (spreadsheet_id, sheet_title, row_number)
+);
+CREATE INDEX IF NOT EXISTS idx_sheet_links_entity ON sheet_links(entity, entity_id);
+
+CREATE TABLE IF NOT EXISTS schema_migrations (
+  name TEXT PRIMARY KEY,
+  applied_at TEXT NOT NULL DEFAULT (datetime('now'))
+);

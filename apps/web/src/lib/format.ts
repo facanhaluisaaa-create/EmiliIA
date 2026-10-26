@@ -108,3 +108,28 @@ export function ageFrom(birth: string | null): number | null {
   if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) age--;
   return age;
 }
+
+export function currentMonthKey(d = new Date()): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+export function shiftMonth(key: string, delta: number): string {
+  const [y, m] = key.split("-").map(Number);
+  return currentMonthKey(new Date(y, m - 1 + delta, 1));
+}
+
+export function monthLabelLong(key: string): string {
+  const [y, m] = key.split("-").map(Number);
+  const s = new Date(y, m - 1, 1).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+export function formatBytes(n: number | null): string {
+  if (!n) return "";
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(0)} KB`;
+  return `${(n / 1024 / 1024).toFixed(1)} MB`;
+}
+
+export const PAYMENT_STATUS_LABEL: Record<string, string> = { pago: "Pago", parcial: "Parcial", atrasado: "Em atraso", pendente: "Pendente", cancelado: "Cancelado" };
+export const PAYMENT_METHOD_LABEL: Record<string, string> = { pix: "Pix", transferencia: "Transferência", dinheiro: "Dinheiro", cartao: "Cartão", boleto: "Boleto", outro: "Outro" };
