@@ -4,6 +4,7 @@ import { attachSession } from "./auth/middleware.js";
 import { authRouter } from "./auth/routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 import { csrfOriginCheck, helmetMiddleware, noCache } from "./middleware/security.js";
+import { integrationsRouter } from "./integrations/routes.js";
 import { agendaRouter } from "./modules/agenda/routes.js";
 import { dashboardRouter } from "./modules/dashboard/routes.js";
 import { documentsRouter } from "./modules/documents/routes.js";
@@ -32,6 +33,7 @@ export function createApp(): express.Express {
   api.use("/finance", financeRouter);
   api.use("/documents", documentsRouter);
   api.use("/reports", reportsRouter);
+  api.use("/integrations", integrationsRouter);
   api.use("/settings", settingsRouter);
   api.use(notFound);
 

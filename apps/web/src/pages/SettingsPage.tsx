@@ -5,11 +5,11 @@ import { useAuth } from "@/auth/AuthContext";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader } from "@/components/ui/Card";
-import { DemoBanner } from "@/components/ui/DemoBanner";
 import { Input } from "@/components/ui/Input";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { api, ApiError, post } from "@/lib/api";
+import { IntegrationsTab } from "@/features/integrations/IntegrationsTab";
 import { cn } from "@/lib/cn";
 import { formatCents, formatDateTime } from "@/lib/format";
 
@@ -278,51 +278,6 @@ function SessionsCard() {
           : <Skeleton className="h-10" />}
       </ul>
     </Card>
-  );
-}
-
-// ---------------------------------------------------------------------------
-
-const PROVIDER_META: Record<string, { label: string; stage: number; description: string }> = {
-  google_sheets: { label: "Google Sheets", stage: 4, description: "Base administrativa sincronizada, com prévia e confirmação antes de qualquer alteração." },
-  google_calendar: { label: "Google Agenda e Meet", stage: 4, description: "Sincronização de consultas e criação de links de videochamada." },
-  google_drive: { label: "Google Drive", stage: 4, description: "Armazenamento de comprovantes, notas fiscais e documentos por paciente e mês." },
-  whatsapp: { label: "WhatsApp Business", stage: 5, description: "Envio de confirmações, lembretes e cobranças pela API oficial, sempre com autorização." },
-};
-const STATUS_META: Record<string, { label: string; tone: "neutral" | "good" | "warn" | "bad" }> = {
-  nao_conectado: { label: "Não conectada", tone: "neutral" },
-  configurando: { label: "Em configuração", tone: "warn" },
-  conectado: { label: "Conectada", tone: "good" },
-  erro: { label: "Erro", tone: "bad" },
-};
-
-function IntegrationsTab() {
-  const [rows, setRows] = useState<Array<{ provider: string; status: string; connected_at: string | null }> | null>(null);
-  useEffect(() => {
-    api<{ integrations: typeof rows }>("/settings/integrations").then((r) => setRows(r.integrations));
-  }, []);
-  return (
-    <div className="space-y-4">
-      <DemoBanner text="Nenhuma integração está conectada. As credenciais ficarão exclusivamente no servidor e cada conexão exigirá autorização explícita." />
-      <div className="grid gap-4 md:grid-cols-2">
-        {rows
-          ? rows.map((r) => {
-              const meta = PROVIDER_META[r.provider];
-              const st = STATUS_META[r.status] ?? STATUS_META.nao_conectado;
-              return (
-                <Card key={r.provider} className="p-6">
-                  <div className="flex items-start justify-between gap-3">
-                    <h2 className="text-xl">{meta?.label ?? r.provider}</h2>
-                    <Badge tone={st.tone}>{st.label}</Badge>
-                  </div>
-                  <p className="mt-2 text-sm text-ink-muted">{meta?.description}</p>
-                  <p className="mt-3 text-[11px] uppercase tracking-[0.15em] text-ink-faint">Etapa {meta?.stage}</p>
-                </Card>
-              );
-            })
-          : [1, 2, 3, 4].map((i) => <Skeleton key={i} className="h-32" />)}
-      </div>
-    </div>
   );
 }
 

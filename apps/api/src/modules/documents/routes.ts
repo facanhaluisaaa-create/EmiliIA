@@ -8,6 +8,7 @@ import { requireAuth, requirePermission } from "../../auth/middleware.js";
 import { config } from "../../config.js";
 import { getDb } from "../../db/connection.js";
 import { newId } from "../../lib/crypto.js";
+import { mirrorDocumentToDrive } from "../../integrations/drive/service.js";
 
 export const documentsRouter = Router();
 documentsRouter.use(requireAuth);
@@ -131,6 +132,12 @@ documentsRouter.post("/", requirePermission("documents:write"), (req, res, next)
     db.prepare(`UPDATE payments SET ${col} = ? WHERE id = ?`).run(id, m.paymentId);
   }
   audit(req, { action: "document.created", entity: "document", entityId: id, details: { kind: m.kind, storage: req.file ? "local" : "link" } });
+  if (req.file) {
+    // Espelha no Google Drive quando conectado (sem bloquear a resposta).
+    const filePath = req.file.path;
+    const userId = req.auth!.user.id;
+    void fs.promises.readFile(filePath).then((buf) => mirrorDocumentToDrive(id, buf, userId)).catch(() => undefined);
+  }
   res.status(201).json({ document: serializeDocument(db.prepare(`${SELECT} WHERE d.id = ?`).get(id) as DocRow) });
 });
 

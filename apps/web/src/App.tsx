@@ -14,6 +14,7 @@ import { AgendaPage } from "./features/agenda/AgendaPage";
 import { PatientDetailPage } from "./features/patients/PatientDetailPage";
 import { PatientsPage } from "./features/patients/PatientsPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { SheetsImportPage } from "./features/integrations/SheetsImportPage";
 
 export function App() {
   return (
@@ -33,6 +34,7 @@ export function App() {
                 <Route path="/comunicacao" element={<CommunicationPage />} />
                 <Route path="/relatorios" element={<ReportsPage />} />
                 <Route path="/configuracoes" element={<SettingsPage />} />
+                <Route path="/configuracoes/planilha" element={<SheetsImportPage />} />
                 <Route path="/inicio" element={<Navigate to="/" replace />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>

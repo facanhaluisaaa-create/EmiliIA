@@ -49,6 +49,17 @@ export const config = {
   ),
   sessionHours: Number(process.env.SESSION_HOURS ?? 8),
   cookieName: "emiliia_session",
+  apiPublicUrl: (process.env.API_PUBLIC_URL ?? `http://localhost:${Number(process.env.PORT ?? 3001)}`).replace(/\/$/, ""),
+  timezone: process.env.TIMEZONE ?? "America/Sao_Paulo",
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+  },
+  whatsapp: {
+    token: process.env.WHATSAPP_TOKEN ?? "",
+    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID ?? "",
+    verifyToken: process.env.WHATSAPP_VERIFY_TOKEN ?? "",
+  },
 };
 
 if (config.encryptionKey.length !== 32) {

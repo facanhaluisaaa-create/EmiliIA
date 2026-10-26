@@ -4,6 +4,7 @@ import { audit } from "../../audit/audit.js";
 import { requireAuth, requirePermission } from "../../auth/middleware.js";
 import { getDb } from "../../db/connection.js";
 import { newId } from "../../lib/crypto.js";
+import { syncInBackground } from "../../integrations/calendar/service.js";
 
 export const agendaRouter = Router();
 
@@ -127,6 +128,7 @@ agendaRouter.post("/", requirePermission("agenda:write"), (req, res) => {
     }
   })();
   audit(req, { action: "appointment.created", entity: "appointment", entityId: ids[0], details: { count: ids.length, recurrence: input.recurrence } });
+  syncInBackground(ids, req.auth!.user.id);
   const rows = db.prepare(`${SELECT} WHERE a.id IN (${ids.map(() => "?").join(",")}) ORDER BY a.starts_at`).all(...ids) as ApptRow[];
   res.status(201).json({ appointments: rows.map(serialize) });
 });
@@ -163,6 +165,7 @@ agendaRouter.put("/:id", requirePermission("agenda:write"), (req, res) => {
     `UPDATE appointments SET patient_id = ?, starts_at = ?, ends_at = ?, modality = ?, status = ?, admin_notes = ?, updated_at = datetime('now') WHERE id = ?`
   ).run(input.patientId, startsAt, endsAt, input.modality, input.status, input.adminNotes, existing.id);
   audit(req, { action: "appointment.updated", entity: "appointment", entityId: existing.id, details: { from: existing.starts_at, to: startsAt, status: input.status } });
+  syncInBackground([existing.id], req.auth!.user.id);
   const row = db.prepare(`${SELECT} WHERE a.id = ?`).get(existing.id) as ApptRow;
   res.json({ appointment: serialize(row) });
 });
@@ -189,5 +192,9 @@ agendaRouter.patch("/:id/status", requirePermission("agenda:write"), (req, res) 
     db.prepare(`UPDATE appointments SET status = ?, updated_at = datetime('now') WHERE id = ?`).run(parsed.data.status, existing.id);
   }
   audit(req, { action: "appointment.status", entity: "appointment", entityId: existing.id, details: { status: parsed.data.status, scope: parsed.data.scope, changed } });
+  const affected = parsed.data.scope === "future" && existing.series_id
+    ? (db.prepare(`SELECT id FROM appointments WHERE series_id = ? AND starts_at >= ?`).all(existing.series_id, existing.starts_at) as Array<{ id: string }>).map((r) => r.id)
+    : [existing.id];
+  syncInBackground(affected, req.auth!.user.id);
   res.json({ ok: true, changed });
 });
