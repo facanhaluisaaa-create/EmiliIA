@@ -4,6 +4,7 @@ import { attachSession } from "./auth/middleware.js";
 import { authRouter } from "./auth/routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 import { csrfOriginCheck, helmetMiddleware, noCache } from "./middleware/security.js";
+import { agendaRouter } from "./modules/agenda/routes.js";
 import { dashboardRouter } from "./modules/dashboard/routes.js";
 import { patientsRouter } from "./modules/patients/routes.js";
 import { settingsRouter } from "./modules/settings/routes.js";
@@ -24,6 +25,7 @@ export function createApp(): express.Express {
   api.use("/auth", authRouter);
   api.use("/dashboard", dashboardRouter);
   api.use("/patients", patientsRouter);
+  api.use("/agenda", agendaRouter);
   api.use("/settings", settingsRouter);
   api.use(notFound);
 

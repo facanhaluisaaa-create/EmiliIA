@@ -6,7 +6,10 @@ import { AppShell } from "./layout/AppShell";
 import { DashboardPage } from "./pages/DashboardPage";
 import { LoginPage } from "./pages/LoginPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { AgendaPage, CommunicationPage, DocumentsPage, FinancePage, PatientsPage, ReportsPage } from "./pages/ModulePages";
+import { CommunicationPage, DocumentsPage, FinancePage, ReportsPage } from "./pages/ModulePages";
+import { AgendaPage } from "./features/agenda/AgendaPage";
+import { PatientDetailPage } from "./features/patients/PatientDetailPage";
+import { PatientsPage } from "./features/patients/PatientsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 
 export function App() {
@@ -20,6 +23,7 @@ export function App() {
               <Route element={<AppShell />}>
                 <Route index element={<DashboardPage />} />
                 <Route path="/pacientes" element={<PatientsPage />} />
+                <Route path="/pacientes/:id" element={<PatientDetailPage />} />
                 <Route path="/agenda" element={<AgendaPage />} />
                 <Route path="/financeiro" element={<FinancePage />} />
                 <Route path="/documentos" element={<DocumentsPage />} />

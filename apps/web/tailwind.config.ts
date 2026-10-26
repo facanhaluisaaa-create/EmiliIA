@@ -29,8 +29,15 @@ export default {
       keyframes: {
         rise: { "0%": { opacity: "0", transform: "translateY(6px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
         fade: { "0%": { opacity: "0" }, "100%": { opacity: "1" } },
+        sheet: { "0%": { opacity: "0", transform: "translateY(16px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+        dialog: { "0%": { opacity: "0", transform: "translate(-50%, calc(-50% + 8px))" }, "100%": { opacity: "1", transform: "translate(-50%, -50%)" } },
       },
-      animation: { rise: "rise 0.35s ease-out both", fade: "fade 0.25s ease-out both" },
+      animation: {
+        rise: "rise 0.35s ease-out both",
+        fade: "fade 0.25s ease-out both",
+        sheet: "sheet 0.3s ease-out both",
+        dialog: "dialog 0.3s ease-out both",
+      },
     },
   },
   plugins: [],

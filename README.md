@@ -4,9 +4,10 @@ Aplicação web privada para a gestão administrativa do consultório da psicól
 Emília Sobral de Toledo Villena (CRP 06/203728), de uso interno da psicóloga e da
 secretária Lígia.
 
-> **Estado atual: Etapa 1 concluída** — identidade visual, navegação, autenticação
-> e dashboard com dados fictícios. Nenhuma integração externa está conectada e
-> nenhum dado real de paciente é utilizado.
+> **Estado atual: Etapas 1 e 2 concluídas** — identidade visual, navegação,
+> autenticação, dashboard, cadastro de pacientes e agenda, tudo com dados
+> fictícios. Nenhuma integração externa está conectada e nenhum dado real de
+> paciente é utilizado.
 
 ## Visão geral
 
@@ -77,15 +78,23 @@ apps/
       audit/         # registro de auditoria
       db/            # schema.sql, conexão, seed fictício
       middleware/    # helmet, CSRF por origem, erros
-      modules/       # dashboard, pacientes (leitura), configurações
+      modules/       # dashboard, pacientes, agenda, configurações
   web/
     src/
       auth/          # contexto de autenticação e proteção de rotas
       components/ui/ # botões, inputs, cartões, badges, indicadores, marca
       layout/        # app shell (sidebar, barra superior, navegação móvel)
+      features/      # pacientes (lista, ficha, formulário) e agenda (dia/semana/mês)
       pages/         # login, dashboard, configurações, módulos previstos
 docs/preview/        # capturas de tela da Etapa 1
 ```
+
+## Pacientes e agenda (Etapa 2)
+
+- **Duplicidade:** ao digitar nome, telefone ou e-mail o sistema consulta cadastros semelhantes em tempo real; ao salvar, um cadastro semelhante exige confirmação explícita.
+- **Conflitos:** cada consulta (e cada ocorrência de uma série) é verificada contra sobreposição de horário com consultas não canceladas. Nada é salvo se houver conflito.
+- **Cancelamento:** consultas nunca são apagadas; recebem o status "cancelada". Em séries, é possível cancelar "esta e as próximas".
+- **Google Agenda / Meet:** campos `google_event_id` e `meet_url` já existem; a sincronização será conectada na Etapa 4.
 
 ## Permissões
 
@@ -109,7 +118,7 @@ o que o perfil não pode acessar.
 ## Roteiro
 
 1. **Etapa 1 — concluída:** identidade visual, navegação, autenticação (senha + MFA), dashboard com dados fictícios, configurações de segurança e auditoria.
-2. Etapa 2: cadastro de pacientes e agenda (diária, semanal, mensal, recorrências, conflitos).
+2. **Etapa 2 — concluída:** cadastro de pacientes (responsável financeiro, contato de emergência, detecção de duplicidade, histórico administrativo) e agenda com visões diária, semanal e mensal, consultas únicas/semanais/quinzenais, verificação de conflitos e cancelamento de séries.
 3. Etapa 3: financeiro, documentos e relatórios (demonstrativos em PDF).
 4. Etapa 4: integrações com Google Sheets (mapeamento, prévia e confirmação), Google Agenda/Meet e Google Drive.
 5. Etapa 5: comunicação via API oficial do WhatsApp Business, sempre com autorização prévia.

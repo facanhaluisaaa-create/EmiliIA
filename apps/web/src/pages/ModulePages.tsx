@@ -1,4 +1,4 @@
-import { CalendarDays, Check, FolderOpen, MessageSquareText, Users, Wallet, BarChart3, type LucideIcon } from "lucide-react";
+import { Check, FolderOpen, MessageSquareText, Wallet, BarChart3, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { DemoBanner } from "@/components/ui/DemoBanner";
@@ -68,42 +68,6 @@ function ModulePreview({ spec }: { spec: ModuleSpec }) {
     </div>
   );
 }
-
-export const PatientsPage = () => (
-  <ModulePreview
-    spec={{
-      title: "Pacientes",
-      stage: 2,
-      icon: Users,
-      description: "Cadastro administrativo completo, pesquisa, edição e histórico de cada paciente.",
-      features: [
-        "Cadastro com nome completo, data de nascimento, contatos, endereço, responsável financeiro e contato de emergência.",
-        "Modalidade de atendimento, valor da sessão, frequência e situação cadastral.",
-        "Pesquisa instantânea e detecção de cadastros duplicados antes de salvar.",
-        "Histórico administrativo (consultas, pagamentos, documentos) separado das informações clínicas.",
-      ],
-      note: "Prontuários, notas de sessão e protocolos de testes ficam em área clínica à parte, criptografada e acessível apenas à psicóloga ou mediante autorização específica.",
-    }}
-  />
-);
-
-export const AgendaPage = () => (
-  <ModulePreview
-    spec={{
-      title: "Agenda",
-      stage: 2,
-      icon: CalendarDays,
-      description: "Visualizações diária, semanal e mensal com verificação de conflitos.",
-      features: [
-        "Consultas únicas, semanais ou quinzenais com horário inicial e final.",
-        "Paciente, modalidade, status e observações administrativas em cada consulta.",
-        "Verificação de conflitos de horário antes de salvar.",
-        "Preparação para sincronização com Google Agenda e geração de links do Google Meet.",
-      ],
-      integrations: ["Google Agenda", "Google Meet"],
-    }}
-  />
-);
 
 export const FinancePage = () => (
   <ModulePreview

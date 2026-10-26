@@ -55,3 +55,56 @@ export const STATUS_LABEL: Record<string, string> = {
   falta: "Falta",
   remarcada: "Remarcada",
 };
+
+export const FREQUENCY_LABEL: Record<string, string> = { semanal: "Semanal", quinzenal: "Quinzenal", mensal: "Mensal", avulso: "Avulso" };
+export const PATIENT_STATUS_LABEL: Record<string, string> = {
+  ativo: "Ativo",
+  inativo: "Inativo",
+  em_avaliacao: "Em avaliação",
+  alta: "Alta",
+  lista_espera: "Lista de espera",
+};
+
+export function toDateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export function fromDateKey(key: string): Date {
+  const [y, m, d] = key.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+export function addDays(d: Date, n: number): Date {
+  const r = new Date(d);
+  r.setDate(r.getDate() + n);
+  return r;
+}
+
+export function startOfWeek(d: Date): Date {
+  const r = new Date(d);
+  r.setHours(0, 0, 0, 0);
+  r.setDate(r.getDate() - ((r.getDay() + 6) % 7));
+  return r;
+}
+
+export function centsToInput(cents: number): string {
+  return (cents / 100).toFixed(2).replace(".", ",");
+}
+
+export function inputToCents(value: string): number {
+  const n = Number(value.replace(/\./g, "").replace(",", "."));
+  return Number.isFinite(n) ? Math.round(n * 100) : 0;
+}
+
+export function formatPhone(value: string | null | undefined): string {
+  return value ?? "";
+}
+
+export function ageFrom(birth: string | null): number | null {
+  if (!birth) return null;
+  const b = fromDateKey(birth);
+  const now = new Date();
+  let age = now.getFullYear() - b.getFullYear();
+  if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) age--;
+  return age;
+}
