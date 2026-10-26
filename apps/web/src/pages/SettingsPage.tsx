@@ -8,11 +8,11 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { api, ApiError, post } from "@/lib/api";
+import { api, ApiError, post, put } from "@/lib/api";
 import { IntegrationsTab } from "@/features/integrations/IntegrationsTab";
 import { UsersTab } from "@/features/settings/UsersTab";
 import { cn } from "@/lib/cn";
-import { formatCents, formatDateTime } from "@/lib/format";
+import { centsToInput, formatDateTime, inputToCents } from "@/lib/format";
 
 const TABS = [
   { id: "usuarios", label: "Usuários", icon: Users },
@@ -249,31 +249,65 @@ function SessionsCard() {
 
 function DefaultsTab() {
   const [settings, setSettings] = useState<Record<string, string> | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const { can } = useAuth();
+  const editable = can("users:manage");
   useEffect(() => {
     api<{ settings: Record<string, string> }>("/settings/defaults").then((r) => setSettings(r.settings));
   }, []);
   if (!settings) return <Skeleton className="h-48" />;
   const hours = JSON.parse(settings["defaults.working_hours"] ?? "{}") as { start?: string; end?: string; days?: number[] };
   const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-  const rows: Array<[string, string]> = [
-    ["Consultório", settings["clinic.name"] ?? ""],
-    ["Profissional responsável", `${settings["clinic.professional"] ?? ""} · ${settings["clinic.crp"] ?? ""}`],
-    ["Valor padrão da sessão", formatCents(Number(settings["defaults.session_value_cents"] ?? 0))],
-    ["Duração padrão", `${settings["defaults.session_minutes"] ?? "50"} minutos`],
-    ["Horário de atendimento", `${hours.start ?? "—"} às ${hours.end ?? "—"} · ${(hours.days ?? []).map((d) => dayNames[d]).join(", ")}`],
-    ["Modalidades", (JSON.parse(settings["defaults.modalities"] ?? "[]") as string[]).map((m) => (m === "online" ? "Online" : "Presencial")).join(" e ")],
-  ];
+  const set = (k: string, v: string) => setSettings((s) => ({ ...(s ?? {}), [k]: v }));
+  const setHours = (patch: Partial<typeof hours>) => set("defaults.working_hours", JSON.stringify({ start: hours.start ?? "08:00", end: hours.end ?? "20:00", days: hours.days ?? [1, 2, 3, 4, 5], ...patch }));
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setSaved(false);
+    setError(null);
+    try {
+      await put("/settings/defaults", { settings });
+      setSaved(true);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Não foi possível salvar.");
+    } finally {
+      setBusy(false);
+    }
+  }
   return (
     <Card>
-      <CardHeader title="Valores padrão" subtitle="Edição disponível na Etapa 3" action={<Badge tone="neutral">Somente leitura</Badge>} />
-      <dl className="divide-y divide-line border-t border-line">
-        {rows.map(([k, v]) => (
-          <div key={k} className="grid gap-1 px-6 py-3.5 sm:grid-cols-[220px_1fr]">
-            <dt className="text-xs font-medium text-ink-muted">{k}</dt>
-            <dd className="text-sm">{v}</dd>
+      <CardHeader title="Valores padrão" subtitle="Usados ao cadastrar pacientes e marcar consultas" action={!editable ? <Badge tone="neutral">Somente leitura</Badge> : undefined} />
+      <form onSubmit={submit} className="space-y-5 border-t border-line px-6 py-5" noValidate>
+        {saved && <p className="rounded-xl bg-[#EAF3EE] px-3 py-2 text-sm text-status-good">Valores salvos.</p>}
+        {error && <p role="alert" className="rounded-xl bg-[#F9ECE9] px-3 py-2 text-sm text-status-bad">{error}</p>}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Input label="Nome do consultório" value={settings["clinic.name"] ?? ""} onChange={(e) => set("clinic.name", e.target.value)} disabled={!editable} />
+          <Input label="Profissional responsável" value={settings["clinic.professional"] ?? ""} onChange={(e) => set("clinic.professional", e.target.value)} disabled={!editable} />
+          <Input label="CRP" value={settings["clinic.crp"] ?? ""} onChange={(e) => set("clinic.crp", e.target.value)} disabled={!editable} />
+          <Input label="Valor padrão da sessão (R$)" inputMode="decimal" value={centsToInput(Number(settings["defaults.session_value_cents"] ?? 0))} onChange={(e) => set("defaults.session_value_cents", String(inputToCents(e.target.value)))} disabled={!editable} />
+          <Input label="Duração padrão (minutos)" type="number" min={10} max={240} value={settings["defaults.session_minutes"] ?? "50"} onChange={(e) => set("defaults.session_minutes", e.target.value)} disabled={!editable} />
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Atende das" type="time" value={hours.start ?? "08:00"} onChange={(e) => setHours({ start: e.target.value })} disabled={!editable} />
+            <Input label="até" type="time" value={hours.end ?? "20:00"} onChange={(e) => setHours({ end: e.target.value })} disabled={!editable} />
           </div>
-        ))}
-      </dl>
+        </div>
+        <div>
+          <span className="block text-sm font-medium">Dias de atendimento</span>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {dayNames.map((d, i) => {
+              const on = (hours.days ?? []).includes(i);
+              return (
+                <button key={d} type="button" disabled={!editable} aria-pressed={on} onClick={() => setHours({ days: on ? (hours.days ?? []).filter((x) => x !== i) : [...(hours.days ?? []), i].sort() })} className={cn("rounded-lg border px-3 py-1.5 text-xs font-medium", on ? "border-forest bg-forest text-cream" : "border-line bg-white text-ink-muted")}>
+                  {d}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        {editable && <Button type="submit" loading={busy}>Salvar valores padrão</Button>}
+      </form>
     </Card>
   );
 }

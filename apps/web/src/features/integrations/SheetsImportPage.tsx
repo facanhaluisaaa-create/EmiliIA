@@ -132,7 +132,7 @@ export function SheetsImportPage() {
         <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Integrações
       </Link>
       <PageHeader eyebrow="Google Sheets" title="Assistente de planilha" description="Leia a estrutura, mapeie as colunas, revise a prévia e confirme. Nada é alterado sem a sua confirmação; nenhum dado é apagado." />
-      <ol className="mb-6 flex flex-wrap gap-2 text-xs" aria-label="Etapas">
+      <ol className="mb-6 flex flex-wrap gap-2 text-xs" aria-label="Passos">
         {steps.map((s, i) => (
           <li key={s} className={cn("flex items-center gap-2 rounded-full border px-3 py-1", step === i + 1 ? "border-forest bg-forest text-cream" : step > i + 1 ? "border-sage-300 bg-sage-100 text-forest" : "border-line text-ink-muted")}>
             <span className="font-medium">{i + 1}</span> {s}

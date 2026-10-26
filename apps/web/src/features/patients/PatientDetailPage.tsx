@@ -198,7 +198,7 @@ export function PatientDetailPage() {
 
       {tab === "financeiro" && (
         <Card>
-          <CardHeader title="Financeiro" subtitle="Cobranças e pagamentos (gestão completa na Etapa 3)" />
+          <CardHeader title="Financeiro" subtitle="Cobranças e pagamentos deste paciente" />
           {history.payments.length ? (
             <ul className="divide-y divide-line border-t border-line">
               {history.payments.map((pay) => (
@@ -220,7 +220,7 @@ export function PatientDetailPage() {
 
       {tab === "documentos" && (
         <Card>
-          <CardHeader title="Documentos" subtitle="Comprovantes, notas e contratos (Google Drive na Etapa 4)" />
+          <CardHeader title="Documentos" subtitle="Comprovantes, notas e contratos" />
           {history.documents.length ? (
             <ul className="divide-y divide-line border-t border-line">
               {history.documents.map((d) => (

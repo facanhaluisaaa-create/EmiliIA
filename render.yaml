@@ -1,0 +1,42 @@
+# Publicação com um clique no Render (https://render.com): crie uma conta,
+# escolha "New +" > "Blueprint", aponte para este repositório e confirme.
+# O Render constrói a imagem Docker, cria o disco persistente e gera o endereço HTTPS.
+services:
+  - type: web
+    name: emiliia
+    runtime: docker
+    plan: starter
+    region: ohio
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: emiliia-dados
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: DATABASE_PATH
+        value: /data/emiliia.db
+      - key: SEED_DEMO
+        value: "false"
+      - key: WEB_ORIGIN
+        fromService:
+          type: web
+          name: emiliia
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: API_PUBLIC_URL
+        fromService:
+          type: web
+          name: emiliia
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: APP_ENCRYPTION_KEY
+        generateValue: true
+      - key: SEED_PASSWORD_EMILIA
+        generateValue: true
+      - key: SEED_PASSWORD_LIGIA
+        generateValue: true
+      - key: TIMEZONE
+        value: America/Sao_Paulo

@@ -165,7 +165,7 @@ export function AppointmentDialog({
           <Input label="Número de consultas na série" type="number" min={2} max={52} value={occurrences} onChange={(e) => setOccurrences(e.target.value)} hint="Cada ocorrência é verificada contra conflitos. Nada é salvo se houver choque de horário." />
         )}
         <Textarea label="Observações administrativas" value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} />
-        {modality === "online" && <p className="text-xs text-ink-muted">O link do Google Meet será gerado automaticamente quando a integração com o Google Agenda estiver conectada (Etapa 4).</p>}
+        {modality === "online" && <p className="text-xs text-ink-muted">O link do Google Meet é criado automaticamente quando a conta Google está conectada em Configurações.</p>}
         <div className="flex flex-col-reverse gap-2 border-t border-line pt-4 sm:flex-row sm:justify-end">
           <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
             Cancelar

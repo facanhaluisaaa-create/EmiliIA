@@ -72,7 +72,7 @@ export function AppointmentDetail({
           </div>
           {a.adminNotes && <p className="rounded-xl bg-sage-100/60 px-3.5 py-2.5 text-sm">{a.adminNotes}</p>}
           {a.modality === "online" && (
-            <p className="text-xs text-ink-muted">{a.meetUrl ? <a href={a.meetUrl} className="underline">Abrir Google Meet</a> : "Link do Google Meet será gerado pela integração com o Google Agenda (Etapa 4)."}</p>
+            <p className="text-xs text-ink-muted">{a.meetUrl ? <a href={a.meetUrl} className="underline">Abrir Google Meet</a> : "O link do Google Meet aparece aqui quando a conta Google está conectada em Configurações."}</p>
           )}
 
           {can("agenda:write") && (

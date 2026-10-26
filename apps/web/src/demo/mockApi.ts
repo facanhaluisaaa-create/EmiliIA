@@ -295,6 +295,7 @@ on("PATCH", /^\/settings\/clinical-grants\/([^/]+)\/revoke$/, (m) => { const me 
 on("GET", /^\/settings\/audit$/, (_m, q) => { requirePerm("audit:read"); return { entries: state.audit.slice(0, Number(q.get("limit") ?? 50)) }; });
 on("GET", /^\/settings\/integrations$/, () => { requirePerm("settings:read"); return { integrations: [] }; });
 on("GET", /^\/settings\/defaults$/, () => { requirePerm("settings:read"); return { settings: state.settings }; });
+on("PUT", /^\/settings\/defaults$/, (_m, _q, b) => { const u = requirePerm("users:manage"); for (const [k, v] of Object.entries((b.settings ?? {}) as Record<string, string>)) if (k.startsWith("clinic.") || k.startsWith("defaults.")) state.settings[k] = String(v); audit(u.id, "settings.updated"); return { ok: true }; });
 
 // ---- Despachante -----------------------------------------------------------------
 function jsonResponse(body: unknown, status = 200): Response { return new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } }); }

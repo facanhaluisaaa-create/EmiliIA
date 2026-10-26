@@ -121,7 +121,7 @@ export function AgendaPage() {
         }
       />
       <div className="mb-4">
-        <DemoBanner text="Dados fictícios. A sincronização com o Google Agenda e o Google Meet será conectada na Etapa 4." />
+        <DemoBanner text="Dados fictícios. Com a conta Google conectada em Configurações, as consultas aparecem também no Google Agenda." />
       </div>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

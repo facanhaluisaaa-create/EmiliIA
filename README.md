@@ -25,6 +25,16 @@ Todas as integrações externas passam pelo backend com credenciais em variávei
 de ambiente. Sem credenciais configuradas elas aparecem como "Não conectada" e
 nada é sincronizado nem enviado.
 
+## Como colocar no ar (sem conhecimento técnico)
+
+1. Crie uma conta gratuita em [render.com](https://render.com).
+2. Clique em **New +** → **Blueprint**, conecte este repositório no GitHub e escolha o branch `etapa-1-fundacao`.
+3. Confirme. Em alguns minutos o Render entrega um endereço `https://emiliia-xxxx.onrender.com`.
+4. No painel do Render, abra **Environment** e copie os valores gerados de `SEED_PASSWORD_EMILIA` e `SEED_PASSWORD_LIGIA`: são as senhas iniciais das contas `emilia@emiliia.local` e `ligia@emiliia.local`.
+5. Entre, troque as senhas em Configurações → Segurança e ative a verificação em duas etapas.
+
+O arquivo `render.yaml` já define tudo: HTTPS, disco persistente para o banco e os uploads, chave de criptografia e fuso horário. Depois, para ligar Google e WhatsApp, acrescente as variáveis descritas em "Integrações" na mesma tela **Environment**.
+
 ## Como executar
 
 Pré-requisitos: Node.js 20 ou superior e npm.

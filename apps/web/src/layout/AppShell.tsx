@@ -42,7 +42,7 @@ function SideNav({ onNavigate, variant }: { onNavigate?: () => void; variant: "s
                     "rounded-md px-1.5 py-0.5 text-[10px] font-medium tracking-wide",
                     variant === "sidebar" ? "bg-white/10 text-sage-300" : "bg-sage-100 text-ink-muted"
                   )}
-                  title={`Previsto para a Etapa ${item.stage}`}
+                  title="Em breve"
                 >
                   E{item.stage}
                 </span>
