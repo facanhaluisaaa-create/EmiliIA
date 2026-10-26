@@ -124,8 +124,8 @@ export function AppShell() {
       {/* Barra lateral — desktop */}
       <aside className="hidden w-64 shrink-0 flex-col bg-forest px-4 py-6 lg:fixed lg:inset-y-0 lg:flex">
         <div className="px-3 pb-6">
-          <Logo tone="light" />
-          <p className="mt-1.5 text-[11px] uppercase tracking-[0.2em] text-sage-400">Revisitare</p>
+          <Logo tone="light" size="lg" className="h-24" />
+          <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-sage-400">Revisitare</p>
         </div>
         <div className="flex-1 overflow-y-auto">
           <SideNav variant="sidebar" />
@@ -161,7 +161,7 @@ export function AppShell() {
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog.Root>
-        <Logo size="sm" />
+        <Logo size="sm" variant="full" className="h-10" />
         <UserMenu compact />
       </header>
 

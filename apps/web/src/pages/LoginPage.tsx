@@ -77,7 +77,7 @@ export function LoginPage() {
       <aside className="relative hidden w-[46%] flex-col justify-between overflow-hidden bg-forest p-12 text-cream lg:flex">
         <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-sage-500/10 blur-3xl" aria-hidden />
         <div className="pointer-events-none absolute -bottom-32 -left-16 h-96 w-96 rounded-full bg-sage-300/10 blur-3xl" aria-hidden />
-        <Logo tone="light" size="lg" />
+        <Logo tone="light" size="lg" className="h-28" />
         <div className="relative max-w-md animate-rise">
           <p className="font-display text-4xl leading-tight text-cream">
             Cuidar da rotina do consultório <span className="italic text-sage-300">com a mesma delicadeza</span> do atendimento.
@@ -92,8 +92,8 @@ export function LoginPage() {
       <main className="flex flex-1 items-center justify-center px-5 py-10">
         <div className="w-full max-w-sm animate-rise">
           <div className="mb-8 lg:hidden">
-            <Logo size="lg" />
-            <p className="mt-1.5 text-[11px] uppercase tracking-[0.2em] text-ink-muted">Espaço Psicológico Revisitare</p>
+            <Logo size="lg" className="h-24" />
+            <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-ink-muted">Espaço Psicológico Revisitare</p>
           </div>
 
           {step === "credentials" ? (
