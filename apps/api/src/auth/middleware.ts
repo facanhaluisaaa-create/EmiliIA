@@ -32,6 +32,10 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     res.status(401).json({ error: "Verificação em duas etapas pendente.", mfaRequired: true });
     return;
   }
+  if (req.auth.user.mustChangePassword && !["/password", "/logout", "/me"].includes(req.path)) {
+    res.status(403).json({ error: "Defina uma nova senha antes de continuar.", mustChangePassword: true });
+    return;
+  }
   next();
 }
 

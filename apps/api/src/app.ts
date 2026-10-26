@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import rateLimit from "express-rate-limit";
 import { attachSession } from "./auth/middleware.js";
 import { authRouter } from "./auth/routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
@@ -13,6 +14,9 @@ import { financeRouter } from "./modules/finance/routes.js";
 import { reportsRouter } from "./modules/reports/routes.js";
 import { patientsRouter } from "./modules/patients/routes.js";
 import { settingsRouter } from "./modules/settings/routes.js";
+import { grantsRouter, usersRouter } from "./modules/settings/users.js";
+import { mountStaticFrontend } from "./static.js";
+import { config } from "./config.js";
 
 export function createApp(): express.Express {
   const app = express();
@@ -23,6 +27,7 @@ export function createApp(): express.Express {
   app.use(cookieParser());
 
   const api = express.Router();
+  api.use(rateLimit({ windowMs: 60_000, limit: 600, standardHeaders: "draft-7", legacyHeaders: false, message: { error: "Muitas requisições. Aguarde um instante." } }));
   api.use(noCache);
   // Webhooks de provedores externos (sem sessão) ficam fora da verificação de origem.
   const CSRF_EXEMPT = new Set(["/communication/whatsapp/webhook"]);
@@ -38,10 +43,16 @@ export function createApp(): express.Express {
   api.use("/reports", reportsRouter);
   api.use("/integrations", integrationsRouter);
   api.use("/communication", communicationRouter);
+  api.use("/settings/users", usersRouter);
+  api.use("/settings/clinical-grants", grantsRouter);
   api.use("/settings", settingsRouter);
   api.use(notFound);
 
   app.use("/api", api);
+  if (config.isProd) {
+    const mounted = mountStaticFrontend(app);
+    if (!mounted) console.warn("[api] frontend compilado não encontrado; execute `npm run build` ou defina WEB_DIST_DIR.");
+  }
   app.use(errorHandler);
   return app;
 }

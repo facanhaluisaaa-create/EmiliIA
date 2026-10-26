@@ -57,8 +57,10 @@ export async function seedIfEmpty(): Promise<void> {
   await seed();
 }
 
+/** SEED_DEMO=false cria apenas contas, configurações, integrações e modelos (sem pacientes fictícios). */
 export async function seed(): Promise<void> {
   const db = getDb();
+  const demo = process.env.SEED_DEMO !== "false";
   const random = rng(20261026);
   const now = new Date();
   now.setHours(0, 0, 0, 0);
@@ -99,6 +101,7 @@ export async function seed(): Promise<void> {
 
   const patientIds: string[] = [];
   const tx = db.transaction(() => {
+    if (!demo) return;
     DEMO_PATIENTS.forEach((p, i) => {
       const id = newId();
       patientIds.push(id);
@@ -197,7 +200,10 @@ export async function seed(): Promise<void> {
     // Registros clínicos fictícios, criptografados; visíveis apenas com permissão clínica.
     insertClinical.run(newId(), patientIds[0], emiliaId, "nota_sessao", encrypt("Nota de sessão de demonstração — conteúdo fictício."));
     insertClinical.run(newId(), patientIds[1], emiliaId, "prontuario", encrypt("Prontuário de demonstração — conteúdo fictício."));
+  });
+  tx();
 
+  const base = db.transaction(() => {
     const insertIntegration = db.prepare(`INSERT INTO integrations (id, provider, status) VALUES (?, ?, 'nao_conectado')`);
     for (const provider of ["google_sheets", "google_calendar", "google_drive", "whatsapp"]) insertIntegration.run(newId(), provider);
 
@@ -211,12 +217,12 @@ export async function seed(): Promise<void> {
     insertSetting.run("defaults.modalities", JSON.stringify(["presencial", "online"]));
 
     db.prepare(`INSERT INTO audit_log (user_id, action, details) VALUES (NULL, 'system.seed', ?)`).run(
-      JSON.stringify({ patients: DEMO_PATIENTS.length, demo: true })
+      JSON.stringify({ patients: demo ? DEMO_PATIENTS.length : 0, demo })
     );
   });
-  tx();
+  base();
 
-  console.log(`[seed] Dados fictícios criados: ${DEMO_PATIENTS.length} pacientes.`);
+  console.log(demo ? `[seed] Dados fictícios criados: ${DEMO_PATIENTS.length} pacientes.` : "[seed] Banco inicializado sem dados de demonstração.");
   console.log(`[seed] Contas: emilia@emiliia.local / ligia@emiliia.local (senhas definidas por SEED_PASSWORD_* ou padrão de desenvolvimento).`);
 }
 

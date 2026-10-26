@@ -10,6 +10,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { api, ApiError, post } from "@/lib/api";
 import { IntegrationsTab } from "@/features/integrations/IntegrationsTab";
+import { UsersTab } from "@/features/settings/UsersTab";
 import { cn } from "@/lib/cn";
 import { formatCents, formatDateTime } from "@/lib/format";
 
@@ -55,43 +56,6 @@ export function SettingsPage() {
         {tab === "auditoria" && can("audit:read") && <AuditTab />}
       </div>
     </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-
-interface UserRow { id: string; name: string; email: string; roleLabel: string; mfaEnabled: boolean; active: boolean; lastLoginAt: string | null }
-
-function UsersTab() {
-  const [users, setUsers] = useState<UserRow[] | null>(null);
-  const { can } = useAuth();
-  useEffect(() => {
-    api<{ users: UserRow[] }>("/settings/users").then((r) => setUsers(r.users));
-  }, []);
-  return (
-    <Card>
-      <CardHeader title="Contas de acesso" subtitle="Duas contas individuais com perfis distintos" action={can("users:manage") ? <Badge tone="sage">Gestão na Etapa 6</Badge> : undefined} />
-      <ul className="divide-y divide-line border-t border-line">
-        {users
-          ? users.map((u) => (
-              <li key={u.id} className="flex flex-col gap-2 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm font-medium">{u.name}</p>
-                  <p className="text-xs text-ink-muted">{u.email} · {u.roleLabel}</p>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge tone={u.mfaEnabled ? "good" : "warn"}>{u.mfaEnabled ? "2 etapas ativas" : "2 etapas pendentes"}</Badge>
-                  <Badge tone={u.active ? "sage" : "neutral"}>{u.active ? "Ativa" : "Inativa"}</Badge>
-                  <span className="text-[11px] text-ink-muted">{u.lastLoginAt ? `Último acesso ${formatDateTime(u.lastLoginAt)}` : "Nunca acessou"}</span>
-                </div>
-              </li>
-            ))
-          : [1, 2].map((i) => <Skeleton key={i} className="mx-6 my-4 h-10" />)}
-      </ul>
-      <p className="border-t border-line px-6 py-4 text-xs text-ink-muted">
-        A secretaria acessa todos os módulos administrativos. Prontuários, notas de sessão e documentos sigilosos exigem autorização específica concedida pela psicóloga.
-      </p>
-    </Card>
   );
 }
 

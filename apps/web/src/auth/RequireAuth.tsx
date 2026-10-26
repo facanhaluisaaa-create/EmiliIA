@@ -1,12 +1,14 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { SplashScreen } from "@/components/ui/SplashScreen";
+import { ChangePasswordPage } from "@/pages/ChangePasswordPage";
 
 export function RequireAuth() {
-  const { status } = useAuth();
+  const { status, user } = useAuth();
   const location = useLocation();
   if (status === "loading") return <SplashScreen />;
   if (status !== "authenticated") return <Navigate to="/entrar" replace state={{ from: location.pathname }} />;
+  if (user?.mustChangePassword) return <ChangePasswordPage />;
   return <Outlet />;
 }
 
