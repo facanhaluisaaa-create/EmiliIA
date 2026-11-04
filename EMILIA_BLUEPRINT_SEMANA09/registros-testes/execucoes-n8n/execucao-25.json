@@ -1,0 +1,202 @@
+{
+ "id": "25",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "waiting",
+ "inicio": "2026-11-04T03:09:13.922Z",
+ "fim": "2026-11-04T03:09:14.184Z",
+ "erro_global": null,
+ "sequencia_de_nos": [
+  "Quando a psicóloga envia mensagem",
+  "Configuração da EmilIA",
+  "Pré-checagem determinística",
+  "Pré-checagem bloqueou?",
+  "Guardrails de entrada (IA)",
+  "EmilIA — Agente de back-office",
+  "Analisar resposta do agente",
+  "Há ação para aprovar?",
+  "Pedir aprovação no chat"
+ ],
+ "nos": [
+  {
+   "no": "Quando a psicóloga envia mensagem",
+   "status": "success",
+   "inicio": 1793761753979,
+   "ms": 4,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "af71a74cc97e415a98456ffdbab83cd6",
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\"."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Configuração da EmilIA",
+   "status": "success",
+   "inicio": 1793761754000,
+   "ms": 6,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "af71a74cc97e415a98456ffdbab83cd6",
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "email_psicologa": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
+      "fuso": "America/Sao_Paulo"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem determinística",
+   "status": "success",
+   "inicio": 1793761754016,
+   "ms": 44,
+   "saidas": [
+    [
+     {
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "chatInput_original": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "sessionId": "af71a74cc97e415a98456ffdbab83cd6",
+      "bloqueio": false,
+      "categoria": "permitido",
+      "motivo": "",
+      "resposta_bloqueio": "",
+      "codigos_detectados": [
+       "P-014"
+      ],
+      "tamanho": 89
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem bloqueou?",
+   "status": "success",
+   "inicio": 1793761754070,
+   "ms": 28,
+   "saidas": [
+    [],
+    [
+     {
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "chatInput_original": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "sessionId": "af71a74cc97e415a98456ffdbab83cd6",
+      "bloqueio": false,
+      "categoria": "permitido",
+      "motivo": "",
+      "resposta_bloqueio": "",
+      "codigos_detectados": [
+       "P-014"
+      ],
+      "tamanho": 89
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Guardrails de entrada (IA)",
+   "status": "success",
+   "inicio": 1793761754105,
+   "ms": 0,
+   "saidas": [
+    [
+     {
+      "guardrailsInput": "PINADO: saída do nó Guardrails fixada para testes sem chave OpenAI",
+      "checks": [
+       {
+        "name": "jailbreak",
+        "triggered": false,
+        "confidenceScore": 0
+       }
+      ]
+     }
+    ]
+   ]
+  },
+  {
+   "no": "EmilIA — Agente de back-office",
+   "status": "success",
+   "inicio": 1793761754112,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "output": "Entendido. Vou propor um lembrete para 07/11/2026 às 09:30. Ele só será criado depois da sua aprovação. <<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\",\"descricao\":\"Confirmar manutenção do horário de segunda-feira\"}<<FIM_ACAO>>"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Analisar resposta do agente",
+   "status": "success",
+   "inicio": 1793761754119,
+   "ms": 23,
+   "saidas": [
+    [
+     {
+      "sessao": "af71a74cc97e415a98456ffdbab83cd6",
+      "resposta_texto": "Entendido. Vou propor um lembrete para 07/11/2026 às 09:30. Ele só será criado depois da sua aprovação.",
+      "tem_acao": true,
+      "valido": true,
+      "erro": null,
+      "acao": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014",
+       "descricao": "Confirmar manutenção do horário de segunda-feira",
+       "inicio_iso": "2026-11-07T09:30:00.000-03:00",
+       "fim_iso": "2026-11-07T09:45:00.000-03:00"
+      },
+      "mensagem_aprovacao": "Preciso da sua aprovação para executar:\n\n• Ferramenta: criar_lembrete (Google Calendar)\n• Paciente: P-014\n• Data e hora: 07/11/2026 às 09:30\n• Título: Confirmar horário com P-014\n• Descrição: Confirmar manutenção do horário de segunda-feira\n\nNada será criado sem a sua aprovação."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Há ação para aprovar?",
+   "status": "success",
+   "inicio": 1793761754149,
+   "ms": 8,
+   "saidas": [
+    [
+     {
+      "sessao": "af71a74cc97e415a98456ffdbab83cd6",
+      "resposta_texto": "Entendido. Vou propor um lembrete para 07/11/2026 às 09:30. Ele só será criado depois da sua aprovação.",
+      "tem_acao": true,
+      "valido": true,
+      "erro": null,
+      "acao": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014",
+       "descricao": "Confirmar manutenção do horário de segunda-feira",
+       "inicio_iso": "2026-11-07T09:30:00.000-03:00",
+       "fim_iso": "2026-11-07T09:45:00.000-03:00"
+      },
+      "mensagem_aprovacao": "Preciso da sua aprovação para executar:\n\n• Ferramenta: criar_lembrete (Google Calendar)\n• Paciente: P-014\n• Data e hora: 07/11/2026 às 09:30\n• Título: Confirmar horário com P-014\n• Descrição: Confirmar manutenção do horário de segunda-feira\n\nNada será criado sem a sua aprovação."
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Pedir aprovação no chat",
+   "status": "waiting",
+   "inicio": 1793761754164,
+   "ms": 10,
+   "saidas": [
+    [
+     {}
+    ]
+   ]
+  }
+ ]
+}

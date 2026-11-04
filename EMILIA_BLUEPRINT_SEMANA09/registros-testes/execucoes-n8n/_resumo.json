@@ -1,0 +1,549 @@
+[
+ {
+  "id": "1",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:55:27.723Z",
+  "erro_global": "3 nodes have issues:\n- 'Registrar auditoria': Parameter \"Document\" is required. Parameter \"Sheet\" is required.\n- 'Criar lembrete no Google Calendar': Parameter \"Calendar\" is required.\n- 'Verificar lembretes existentes': Parameter \"Calendar\" is required.",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "2",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:55:33.653Z",
+  "erro_global": "3 nodes have issues:\n- 'Registrar auditoria': Parameter \"Document\" is required. Parameter \"Sheet\" is required.\n- 'Criar lembrete no Google Calendar': Parameter \"Calendar\" is required.\n- 'Verificar lembretes existentes': Parameter \"Calendar\" is required.",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "3",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:55:39.655Z",
+  "erro_global": "3 nodes have issues:\n- 'Registrar auditoria': Parameter \"Document\" is required. Parameter \"Sheet\" is required.\n- 'Criar lembrete no Google Calendar': Parameter \"Calendar\" is required.\n- 'Verificar lembretes existentes': Parameter \"Calendar\" is required.",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "4",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:55:45.597Z",
+  "erro_global": "3 nodes have issues:\n- 'Registrar auditoria': Parameter \"Document\" is required. Parameter \"Sheet\" is required.\n- 'Criar lembrete no Google Calendar': Parameter \"Calendar\" is required.\n- 'Verificar lembretes existentes': Parameter \"Calendar\" is required.",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "5",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:57:50.525Z",
+  "erro_global": "2 nodes have issues:\n- 'Criar lembrete no Google Calendar': Not a valid Google Calendar ID\n- 'Verificar lembretes existentes': Not a valid Google Calendar ID",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "6",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:57:56.514Z",
+  "erro_global": "2 nodes have issues:\n- 'Criar lembrete no Google Calendar': Not a valid Google Calendar ID\n- 'Verificar lembretes existentes': Not a valid Google Calendar ID",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "7",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:58:02.490Z",
+  "erro_global": "2 nodes have issues:\n- 'Criar lembrete no Google Calendar': Not a valid Google Calendar ID\n- 'Verificar lembretes existentes': Not a valid Google Calendar ID",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "8",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:58:08.537Z",
+  "erro_global": "2 nodes have issues:\n- 'Criar lembrete no Google Calendar': Not a valid Google Calendar ID\n- 'Verificar lembretes existentes': Not a valid Google Calendar ID",
+  "sequencia_de_nos": []
+ },
+ {
+  "id": "9",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:59:09.790Z",
+  "erro_global": "Cannot read properties of undefined (reading 'text')",
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Registrar auditoria",
+   "Responder no chat"
+  ]
+ },
+ {
+  "id": "10",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:59:15.769Z",
+  "erro_global": "Cannot read properties of undefined (reading 'text')",
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Registrar auditoria",
+   "Responder no chat"
+  ]
+ },
+ {
+  "id": "11",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:59:21.891Z",
+  "erro_global": "Cannot read properties of undefined (reading 'text')",
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Registrar auditoria",
+   "Responder no chat"
+  ]
+ },
+ {
+  "id": "12",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:59:27.846Z",
+  "erro_global": "Cannot read properties of undefined (reading 'text')",
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Registrar auditoria",
+   "Responder no chat"
+  ]
+ },
+ {
+  "id": "13",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T02:59:44.112Z",
+  "erro_global": "Cannot read properties of undefined (reading 'text')",
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Preparar resposta",
+   "Registrar auditoria",
+   "Responder no chat"
+  ]
+ },
+ {
+  "id": "14",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "error",
+  "inicio": "2026-11-04T03:00:54.984Z",
+  "erro_global": "Cannot read properties of undefined (reading 'text')",
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Registrar auditoria",
+   "Responder no chat"
+  ]
+ },
+ {
+  "id": "15",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:02:27.145Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "16",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:02:36.191Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "17",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:02:45.194Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "18",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:02:54.377Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Preparar bloqueio (regra)",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "19",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:03:13.211Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Preparar resposta",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "20",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "waiting",
+  "inicio": "2026-11-04T03:03:26.631Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat"
+  ]
+ },
+ {
+  "id": "21",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "waiting",
+  "inicio": "2026-11-04T03:04:19.146Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat"
+  ]
+ },
+ {
+  "id": "22",
+  "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "status": "success",
+  "inicio": "2026-11-04T03:05:14.889Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando chamado pela EmilIA",
+   "Validar ação",
+   "Proposta válida?",
+   "Retornar informação faltante"
+  ]
+ },
+ {
+  "id": "23",
+  "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "status": "success",
+  "inicio": "2026-11-04T03:05:52.038Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando chamado pela EmilIA",
+   "Validar ação",
+   "Proposta válida?",
+   "Retornar proposta validada"
+  ]
+ },
+ {
+  "id": "24",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "waiting",
+  "inicio": "2026-11-04T03:07:29.523Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat"
+  ]
+ },
+ {
+  "id": "25",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "waiting",
+  "inicio": "2026-11-04T03:09:13.922Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat"
+  ]
+ },
+ {
+  "id": "26",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:11:05.215Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Preparar resposta",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "27",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:11:18.697Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat",
+   "Aprovado?",
+   "Qual ferramenta?",
+   "Verificar lembretes existentes",
+   "Já existe lembrete igual?",
+   "Lembrete duplicado?",
+   "Criar lembrete no Google Calendar",
+   "Preparar falha",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "28",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:11:28.927Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat",
+   "Aprovado?",
+   "Preparar negado",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "29",
+  "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "status": "success",
+  "inicio": "2026-11-04T03:11:42.552Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando chamado pela EmilIA",
+   "Validar ação",
+   "Proposta válida?",
+   "Retornar informação faltante"
+  ]
+ },
+ {
+  "id": "30",
+  "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "status": "success",
+  "inicio": "2026-11-04T03:12:19.654Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando chamado pela EmilIA",
+   "Validar ação",
+   "Proposta válida?",
+   "Retornar proposta validada"
+  ]
+ },
+ {
+  "id": "31",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:13:25.194Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Preparar resposta",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "32",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:13:41.199Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat",
+   "Aprovado?",
+   "Qual ferramenta?",
+   "Verificar lembretes existentes",
+   "Já existe lembrete igual?",
+   "Lembrete duplicado?",
+   "Criar lembrete no Google Calendar",
+   "Preparar falha",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "33",
+  "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+  "status": "success",
+  "inicio": "2026-11-04T03:14:02.488Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando a psicóloga envia mensagem",
+   "Configuração da EmilIA",
+   "Pré-checagem determinística",
+   "Pré-checagem bloqueou?",
+   "Guardrails de entrada (IA)",
+   "EmilIA — Agente de back-office",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Pedir aprovação no chat",
+   "Aprovado?",
+   "Preparar negado",
+   "Consolidar resposta",
+   "Responder no chat",
+   "Registrar auditoria"
+  ]
+ },
+ {
+  "id": "34",
+  "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "status": "success",
+  "inicio": "2026-11-04T03:14:26.858Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando chamado pela EmilIA",
+   "Validar ação",
+   "Proposta válida?",
+   "Retornar informação faltante"
+  ]
+ },
+ {
+  "id": "35",
+  "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "status": "success",
+  "inicio": "2026-11-04T03:15:04.042Z",
+  "erro_global": null,
+  "sequencia_de_nos": [
+   "Quando chamado pela EmilIA",
+   "Validar ação",
+   "Proposta válida?",
+   "Retornar proposta validada"
+  ]
+ }
+]

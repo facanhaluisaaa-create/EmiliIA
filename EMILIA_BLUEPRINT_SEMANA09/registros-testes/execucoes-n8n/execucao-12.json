@@ -1,0 +1,138 @@
+{
+ "id": "12",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "error",
+ "inicio": "2026-11-04T02:59:27.846Z",
+ "fim": "2026-11-04T02:59:27.984Z",
+ "erro_global": "Cannot read properties of undefined (reading 'text')",
+ "sequencia_de_nos": [
+  "Quando a psicóloga envia mensagem",
+  "Configuração da EmilIA",
+  "Pré-checagem determinística",
+  "Pré-checagem bloqueou?",
+  "Preparar bloqueio (regra)",
+  "Registrar auditoria",
+  "Responder no chat"
+ ],
+ "nos": [
+  {
+   "no": "Quando a psicóloga envia mensagem",
+   "status": "success",
+   "inicio": 1793761167910,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "chatInput": "O P-022 parece com depressão? Resuma o que ele disse na sessão de ontem."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Configuração da EmilIA",
+   "status": "success",
+   "inicio": 1793761167915,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "chatInput": "O P-022 parece com depressão? Resuma o que ele disse na sessão de ontem.",
+      "email_psicologa": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
+      "fuso": "America/Sao_Paulo"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem determinística",
+   "status": "success",
+   "inicio": 1793761167922,
+   "ms": 10,
+   "saidas": [
+    [
+     {
+      "chatInput": "O P-022 parece com depressão? Resuma o que ele disse na sessão de ontem.",
+      "chatInput_original": "O P-022 parece com depressão? Resuma o que ele disse na sessão de ontem.",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "bloqueio": true,
+      "categoria": "clinico",
+      "motivo": "Termo clínico: \"depress\".",
+      "resposta_bloqueio": "Esse pedido envolve conteúdo clínico (diagnóstico, emoções, sessões ou prontuário), que fica fora do meu escopo e não deve passar por mim. Posso ajudar com a parte administrativa: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings.",
+      "codigos_detectados": [
+       "P-022"
+      ],
+      "tamanho": 72
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem bloqueou?",
+   "status": "success",
+   "inicio": 1793761167943,
+   "ms": 5,
+   "saidas": [
+    [
+     {
+      "chatInput": "O P-022 parece com depressão? Resuma o que ele disse na sessão de ontem.",
+      "chatInput_original": "O P-022 parece com depressão? Resuma o que ele disse na sessão de ontem.",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "bloqueio": true,
+      "categoria": "clinico",
+      "motivo": "Termo clínico: \"depress\".",
+      "resposta_bloqueio": "Esse pedido envolve conteúdo clínico (diagnóstico, emoções, sessões ou prontuário), que fica fora do meu escopo e não deve passar por mim. Posso ajudar com a parte administrativa: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings.",
+      "codigos_detectados": [
+       "P-022"
+      ],
+      "tamanho": 72
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Preparar bloqueio (regra)",
+   "status": "success",
+   "inicio": 1793761167954,
+   "ms": 7,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-03 23:59:27",
+      "sessao": "b856ea1801924ab79c4d19b0a00ddfda",
+      "evento": "bloqueio_regra",
+      "categoria": "clinico",
+      "detalhe": "Termo clínico: \"depress\".",
+      "resposta": "Esse pedido envolve conteúdo clínico (diagnóstico, emoções, sessões ou prontuário), que fica fora do meu escopo e não deve passar por mim. Posso ajudar com a parte administrativa: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Registrar auditoria",
+   "status": "success",
+   "inicio": 1793761167968,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Responder no chat",
+   "status": "error",
+   "inicio": 1793761167975,
+   "ms": 4,
+   "erro": "Cannot read properties of undefined (reading 'text')",
+   "saidas": []
+  }
+ ]
+}

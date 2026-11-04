@@ -1,5 +1,7 @@
 # Matriz dos oito testes obrigatórios
 
+Resultados reais obtidos em 04/11/2026: ver `EMILIA_BLUEPRINT_SEMANA09/registros-testes/matriz-resultados-8-testes.md`.
+
 Execute pelo botão **Open chat** do workflow principal, na ordem. Depois de cada teste, abra **Executions** e confira o caminho percorrido, e veja a linha gerada na aba **Auditoria**. Registre o resultado real (não presuma).
 
 Antes de começar: confira a data de hoje e ajuste as datas das mensagens 5, 6 e 7 para dias futuros.

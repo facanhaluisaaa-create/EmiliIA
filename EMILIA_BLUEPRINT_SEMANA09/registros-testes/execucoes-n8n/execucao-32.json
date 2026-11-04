@@ -1,0 +1,373 @@
+{
+ "id": "32",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "success",
+ "inicio": "2026-11-04T03:13:41.199Z",
+ "fim": "2026-11-04T03:13:53.440Z",
+ "erro_global": null,
+ "sequencia_de_nos": [
+  "Quando a psicóloga envia mensagem",
+  "Configuração da EmilIA",
+  "Pré-checagem determinística",
+  "Pré-checagem bloqueou?",
+  "Guardrails de entrada (IA)",
+  "EmilIA — Agente de back-office",
+  "Analisar resposta do agente",
+  "Há ação para aprovar?",
+  "Pedir aprovação no chat",
+  "Aprovado?",
+  "Qual ferramenta?",
+  "Verificar lembretes existentes",
+  "Já existe lembrete igual?",
+  "Lembrete duplicado?",
+  "Criar lembrete no Google Calendar",
+  "Preparar falha",
+  "Consolidar resposta",
+  "Responder no chat",
+  "Registrar auditoria"
+ ],
+ "nos": [
+  {
+   "no": "Quando a psicóloga envia mensagem",
+   "status": "success",
+   "inicio": 1793762021268,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\"."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Configuração da EmilIA",
+   "status": "success",
+   "inicio": 1793762021279,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "email_psicologa": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
+      "fuso": "America/Sao_Paulo"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem determinística",
+   "status": "success",
+   "inicio": 1793762021290,
+   "ms": 10,
+   "saidas": [
+    [
+     {
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "chatInput_original": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "sessionId": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "bloqueio": false,
+      "categoria": "permitido",
+      "motivo": "",
+      "resposta_bloqueio": "",
+      "codigos_detectados": [
+       "P-014"
+      ],
+      "tamanho": 89
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem bloqueou?",
+   "status": "success",
+   "inicio": 1793762021310,
+   "ms": 7,
+   "saidas": [
+    [],
+    [
+     {
+      "chatInput": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "chatInput_original": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+      "sessionId": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "bloqueio": false,
+      "categoria": "permitido",
+      "motivo": "",
+      "resposta_bloqueio": "",
+      "codigos_detectados": [
+       "P-014"
+      ],
+      "tamanho": 89
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Guardrails de entrada (IA)",
+   "status": "success",
+   "inicio": 1793762021345,
+   "ms": 0,
+   "saidas": [
+    [
+     {
+      "guardrailsInput": "PINADO: saída do nó Guardrails fixada para testes sem chave OpenAI",
+      "checks": [
+       {
+        "name": "jailbreak",
+        "triggered": false,
+        "confidenceScore": 0
+       }
+      ]
+     }
+    ]
+   ]
+  },
+  {
+   "no": "EmilIA — Agente de back-office",
+   "status": "success",
+   "inicio": 1793762021352,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "output": "Entendido. Vou propor um lembrete para 07/11/2026 às 09:30. Ele só será criado depois da sua aprovação. <<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\",\"descricao\":\"Confirmar manutenção do horário de segunda-feira\"}<<FIM_ACAO>>"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Analisar resposta do agente",
+   "status": "success",
+   "inicio": 1793762021360,
+   "ms": 13,
+   "saidas": [
+    [
+     {
+      "sessao": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "resposta_texto": "Entendido. Vou propor um lembrete para 07/11/2026 às 09:30. Ele só será criado depois da sua aprovação.",
+      "tem_acao": true,
+      "valido": true,
+      "erro": null,
+      "acao": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014",
+       "descricao": "Confirmar manutenção do horário de segunda-feira",
+       "inicio_iso": "2026-11-07T09:30:00.000-03:00",
+       "fim_iso": "2026-11-07T09:45:00.000-03:00"
+      },
+      "mensagem_aprovacao": "Preciso da sua aprovação para executar:\n\n• Ferramenta: criar_lembrete (Google Calendar)\n• Paciente: P-014\n• Data e hora: 07/11/2026 às 09:30\n• Título: Confirmar horário com P-014\n• Descrição: Confirmar manutenção do horário de segunda-feira\n\nNada será criado sem a sua aprovação."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Há ação para aprovar?",
+   "status": "success",
+   "inicio": 1793762021380,
+   "ms": 3,
+   "saidas": [
+    [
+     {
+      "sessao": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "resposta_texto": "Entendido. Vou propor um lembrete para 07/11/2026 às 09:30. Ele só será criado depois da sua aprovação.",
+      "tem_acao": true,
+      "valido": true,
+      "erro": null,
+      "acao": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014",
+       "descricao": "Confirmar manutenção do horário de segunda-feira",
+       "inicio_iso": "2026-11-07T09:30:00.000-03:00",
+       "fim_iso": "2026-11-07T09:45:00.000-03:00"
+      },
+      "mensagem_aprovacao": "Preciso da sua aprovação para executar:\n\n• Ferramenta: criar_lembrete (Google Calendar)\n• Paciente: P-014\n• Data e hora: 07/11/2026 às 09:30\n• Título: Confirmar horário com P-014\n• Descrição: Confirmar manutenção do horário de segunda-feira\n\nNada será criado sem a sua aprovação."
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Pedir aprovação no chat",
+   "status": "success",
+   "inicio": 1793762029760,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "data": {
+       "approved": true,
+       "respondedAt": "2026-11-04T03:13:49.695Z"
+      }
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Aprovado?",
+   "status": "success",
+   "inicio": 1793762029767,
+   "ms": 4,
+   "saidas": [
+    [
+     {
+      "data": {
+       "approved": true,
+       "respondedAt": "2026-11-04T03:13:49.695Z"
+      }
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Qual ferramenta?",
+   "status": "success",
+   "inicio": 1793762029777,
+   "ms": 6,
+   "saidas": [
+    [
+     {
+      "data": {
+       "approved": true,
+       "respondedAt": "2026-11-04T03:13:49.695Z"
+      }
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Verificar lembretes existentes",
+   "status": "success",
+   "inicio": 1793762029789,
+   "ms": 7,
+   "saidas": [
+    [
+     {
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Já existe lembrete igual?",
+   "status": "success",
+   "inicio": 1793762029802,
+   "ms": 7,
+   "saidas": [
+    [
+     {
+      "existe": false,
+      "total_na_janela": 0
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Lembrete duplicado?",
+   "status": "success",
+   "inicio": 1793762029816,
+   "ms": 3,
+   "saidas": [
+    [],
+    [
+     {
+      "existe": false,
+      "total_na_janela": 0
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Criar lembrete no Google Calendar",
+   "status": "success",
+   "inicio": 1793762029825,
+   "ms": 12,
+   "saidas": [
+    [],
+    [
+     {
+      "existe": false,
+      "total_na_janela": 0,
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Preparar falha",
+   "status": "success",
+   "inicio": 1793762029845,
+   "ms": 6,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-04 00:13:49",
+      "sessao": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "evento": "acao_falhou",
+      "categoria": "criar_lembrete",
+      "detalhe": "Node does not have any credentials set",
+      "resposta": "A ação foi aprovada, mas a execução falhou (Node does not have any credentials set). Nada foi criado ou enviado. Verifique a credencial e tente novamente."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Consolidar resposta",
+   "status": "success",
+   "inicio": 1793762029857,
+   "ms": 5,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-04 00:13:49",
+      "sessao": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "evento": "acao_falhou",
+      "categoria": "criar_lembrete",
+      "detalhe": "Node does not have any credentials set",
+      "resposta": "A ação foi aprovada, mas a execução falhou (Node does not have any credentials set). Nada foi criado ou enviado. Verifique a credencial e tente novamente."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Responder no chat",
+   "status": "success",
+   "inicio": 1793762033422,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "sessionId": "b4c9c2a314154d4a9d4158b5ce536be5",
+      "action": "sendMessage",
+      "chatInput": "A ação foi aprovada, mas a execução falhou (Node does not have any credentials set). Nada foi criado ou enviado. Verifique a credencial e tente novamente."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Registrar auditoria",
+   "status": "success",
+   "inicio": 1793762033431,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  }
+ ]
+}

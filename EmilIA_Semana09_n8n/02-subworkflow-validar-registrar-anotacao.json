@@ -21,7 +21,7 @@
           ]
         }
       },
-      "id": "n045-f8e8aee3",
+      "id": "n046-a3b34be7",
       "name": "Quando chamado pela EmilIA",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
@@ -34,7 +34,7 @@
       "parameters": {
         "jsCode": "// Regra determinística: campos obrigatórios, formato do código e filtro de conteúdo clínico.\nconst j = $input.first().json;\nconst codigo = String(j.codigo_paciente ?? '').trim().toUpperCase().replace(/^P[\\s\\-_.]?0*(\\d{1,3})$/i, (m, n) => 'P-' + String(n).padStart(3, '0'));\nconst texto = String(j.texto ?? '').trim().replace(/\\s+/g, ' ');\nconst norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\nconst CLINICO = ['diagnos','depress','ansied','transtorno','sintoma','prontuario','sentimento','emocao','medicac','remedio','laudo','suicid','crise','trauma','quadro clinico','humor','sessao foi','na sessao'];\nconst problemas = [];\nif (!/^P-\\d{3}$/.test(codigo)) problemas.push('codigo_paciente deve estar no formato P-000');\nif (texto.length < 5) problemas.push('texto da anotação é obrigatório (mínimo 5 caracteres)');\nif (texto.length > 500) problemas.push('texto acima de 500 caracteres');\nconst clinico = CLINICO.find((k) => norm(texto).includes(k));\nif (clinico) problemas.push('conteúdo clínico não pode ser registrado (\"' + clinico + '\")');\nlet h = 5381; const base = codigo + '|' + norm(texto);\nfor (let i = 0; i < base.length; i++) h = ((h << 5) + h + base.charCodeAt(i)) >>> 0;\nconst chave = 'A' + h.toString(16).padStart(8, '0');\nreturn [{ json: { ok: problemas.length === 0, motivo: problemas.join('; '), codigo_paciente: codigo, texto, chave_dedup: chave, sessao: String(j.sessao ?? '') } }];"
       },
-      "id": "n046-eb3f8c0b",
+      "id": "n047-e87067f6",
       "name": "Validar anotação",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -54,7 +54,7 @@
           },
           "conditions": [
             {
-              "id": "n047-6a45e8f3",
+              "id": "n048-bfa10de8",
               "leftValue": "={{ $json.ok }}",
               "rightValue": "",
               "operator": {
@@ -68,7 +68,7 @@
         },
         "options": {}
       },
-      "id": "n048-ca065c96",
+      "id": "n049-d94dfd1d",
       "name": "Anotação válida?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -81,7 +81,7 @@
       "parameters": {
         "jsCode": "const v = $input.first().json;\nreturn [{ json: { ok: false, registrado: false, motivo: v.motivo, codigo_paciente: v.codigo_paciente } }];"
       },
-      "id": "n049-067e494c",
+      "id": "n050-a720e983",
       "name": "Retornar erro",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -114,7 +114,7 @@
         },
         "options": {}
       },
-      "id": "n050-b60896f4",
+      "id": "n051-6028003c",
       "name": "Buscar anotações do paciente",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -129,7 +129,7 @@
       "parameters": {
         "jsCode": "// Prevenção de duplicidade: mesma chave (código + texto normalizado) nas últimas 24 horas.\nconst v = $('Validar anotação').first().json;\nconst linhas = $input.all().map((i) => i.json).filter((r) => r && r.chave_dedup);\nconst agora = $now.setZone('America/Sao_Paulo');\nconst duplicada = linhas.some((r) => {\n  if (String(r.chave_dedup) !== v.chave_dedup) return false;\n  const quando = DateTime.fromFormat(String(r.data_hora || ''), 'yyyy-MM-dd HH:mm:ss', { zone: 'America/Sao_Paulo' });\n  return !quando.isValid || agora.diff(quando, 'hours').hours < 24;\n});\nreturn [{ json: { ...v, duplicada, existentes: linhas.length } }];"
       },
-      "id": "n051-d7f1b6cf",
+      "id": "n052-7b5c4378",
       "name": "Verificar duplicidade",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -149,7 +149,7 @@
           },
           "conditions": [
             {
-              "id": "n052-1e7b0eff",
+              "id": "n053-35a29c5d",
               "leftValue": "={{ $json.duplicada }}",
               "rightValue": "",
               "operator": {
@@ -163,7 +163,7 @@
         },
         "options": {}
       },
-      "id": "n053-b63e2eff",
+      "id": "n054-b1fe65fe",
       "name": "Duplicada?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -176,7 +176,7 @@
       "parameters": {
         "jsCode": "const v = $input.first().json;\nreturn [{ json: { ok: false, registrado: false, motivo: 'Anotação idêntica já registrada para ' + v.codigo_paciente + ' nas últimas 24 horas. Não registrei de novo.', codigo_paciente: v.codigo_paciente, chave_dedup: v.chave_dedup } }];"
       },
-      "id": "n054-ab131e06",
+      "id": "n055-b096d069",
       "name": "Retornar duplicada",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -189,7 +189,7 @@
       "parameters": {
         "jsCode": "const v = $('Verificar duplicidade').first().json;\nreturn [{ json: {\n  id: v.chave_dedup + '-' + $now.toFormat('yyyyMMddHHmmss'),\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  codigo_paciente: v.codigo_paciente,\n  texto: v.texto,\n  chave_dedup: v.chave_dedup,\n  origem: 'EmilIA',\n  sessao: v.sessao,\n} }];"
       },
-      "id": "n055-6e61d4e6",
+      "id": "n056-4dda9a99",
       "name": "Preparar linha",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -221,7 +221,7 @@
         },
         "options": {}
       },
-      "id": "n056-a034c2ca",
+      "id": "n057-eadfb22f",
       "name": "Registrar na planilha",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -234,7 +234,7 @@
       "parameters": {
         "jsCode": "const linha = $('Preparar linha').first().json;\nreturn [{ json: { ok: true, registrado: true, id: linha.id, codigo_paciente: linha.codigo_paciente, texto: linha.texto, mensagem: 'Anotação administrativa registrada para ' + linha.codigo_paciente + '.' } }];"
       },
-      "id": "n057-b40062f4",
+      "id": "n058-35ee6725",
       "name": "Retornar sucesso",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -250,7 +250,7 @@
         "width": 460,
         "color": 5
       },
-      "id": "n058-b8859d59",
+      "id": "n059-28a94bef",
       "name": "Nota",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,

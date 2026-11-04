@@ -1,0 +1,11 @@
+{
+ "id": "6",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "error",
+ "inicio": "2026-11-04T02:57:56.514Z",
+ "fim": "2026-11-04T02:57:56.576Z",
+ "erro_global": "2 nodes have issues:\n- 'Criar lembrete no Google Calendar': Not a valid Google Calendar ID\n- 'Verificar lembretes existentes': Not a valid Google Calendar ID",
+ "sequencia_de_nos": [],
+ "nos": []
+}

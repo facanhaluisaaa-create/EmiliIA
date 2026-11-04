@@ -1,0 +1,107 @@
+{
+ "id": "30",
+ "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+ "modo": "manual",
+ "status": "success",
+ "inicio": "2026-11-04T03:12:19.654Z",
+ "fim": "2026-11-04T03:12:19.717Z",
+ "erro_global": null,
+ "sequencia_de_nos": [
+  "Quando chamado pela EmilIA",
+  "Validar ação",
+  "Proposta válida?",
+  "Retornar proposta validada"
+ ],
+ "nos": [
+  {
+   "no": "Quando chamado pela EmilIA",
+   "status": "success",
+   "inicio": 1793761939671,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "ferramenta": "criar_lembrete",
+      "codigo_paciente": "p14",
+      "data": "07/11/2026",
+      "hora": "9h30",
+      "titulo": "Confirmar horário com P-014",
+      "descricao": "",
+      "assunto": "",
+      "corpo": ""
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Validar ação",
+   "status": "success",
+   "inicio": 1793761939683,
+   "ms": 8,
+   "saidas": [
+    [
+     {
+      "ok": true,
+      "status": "proposta_validada",
+      "proposta": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014"
+      },
+      "bloco_obrigatorio": "<<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>",
+      "instrucao": "A ação foi validada mas NÃO executada. Explique à psicóloga o que será feito e termine a resposta reproduzindo EXATAMENTE este bloco, sem alterar nada: <<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Proposta válida?",
+   "status": "success",
+   "inicio": 1793761939697,
+   "ms": 5,
+   "saidas": [
+    [
+     {
+      "ok": true,
+      "status": "proposta_validada",
+      "proposta": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014"
+      },
+      "bloco_obrigatorio": "<<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>",
+      "instrucao": "A ação foi validada mas NÃO executada. Explique à psicóloga o que será feito e termine a resposta reproduzindo EXATAMENTE este bloco, sem alterar nada: <<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>"
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Retornar proposta validada",
+   "status": "success",
+   "inicio": 1793761939706,
+   "ms": 6,
+   "saidas": [
+    [
+     {
+      "ok": true,
+      "status": "proposta_validada",
+      "proposta": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2026-11-07",
+       "hora": "09:30",
+       "titulo": "Confirmar horário com P-014"
+      },
+      "bloco_obrigatorio": "<<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>",
+      "instrucao": "A ação foi validada mas NÃO executada. Explique à psicóloga o que será feito e termine a resposta reproduzindo EXATAMENTE este bloco, sem alterar nada: <<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2026-11-07\",\"hora\":\"09:30\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>"
+     }
+    ]
+   ]
+  }
+ ]
+}

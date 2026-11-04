@@ -1,0 +1,160 @@
+{
+ "id": "16",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "success",
+ "inicio": "2026-11-04T03:02:36.191Z",
+ "fim": "2026-11-04T03:02:39.329Z",
+ "erro_global": null,
+ "sequencia_de_nos": [
+  "Quando a psicóloga envia mensagem",
+  "Configuração da EmilIA",
+  "Pré-checagem determinística",
+  "Pré-checagem bloqueou?",
+  "Preparar bloqueio (regra)",
+  "Consolidar resposta",
+  "Responder no chat",
+  "Registrar auditoria"
+ ],
+ "nos": [
+  {
+   "no": "Quando a psicóloga envia mensagem",
+   "status": "success",
+   "inicio": 1793761356298,
+   "ms": 0,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "e393c86d4c0649c1a12a3426fe1ac927",
+      "chatInput": "Me passa uma receita de bolo de cenoura com cobertura de chocolate."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Configuração da EmilIA",
+   "status": "success",
+   "inicio": 1793761356306,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "e393c86d4c0649c1a12a3426fe1ac927",
+      "chatInput": "Me passa uma receita de bolo de cenoura com cobertura de chocolate.",
+      "email_psicologa": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
+      "fuso": "America/Sao_Paulo"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem determinística",
+   "status": "success",
+   "inicio": 1793761356312,
+   "ms": 9,
+   "saidas": [
+    [
+     {
+      "chatInput": "Me passa uma receita de bolo de cenoura com cobertura de chocolate.",
+      "chatInput_original": "Me passa uma receita de bolo de cenoura com cobertura de chocolate.",
+      "sessionId": "e393c86d4c0649c1a12a3426fe1ac927",
+      "bloqueio": true,
+      "categoria": "fora_escopo",
+      "motivo": "Tema fora do escopo: \"receita de\".",
+      "resposta_bloqueio": "Isso está fora do que eu faço. Sou a assistente administrativa do consultório: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings. Em que posso ajudar nesses temas?",
+      "codigos_detectados": [],
+      "tamanho": 67
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem bloqueou?",
+   "status": "success",
+   "inicio": 1793761356327,
+   "ms": 4,
+   "saidas": [
+    [
+     {
+      "chatInput": "Me passa uma receita de bolo de cenoura com cobertura de chocolate.",
+      "chatInput_original": "Me passa uma receita de bolo de cenoura com cobertura de chocolate.",
+      "sessionId": "e393c86d4c0649c1a12a3426fe1ac927",
+      "bloqueio": true,
+      "categoria": "fora_escopo",
+      "motivo": "Tema fora do escopo: \"receita de\".",
+      "resposta_bloqueio": "Isso está fora do que eu faço. Sou a assistente administrativa do consultório: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings. Em que posso ajudar nesses temas?",
+      "codigos_detectados": [],
+      "tamanho": 67
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Preparar bloqueio (regra)",
+   "status": "success",
+   "inicio": 1793761356336,
+   "ms": 6,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-04 00:02:36",
+      "sessao": "e393c86d4c0649c1a12a3426fe1ac927",
+      "evento": "bloqueio_regra",
+      "categoria": "fora_escopo",
+      "detalhe": "Tema fora do escopo: \"receita de\".",
+      "resposta": "Isso está fora do que eu faço. Sou a assistente administrativa do consultório: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings. Em que posso ajudar nesses temas?"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Consolidar resposta",
+   "status": "success",
+   "inicio": 1793761356350,
+   "ms": 7,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-04 00:02:36",
+      "sessao": "e393c86d4c0649c1a12a3426fe1ac927",
+      "evento": "bloqueio_regra",
+      "categoria": "fora_escopo",
+      "detalhe": "Tema fora do escopo: \"receita de\".",
+      "resposta": "Isso está fora do que eu faço. Sou a assistente administrativa do consultório: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings. Em que posso ajudar nesses temas?"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Responder no chat",
+   "status": "success",
+   "inicio": 1793761359315,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "sessionId": "e393c86d4c0649c1a12a3426fe1ac927",
+      "action": "sendMessage",
+      "chatInput": "Isso está fora do que eu faço. Sou a assistente administrativa do consultório: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings. Em que posso ajudar nesses temas?"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Registrar auditoria",
+   "status": "success",
+   "inicio": 1793761359322,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  }
+ ]
+}

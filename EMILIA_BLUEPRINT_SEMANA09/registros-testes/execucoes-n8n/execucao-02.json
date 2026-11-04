@@ -1,0 +1,11 @@
+{
+ "id": "2",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "error",
+ "inicio": "2026-11-04T02:55:33.653Z",
+ "fim": "2026-11-04T02:55:33.709Z",
+ "erro_global": "3 nodes have issues:\n- 'Registrar auditoria': Parameter \"Document\" is required. Parameter \"Sheet\" is required.\n- 'Criar lembrete no Google Calendar': Parameter \"Calendar\" is required.\n- 'Verificar lembretes existentes': Parameter \"Calendar\" is required.",
+ "sequencia_de_nos": [],
+ "nos": []
+}

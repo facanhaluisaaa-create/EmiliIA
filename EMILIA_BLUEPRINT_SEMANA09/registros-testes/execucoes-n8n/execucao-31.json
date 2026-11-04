@@ -1,0 +1,252 @@
+{
+ "id": "31",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "success",
+ "inicio": "2026-11-04T03:13:25.194Z",
+ "fim": "2026-11-04T03:13:28.383Z",
+ "erro_global": null,
+ "sequencia_de_nos": [
+  "Quando a psicóloga envia mensagem",
+  "Configuração da EmilIA",
+  "Pré-checagem determinística",
+  "Pré-checagem bloqueou?",
+  "Guardrails de entrada (IA)",
+  "EmilIA — Agente de back-office",
+  "Analisar resposta do agente",
+  "Há ação para aprovar?",
+  "Preparar resposta",
+  "Consolidar resposta",
+  "Responder no chat",
+  "Registrar auditoria"
+ ],
+ "nos": [
+  {
+   "no": "Quando a psicóloga envia mensagem",
+   "status": "success",
+   "inicio": 1793762005279,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "5868a25c4abf46818ed3ebf701f00a03",
+      "chatInput": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\"."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Configuração da EmilIA",
+   "status": "success",
+   "inicio": 1793762005297,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "5868a25c4abf46818ed3ebf701f00a03",
+      "chatInput": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\".",
+      "email_psicologa": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
+      "fuso": "America/Sao_Paulo"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem determinística",
+   "status": "success",
+   "inicio": 1793762005309,
+   "ms": 14,
+   "saidas": [
+    [
+     {
+      "chatInput": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\".",
+      "chatInput_original": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\".",
+      "sessionId": "5868a25c4abf46818ed3ebf701f00a03",
+      "bloqueio": false,
+      "categoria": "permitido",
+      "motivo": "",
+      "resposta_bloqueio": "",
+      "codigos_detectados": [
+       "P-014"
+      ],
+      "tamanho": 100
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem bloqueou?",
+   "status": "success",
+   "inicio": 1793762005331,
+   "ms": 8,
+   "saidas": [
+    [],
+    [
+     {
+      "chatInput": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\".",
+      "chatInput_original": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\".",
+      "sessionId": "5868a25c4abf46818ed3ebf701f00a03",
+      "bloqueio": false,
+      "categoria": "permitido",
+      "motivo": "",
+      "resposta_bloqueio": "",
+      "codigos_detectados": [
+       "P-014"
+      ],
+      "tamanho": 100
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Guardrails de entrada (IA)",
+   "status": "success",
+   "inicio": 1793762005348,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "guardrailsInput": "PINADO: saída do nó Guardrails fixada para testes sem chave OpenAI",
+      "checks": [
+       {
+        "name": "jailbreak",
+        "triggered": false,
+        "confidenceScore": 0
+       }
+      ]
+     }
+    ]
+   ]
+  },
+  {
+   "no": "EmilIA — Agente de back-office",
+   "status": "success",
+   "inicio": 1793762005358,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "output": "Vou propor o lembrete. <<ACAO_PENDENTE>>{\"ferramenta\":\"criar_lembrete\",\"codigo_paciente\":\"P-014\",\"data\":\"2020-01-01\",\"hora\":\"10:00\",\"titulo\":\"Confirmar horário com P-014\"}<<FIM_ACAO>>"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Analisar resposta do agente",
+   "status": "success",
+   "inicio": 1793762005369,
+   "ms": 14,
+   "saidas": [
+    [
+     {
+      "sessao": "5868a25c4abf46818ed3ebf701f00a03",
+      "resposta_texto": "Vou propor o lembrete.\n\nA ação proposta não passou na validação e não será executada. Campos inválidos ou ausentes: data no passado Informe os dados corretos para eu propor novamente.",
+      "tem_acao": true,
+      "valido": false,
+      "erro": "Campos inválidos ou ausentes: data no passado",
+      "acao": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2020-01-01",
+       "hora": "10:00",
+       "titulo": "Confirmar horário com P-014"
+      },
+      "mensagem_aprovacao": ""
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Há ação para aprovar?",
+   "status": "success",
+   "inicio": 1793762005392,
+   "ms": 3,
+   "saidas": [
+    [],
+    [
+     {
+      "sessao": "5868a25c4abf46818ed3ebf701f00a03",
+      "resposta_texto": "Vou propor o lembrete.\n\nA ação proposta não passou na validação e não será executada. Campos inválidos ou ausentes: data no passado Informe os dados corretos para eu propor novamente.",
+      "tem_acao": true,
+      "valido": false,
+      "erro": "Campos inválidos ou ausentes: data no passado",
+      "acao": {
+       "ferramenta": "criar_lembrete",
+       "codigo_paciente": "P-014",
+       "data": "2020-01-01",
+       "hora": "10:00",
+       "titulo": "Confirmar horário com P-014"
+      },
+      "mensagem_aprovacao": ""
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Preparar resposta",
+   "status": "success",
+   "inicio": 1793762005402,
+   "ms": 9,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-04 00:13:25",
+      "sessao": "5868a25c4abf46818ed3ebf701f00a03",
+      "evento": "acao_invalida",
+      "categoria": "validacao_falhou",
+      "detalhe": "Campos inválidos ou ausentes: data no passado",
+      "resposta": "Vou propor o lembrete.\n\nA ação proposta não passou na validação e não será executada. Campos inválidos ou ausentes: data no passado Informe os dados corretos para eu propor novamente."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Consolidar resposta",
+   "status": "success",
+   "inicio": 1793762005417,
+   "ms": 8,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-04 00:13:25",
+      "sessao": "5868a25c4abf46818ed3ebf701f00a03",
+      "evento": "acao_invalida",
+      "categoria": "validacao_falhou",
+      "detalhe": "Campos inválidos ou ausentes: data no passado",
+      "resposta": "Vou propor o lembrete.\n\nA ação proposta não passou na validação e não será executada. Campos inválidos ou ausentes: data no passado Informe os dados corretos para eu propor novamente."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Responder no chat",
+   "status": "success",
+   "inicio": 1793762008355,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "sessionId": "5868a25c4abf46818ed3ebf701f00a03",
+      "action": "sendMessage",
+      "chatInput": "Vou propor o lembrete.\n\nA ação proposta não passou na validação e não será executada. Campos inválidos ou ausentes: data no passado Informe os dados corretos para eu propor novamente."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Registrar auditoria",
+   "status": "success",
+   "inicio": 1793762008366,
+   "ms": 3,
+   "saidas": [
+    [
+     {
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  }
+ ]
+}

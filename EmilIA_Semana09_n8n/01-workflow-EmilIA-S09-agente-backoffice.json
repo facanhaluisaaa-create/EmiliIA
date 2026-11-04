@@ -8,7 +8,7 @@
           "responseMode": "responseNodes"
         }
       },
-      "id": "n001-1d504438",
+      "id": "n001-72e3c951",
       "name": "Quando a psicóloga envia mensagem",
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.3,
@@ -23,13 +23,13 @@
         "assignments": {
           "assignments": [
             {
-              "id": "n002-57d777d5",
+              "id": "n002-97cba06d",
               "name": "email_psicologa",
               "value": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
               "type": "string"
             },
             {
-              "id": "n003-085d2c85",
+              "id": "n003-00d0afcb",
               "name": "fuso",
               "value": "America/Sao_Paulo",
               "type": "string"
@@ -39,7 +39,7 @@
         "includeOtherFields": true,
         "options": {}
       },
-      "id": "n004-4f735021",
+      "id": "n004-c042d2ae",
       "name": "Configuração da EmilIA",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -52,7 +52,7 @@
       "parameters": {
         "jsCode": "// CAMADA 1 (parte determinística) — roda ANTES do agente. Nada daqui chega às ferramentas de negócio.\nconst entrada = $input.first().json;\nconst original = String(entrada.chatInput ?? '').trim();\nconst sessao = String(entrada.sessionId ?? '');\nconst norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\nconst t = ' ' + norm(original).replace(/\\s+/g, ' ') + ' ';\n\nconst LIMITE_CARACTERES = 1500;\nconst MANIPULACAO = ['ignore as instrucoes','ignore suas instrucoes','ignore todas as instrucoes','ignore as regras','ignore previous','ignore all previous','desconsidere as regras','desconsidere suas instrucoes','esqueca as regras','esqueca suas instrucoes','esqueca tudo','voce agora e','a partir de agora voce','agora voce e','modo desenvolvedor','developer mode','sem restricoes','sem filtros','sem guardrails','sem limites','jailbreak','do anything now',' dan ','revele seu prompt','mostre seu prompt','qual e o seu prompt','system prompt','prompt do sistema','instrucoes do sistema','suas instrucoes internas','finja que voce','faca de conta que voce','role play','roleplay','bypass','burle ','contorne as regras','override','sudo '];\nconst CLINICO = ['diagnos','depress','ansied','tdah','transtorno','sintoma','prontuario','conteudo da sessao','conteudo das sessoes','o que ele disse','o que ela disse','o que foi dito','o que conversamos','sentimento','emocao','emocional','medicac','remedio','laudo',' cid ','cid-','suicid','crise','trauma','evolucao clinica','quadro clinico','estado mental','como ele esta','como ela esta','analise a sessao','analisa a sessao','interprete','personalidade','borderline','bipolar','esquizo','autis','psicotic','luto','abuso','automutil','resumo da sessao','resuma a sessao'];\nconst ACAO_PROIBIDA = ['cobre o paciente','cobrar o paciente','cobra o paciente','envie cobranca','mande cobranca','enviar cobranca','cancele a consulta','cancelar a consulta','cancela a consulta','desmarque','desmarcar','ligue para o paciente','liga para o paciente','mande mensagem para o paciente','manda mensagem para o paciente','avise o paciente','avisa o paciente','entre em contato com o paciente','whatsapp para o paciente','whatsapp pro paciente','envie para o paciente','mande para o paciente'];\nconst ESCOPO = ['agenda','consulta','paciente','p-0','p-1','p-2','pendenc','financeir','pagamento','pago','valor','anotac','lembrete','briefing','feriado','horario','frequencia','falta','semana','hoje','amanha','mes','sessao','sessoes','atendimento','resumo administrativo','email','e-mail','calendario'];\nconst FORA_ESCOPO = ['receita de','bolo','futebol','piada','poema','filme','serie','noticia','traduz','python','javascript','bitcoin','investimento','horoscopo','clima','previsao do tempo','jogo ','musica','redacao','trabalho de escola'];\n\nconst temAlgum = (lista) => lista.find((k) => t.includes(k)) || null;\nconst temEscopo = ESCOPO.some((k) => t.includes(k));\n\nlet bloqueio = false, categoria = 'permitido', motivo = '', resposta = '';\nif (!original) {\n  bloqueio = true; categoria = 'formato'; motivo = 'Mensagem vazia.';\n  resposta = 'Recebi uma mensagem vazia. Diga o que precisa, por exemplo: \"Quais consultas tenho amanhã?\"';\n} else if (original.length > LIMITE_CARACTERES) {\n  bloqueio = true; categoria = 'formato'; motivo = 'Mensagem acima de ' + LIMITE_CARACTERES + ' caracteres.';\n  resposta = 'Sua mensagem é muito longa (limite de ' + LIMITE_CARACTERES + ' caracteres). Pode resumir o pedido?';\n} else if (/\\b\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}\\b/.test(original)) {\n  bloqueio = true; categoria = 'dados_pessoais'; motivo = 'Possível CPF na mensagem.';\n  resposta = 'Para proteger os dados dos pacientes, não trabalho com CPF ou documentos. Use o código do paciente (exemplo: P-014).';\n} else if (temAlgum(MANIPULACAO)) {\n  bloqueio = true; categoria = 'manipulacao'; motivo = 'Padrão de manipulação: \"' + temAlgum(MANIPULACAO).trim() + '\".';\n  resposta = 'Não posso alterar minhas instruções nem atuar fora do meu papel. Sou a EmilIA, assistente administrativa: posso ajudar com agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings.';\n} else if (temAlgum(CLINICO)) {\n  bloqueio = true; categoria = 'clinico'; motivo = 'Termo clínico: \"' + temAlgum(CLINICO).trim() + '\".';\n  resposta = 'Esse pedido envolve conteúdo clínico (diagnóstico, emoções, sessões ou prontuário), que fica fora do meu escopo e não deve passar por mim. Posso ajudar com a parte administrativa: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings.';\n} else if (temAlgum(ACAO_PROIBIDA)) {\n  bloqueio = true; categoria = 'acao_proibida'; motivo = 'Ação proibida por regra de negócio: \"' + temAlgum(ACAO_PROIBIDA).trim() + '\".';\n  resposta = 'Por regra de negócio, não cobro, não cancelo consultas e não entro em contato com pacientes. Posso mostrar a pendência ou a consulta e registrar uma anotação administrativa para você mesma agir.';\n} else if (!temEscopo && temAlgum(FORA_ESCOPO)) {\n  bloqueio = true; categoria = 'fora_escopo'; motivo = 'Tema fora do escopo: \"' + temAlgum(FORA_ESCOPO).trim() + '\".';\n  resposta = 'Isso está fora do que eu faço. Sou a assistente administrativa do consultório: agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings. Em que posso ajudar nesses temas?';\n}\n\n// Normaliza códigos de paciente (p14, P 014, p-14 → P-014) para as ferramentas.\nconst normalizado = original.replace(/\\bp[\\s\\-_.]?0*(\\d{1,3})\\b/gi, (m, n) => 'P-' + String(n).padStart(3, '0'));\nconst codigos = Array.from(new Set((normalizado.match(/\\bP-\\d{3}\\b/g) || [])));\n\nreturn [{ json: { chatInput: normalizado, chatInput_original: original, sessionId: sessao, bloqueio, categoria, motivo, resposta_bloqueio: resposta, codigos_detectados: codigos, tamanho: original.length } }];"
       },
-      "id": "n005-87cda381",
+      "id": "n005-8e51a29d",
       "name": "Pré-checagem determinística",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -72,7 +72,7 @@
           },
           "conditions": [
             {
-              "id": "n006-c5b90c1a",
+              "id": "n006-48710c0c",
               "leftValue": "={{ $json.bloqueio }}",
               "rightValue": "",
               "operator": {
@@ -86,7 +86,7 @@
         },
         "options": {}
       },
-      "id": "n007-65646c4e",
+      "id": "n007-e2526c48",
       "name": "Pré-checagem bloqueou?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -99,7 +99,7 @@
       "parameters": {
         "jsCode": "// Prepara auditoria e resposta para um bloqueio da regra determinística (Camada 1).\nconst j = $input.first().json;\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: j.sessionId,\n  evento: 'bloqueio_regra',\n  categoria: j.categoria,\n  detalhe: j.motivo,\n  resposta: j.resposta_bloqueio,\n} }];"
       },
-      "id": "n008-8516cc4b",
+      "id": "n008-1ac81961",
       "name": "Preparar bloqueio (regra)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -138,7 +138,7 @@
           }
         }
       },
-      "id": "n009-c22a5044",
+      "id": "n009-64e2df38",
       "name": "Guardrails de entrada (IA)",
       "type": "@n8n/n8n-nodes-langchain.guardrails",
       "typeVersion": 2,
@@ -159,7 +159,7 @@
           "maxTokens": 300
         }
       },
-      "id": "n010-b550a1e4",
+      "id": "n010-a02fcdbc",
       "name": "Modelo dos Guardrails",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
@@ -172,7 +172,7 @@
       "parameters": {
         "jsCode": "// Prepara auditoria e resposta para um bloqueio do nó Guardrails (jailbreak, tema, dados pessoais).\nconst j = $input.first().json;\nconst pre = $('Pré-checagem determinística').first().json;\nconst disparados = (j.checks || []).filter((c) => c.triggered).map((c) => c.name);\nconst nomes = { jailbreak: 'tentativa de manipulação', topicalAlignment: 'tema fora do escopo', pii: 'dados pessoais', keywords: 'palavra proibida', urls: 'link não permitido', secretKeys: 'possível chave secreta' };\nconst lista = disparados.map((n) => nomes[n] || n).join(', ') || 'política de uso';\nlet resposta = 'Não posso seguir com esse pedido (' + lista + '). Sou a EmilIA, assistente administrativa do consultório: posso ajudar com agenda, pendências financeiras, frequência, anotações administrativas, lembretes e briefings.';\nif (disparados.includes('pii')) resposta = 'Para proteger os dados dos pacientes, não trabalho com e-mails, telefones ou documentos nas mensagens. Use o código do paciente (exemplo: P-014).';\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: pre.sessionId,\n  evento: 'bloqueio_guardrails',\n  categoria: disparados.join('|') || 'guardrails',\n  detalhe: 'Guardrails acionados: ' + lista,\n  resposta,\n} }];"
       },
-      "id": "n011-741a4c06",
+      "id": "n011-6aad595c",
       "name": "Preparar bloqueio (Guardrails)",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -194,7 +194,7 @@
           "returnIntermediateSteps": false
         }
       },
-      "id": "n012-def28a3f",
+      "id": "n012-5e04e929",
       "name": "EmilIA — Agente de back-office",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
@@ -215,7 +215,7 @@
           "maxTokens": 1024
         }
       },
-      "id": "n013-55661dff",
+      "id": "n013-ec33cbb1",
       "name": "Modelo GPT-5.4 mini",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
@@ -229,7 +229,7 @@
         "sessionIdType": "fromInput",
         "contextWindowLength": 10
       },
-      "id": "n014-40409f97",
+      "id": "n014-4e87d5f9",
       "name": "Memória (10 interações)",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
@@ -256,7 +256,7 @@
         },
         "options": {}
       },
-      "id": "n015-634062ec",
+      "id": "n015-a494fa0c",
       "name": "consultar_pacientes",
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.7,
@@ -285,7 +285,7 @@
           "orderBy": "startTime"
         }
       },
-      "id": "n016-c3a5ffc1",
+      "id": "n016-33322bb2",
       "name": "consultar_agenda",
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
@@ -300,7 +300,7 @@
         "url": "=https://brasilapi.com.br/api/feriados/v1/{{ $fromAI('ano', 'Ano com quatro dígitos, por exemplo 2026', 'number') }}",
         "options": {}
       },
-      "id": "n017-88e09050",
+      "id": "n017-1939c31d",
       "name": "verificar_feriado",
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
@@ -335,7 +335,7 @@
         },
         "options": {}
       },
-      "id": "n018-7398d271",
+      "id": "n018-598b86e7",
       "name": "consultar_anotacoes",
       "type": "n8n-nodes-base.googleSheetsTool",
       "typeVersion": 4.7,
@@ -398,7 +398,7 @@
           "convertFieldsToString": false
         }
       },
-      "id": "n019-9a3a40c2",
+      "id": "n019-4202da05",
       "name": "registrar_anotacao",
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
@@ -516,7 +516,7 @@
           "convertFieldsToString": false
         }
       },
-      "id": "n020-ce71184f",
+      "id": "n020-942e831f",
       "name": "criar_lembrete",
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
@@ -634,7 +634,7 @@
           "convertFieldsToString": false
         }
       },
-      "id": "n021-59a7b61b",
+      "id": "n021-184f859c",
       "name": "enviar_briefing_email",
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
@@ -647,7 +647,7 @@
       "parameters": {
         "jsCode": "// CAMADA 3 (determinística) + preparação da CAMADA 4.\n// Lê a resposta do agente, separa o bloco de ação pendente e o revalida sem depender do prompt.\nconst saida = String($input.first().json.output ?? '');\nconst pre = $('Pré-checagem determinística').first().json;\nconst re = /<<ACAO_PENDENTE>>([\\s\\S]*?)<<FIM_ACAO>>/;\nconst m = saida.match(re);\nlet texto = saida.replace(re, '').trim();\nlet acao = null; let erro = null;\nif (m) { try { acao = JSON.parse(m[1].trim()); } catch (e) { erro = 'O bloco de ação veio ilegível.'; } }\n\nconst norm = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\nconst CLINICO = ['diagnos','depress','ansied','transtorno','sintoma','prontuario','sentimento','emocao','medicac','remedio','laudo','suicid','crise','trauma','quadro clinico'];\nconst hoje = $now.setZone('America/Sao_Paulo').startOf('day');\n\nfunction validar(a) {\n  const faltando = [];\n  if (!a || typeof a !== 'object') return { ok: false, faltando: ['acao'], mensagem: 'Ação ausente.' };\n  if (!['criar_lembrete', 'enviar_briefing_email'].includes(a.ferramenta)) return { ok: false, faltando: ['ferramenta'], mensagem: 'Ferramenta não permitida.' };\n  if (a.codigo_paciente && !/^P-\\d{3}$/.test(a.codigo_paciente)) faltando.push('codigo_paciente (formato P-000)');\n  if (a.ferramenta === 'criar_lembrete') {\n    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(a.data || '')) faltando.push('data (AAAA-MM-DD)');\n    if (!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(a.hora || '')) faltando.push('hora (HH:MM)');\n    if (!a.titulo || String(a.titulo).trim().length < 3) faltando.push('titulo');\n    if (!faltando.length) {\n      const dt = DateTime.fromISO(a.data + 'T' + a.hora, { zone: 'America/Sao_Paulo' });\n      if (!dt.isValid) faltando.push('data/hora inválidas');\n      else if (dt < hoje) faltando.push('data no passado');\n      else if (dt > hoje.plus({ days: 365 })) faltando.push('data além de 365 dias');\n      else { a.inicio_iso = dt.toISO(); a.fim_iso = dt.plus({ minutes: 15 }).toISO(); }\n    }\n  }\n  if (a.ferramenta === 'enviar_briefing_email') {\n    if (!a.codigo_paciente) faltando.push('codigo_paciente');\n    if (!a.assunto || String(a.assunto).trim().length < 3) faltando.push('assunto');\n    if (!a.corpo || String(a.corpo).trim().length < 10) faltando.push('corpo');\n    if (String(a.corpo || '').length > 2500) faltando.push('corpo acima de 2500 caracteres');\n  }\n  const textoAcao = norm([a.titulo, a.descricao, a.assunto, a.corpo].join(' '));\n  const clinico = CLINICO.find((k) => textoAcao.includes(k));\n  if (clinico) faltando.push('conteúdo clínico não permitido (\"' + clinico + '\")');\n  return faltando.length ? { ok: false, faltando, mensagem: 'Campos inválidos ou ausentes: ' + faltando.join('; ') } : { ok: true };\n}\n\nlet valido = false; let mensagem_aprovacao = '';\nif (acao && !erro) {\n  const v = validar(acao);\n  if (v.ok) {\n    valido = true;\n    const fmt = (d) => d ? d.split('-').reverse().join('/') : '';\n    if (acao.ferramenta === 'criar_lembrete') {\n      mensagem_aprovacao = 'Preciso da sua aprovação para executar:\\n\\n' +\n        '• Ferramenta: criar_lembrete (Google Calendar)\\n' +\n        (acao.codigo_paciente ? '• Paciente: ' + acao.codigo_paciente + '\\n' : '') +\n        '• Data e hora: ' + fmt(acao.data) + ' às ' + acao.hora + '\\n' +\n        '• Título: ' + acao.titulo + '\\n' +\n        (acao.descricao ? '• Descrição: ' + acao.descricao + '\\n' : '') +\n        '\\nNada será criado sem a sua aprovação.';\n    } else {\n      mensagem_aprovacao = 'Preciso da sua aprovação para executar:\\n\\n' +\n        '• Ferramenta: enviar_briefing_email (Gmail)\\n' +\n        '• Destinatário: o e-mail cadastrado da psicóloga (configuração do workflow)\\n' +\n        '• Paciente: ' + acao.codigo_paciente + '\\n' +\n        '• Assunto: ' + acao.assunto + '\\n' +\n        '• Conteúdo:\\n' + acao.corpo + '\\n' +\n        '\\nNada será enviado sem a sua aprovação.';\n    }\n  } else {\n    erro = v.mensagem;\n  }\n}\nif (erro) texto = (texto ? texto + '\\n\\n' : '') + 'A ação proposta não passou na validação e não será executada. ' + erro + ' Informe os dados corretos para eu propor novamente.';\nif (!texto) texto = 'Não consegui formular uma resposta. Pode repetir o pedido de outra forma?';\n\nreturn [{ json: { sessao: pre.sessionId, resposta_texto: texto, tem_acao: Boolean(acao), valido, erro, acao, mensagem_aprovacao } }];"
       },
-      "id": "n022-4bad43b8",
+      "id": "n022-e62038d4",
       "name": "Analisar resposta do agente",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -667,7 +667,7 @@
           },
           "conditions": [
             {
-              "id": "n023-ac075b7c",
+              "id": "n023-7f869b03",
               "leftValue": "={{ $json.tem_acao && $json.valido }}",
               "rightValue": "",
               "operator": {
@@ -681,7 +681,7 @@
         },
         "options": {}
       },
-      "id": "n024-7a978f3a",
+      "id": "n024-4e961bae",
       "name": "Há ação para aprovar?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -694,7 +694,7 @@
       "parameters": {
         "jsCode": "const j = $input.first().json;\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: j.sessao,\n  evento: j.tem_acao ? 'acao_invalida' : 'resposta',\n  categoria: j.tem_acao ? 'validacao_falhou' : 'permitido',\n  detalhe: j.erro || 'Resposta administrativa sem ação sensível.',\n  resposta: j.resposta_texto,\n} }];"
       },
-      "id": "n025-5a264919",
+      "id": "n025-a3affb25",
       "name": "Preparar resposta",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -726,7 +726,7 @@
           }
         }
       },
-      "id": "n026-2da7161a",
+      "id": "n026-7449b132",
       "name": "Pedir aprovação no chat",
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
@@ -746,7 +746,7 @@
           },
           "conditions": [
             {
-              "id": "n027-5e40c253",
+              "id": "n027-04f8eda6",
               "leftValue": "={{ $json.data?.approved === true }}",
               "rightValue": "",
               "operator": {
@@ -760,7 +760,7 @@
         },
         "options": {}
       },
-      "id": "n028-4f1e7879",
+      "id": "n028-cf74217f",
       "name": "Aprovado?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -783,7 +783,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "n029-a7f16b6d",
+                    "id": "n029-3b07afe1",
                     "leftValue": "={{ $('Analisar resposta do agente').first().json.acao.ferramenta }}",
                     "rightValue": "criar_lembrete",
                     "operator": {
@@ -807,7 +807,7 @@
                 },
                 "conditions": [
                   {
-                    "id": "n030-b0e2d4b0",
+                    "id": "n030-d5afe843",
                     "leftValue": "={{ $('Analisar resposta do agente').first().json.acao.ferramenta }}",
                     "rightValue": "enviar_briefing_email",
                     "operator": {
@@ -825,7 +825,7 @@
         },
         "options": {}
       },
-      "id": "n031-742e1ac6",
+      "id": "n031-6353671b",
       "name": "Qual ferramenta?",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
@@ -849,7 +849,7 @@
         "timeMax": "={{ $('Analisar resposta do agente').first().json.acao.fim_iso }}",
         "options": {}
       },
-      "id": "n032-6b90315e",
+      "id": "n032-9f2bbc53",
       "name": "Verificar lembretes existentes",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
@@ -864,7 +864,7 @@
       "parameters": {
         "jsCode": "// Evita lembrete duplicado: compara título e horário com os eventos já existentes na janela.\nconst acao = $('Analisar resposta do agente').first().json.acao;\nconst eventos = $input.all().map((i) => i.json).filter((e) => e && (e.summary || e.id));\nconst norm = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();\nconst existe = eventos.some((e) => norm(e.summary) === norm(acao.titulo));\nreturn [{ json: { existe, total_na_janela: eventos.length } }];"
       },
-      "id": "n033-74ebc6d6",
+      "id": "n033-321fb99c",
       "name": "Já existe lembrete igual?",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -884,7 +884,7 @@
           },
           "conditions": [
             {
-              "id": "n034-90f5b51f",
+              "id": "n034-f0e2c6bb",
               "leftValue": "={{ $json.existe }}",
               "rightValue": "",
               "operator": {
@@ -898,7 +898,7 @@
         },
         "options": {}
       },
-      "id": "n035-cbd9605f",
+      "id": "n035-b78956ea",
       "name": "Lembrete duplicado?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
@@ -911,7 +911,7 @@
       "parameters": {
         "jsCode": "const analise = $('Analisar resposta do agente').first().json;\nconst a = analise.acao || {};\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: analise.sessao,\n  evento: 'acao_duplicada',\n  categoria: a.ferramenta,\n  detalhe: 'Já existe um lembrete com o mesmo título nesse horário.',\n  resposta: 'Já existe um lembrete \"' + a.titulo + '\" nesse horário. Não criei outro para evitar duplicidade.',\n} }];"
       },
-      "id": "n036-eab00163",
+      "id": "n036-5414b626",
       "name": "Preparar duplicado",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -937,7 +937,7 @@
           "description": "={{ 'Lembrete criado pela EmilIA após aprovação no chat.' + ($('Analisar resposta do agente').first().json.acao.codigo_paciente ? ' Paciente: ' + $('Analisar resposta do agente').first().json.acao.codigo_paciente + '.' : '') + ($('Analisar resposta do agente').first().json.acao.descricao ? ' ' + $('Analisar resposta do agente').first().json.acao.descricao : '') }}"
         }
       },
-      "id": "n037-a764c50c",
+      "id": "n037-41264f45",
       "name": "Criar lembrete no Google Calendar",
       "type": "n8n-nodes-base.googleCalendar",
       "typeVersion": 1.3,
@@ -957,7 +957,7 @@
           "appendAttribution": false
         }
       },
-      "id": "n038-46c31c16",
+      "id": "n038-9d951b11",
       "name": "Enviar briefing por e-mail",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.2,
@@ -971,7 +971,7 @@
       "parameters": {
         "jsCode": "const analise = $('Analisar resposta do agente').first().json;\nconst a = analise.acao || {};\nconst fmt = (d) => d ? d.split('-').reverse().join('/') : '';\nconst resposta = a.ferramenta === 'criar_lembrete'\n  ? 'Aprovado e executado: lembrete \"' + a.titulo + '\" criado no Google Calendar para ' + fmt(a.data) + ' às ' + a.hora + '.'\n  : 'Aprovado e executado: briefing do paciente ' + a.codigo_paciente + ' enviado por e-mail (assunto: \"' + a.assunto + '\").';\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: analise.sessao,\n  evento: 'acao_executada',\n  categoria: a.ferramenta,\n  detalhe: JSON.stringify({ codigo_paciente: a.codigo_paciente, data: a.data, hora: a.hora, titulo: a.titulo, assunto: a.assunto }),\n  resposta,\n} }];"
       },
-      "id": "n039-c4f4364a",
+      "id": "n039-746d6551",
       "name": "Preparar executado",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -984,7 +984,7 @@
       "parameters": {
         "jsCode": "// Tratamento de erro (Camada 5): a execução falhou em Calendar ou Gmail. Nada é \"fingido\" como executado.\nconst analise = $('Analisar resposta do agente').first().json;\nconst a = analise.acao || {};\nconst err = $input.first().json.error || {};\nconst msg = typeof err === 'string' ? err : (err.message || JSON.stringify(err));\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: analise.sessao,\n  evento: 'acao_falhou',\n  categoria: a.ferramenta,\n  detalhe: String(msg).slice(0, 300),\n  resposta: 'A ação foi aprovada, mas a execução falhou (' + String(msg).slice(0, 120) + '). Nada foi criado ou enviado. Verifique a credencial e tente novamente.',\n} }];"
       },
-      "id": "n040-09bad117",
+      "id": "n040-11fcf9f0",
       "name": "Preparar falha",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -997,13 +997,26 @@
       "parameters": {
         "jsCode": "const analise = $('Analisar resposta do agente').first().json;\nconst a = analise.acao || {};\nreturn [{ json: {\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  sessao: analise.sessao,\n  evento: 'acao_negada',\n  categoria: a.ferramenta,\n  detalhe: 'Aprovação negada pela psicóloga. Nenhuma ação executada.',\n  resposta: 'Entendido, ação cancelada. Nada foi ' + (a.ferramenta === 'criar_lembrete' ? 'criado no calendário' : 'enviado por e-mail') + '.',\n} }];"
       },
-      "id": "n041-cbc0000d",
+      "id": "n041-7af9863e",
       "name": "Preparar negado",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         1040,
         620
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ponto único de saída: a resposta ao chat e a auditoria partem daqui, em paralelo.\nreturn $input.all();"
+      },
+      "id": "n042-f8c23527",
+      "name": "Consolidar resposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2560,
+        300
       ]
     },
     {
@@ -1029,13 +1042,13 @@
         },
         "options": {}
       },
-      "id": "n042-b7f9ceeb",
+      "id": "n043-0cafed1d",
       "name": "Registrar auditoria",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2560,
-        300
+        2800,
+        440
       ],
       "alwaysOutputData": true,
       "onError": "continueRegularOutput"
@@ -1043,26 +1056,26 @@
     {
       "parameters": {
         "operation": "send",
-        "message": "={{ $json.resposta }}",
+        "message": "={{ $('Consolidar resposta').first().json.resposta }}",
         "options": {}
       },
-      "id": "n043-9f2843c6",
+      "id": "n044-e0ef3c29",
       "name": "Responder no chat",
       "type": "@n8n/n8n-nodes-langchain.chat",
       "typeVersion": 1.3,
       "position": [
         2800,
-        300
+        160
       ]
     },
     {
       "parameters": {
-        "content": "## EmilIA — Semana 9: agente com guardrails\n\n**Camada 1** Pré-checagem determinística (Code) + Guardrails (IA): nada bloqueado chega ao agente.\n**Camada 2** System Message numerada no agente.\n**Camada 3** Regras em Code/IF aqui e nos dois sub-workflows (código P-000, data/hora explícitas, duplicidade).\n**Camada 4** \"Pedir aprovação no chat\" (Send and Wait, botões Aprovar/Negar) antes de Calendar e Gmail. O agente só propõe; quem executa são os nós determinísticos.\n**Camada 5** Max Iterations 8, streaming desligado, erros tratados (saídas de erro) e auditoria na planilha.\n\nTodo caminho termina em \"Responder no chat\" (Chat Trigger em \"Using Response Nodes\").",
+        "content": "## EmilIA — Semana 9: agente com guardrails\n\n**Camada 1** Pré-checagem determinística (Code) + Guardrails (IA): nada bloqueado chega ao agente.\n**Camada 2** System Message numerada no agente.\n**Camada 3** Regras em Code/IF aqui e nos dois sub-workflows (código P-000, data/hora explícitas, duplicidade).\n**Camada 4** \"Pedir aprovação no chat\" (Send and Wait, botões Aprovar/Negar) antes de Calendar e Gmail. O agente só propõe; quem executa são os nós determinísticos.\n**Camada 5** Max Iterations 8, streaming desligado, erros tratados (saídas de erro) e auditoria na planilha.\n\nTodo caminho passa por \"Consolidar resposta\" e segue, em paralelo, para \"Responder no chat\" e \"Registrar auditoria\" (Chat Trigger em \"Using Response Nodes\"). Assim a resposta não depende da planilha.",
         "height": 300,
         "width": 520,
         "color": 4
       },
-      "id": "n044-160e447d",
+      "id": "n045-b0aa0ab9",
       "name": "Nota: arquitetura",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -1309,7 +1322,7 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
@@ -1320,7 +1333,7 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
@@ -1331,7 +1344,7 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
@@ -1342,7 +1355,7 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
@@ -1353,7 +1366,7 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
@@ -1364,7 +1377,7 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
@@ -1375,18 +1388,23 @@
       "main": [
         [
           {
-            "node": "Registrar auditoria",
+            "node": "Consolidar resposta",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Registrar auditoria": {
+    "Consolidar resposta": {
       "main": [
         [
           {
             "node": "Responder no chat",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Registrar auditoria",
             "type": "main",
             "index": 0
           }

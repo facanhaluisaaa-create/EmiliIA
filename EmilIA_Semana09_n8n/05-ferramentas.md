@@ -22,7 +22,7 @@ Todas as ferramentas estão no JSON do workflow principal, conectadas ao nó **E
 6. Só o botão Aprovar leva aos nós do Google Calendar ou do Gmail. Negar leva a "Preparar negado" e nada é executado.
 7. Antes de criar o lembrete, o workflow consulta o calendário na mesma janela e recusa títulos repetidos.
 8. Falhas no Calendar ou no Gmail saem pela saída de erro e viram a resposta "a execução falhou; nada foi criado ou enviado".
-9. Todo caminho registra uma linha na aba **Auditoria** e termina em **Responder no chat**.
+9. Todo caminho passa pelo nó **Consolidar resposta**, que alimenta em paralelo **Responder no chat** e **Registrar auditoria** (aba **Auditoria**). A resposta à psicóloga não depende da planilha: se a auditoria falhar, a resposta é entregue mesmo assim e a falha fica visível na execução.
 
 ## Estrutura das abas da planilha (ver `dados-ficticios/`)
 

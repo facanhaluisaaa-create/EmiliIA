@@ -6,7 +6,7 @@ Pasta de entrega do artefato técnico da Semana 9 (disciplina Agentes de IA para
 
 | Arquivo | O que é |
 |---|---|
-| `01-workflow-EmilIA-S09-agente-backoffice.json` | Workflow principal, importável no n8n (36 nós): Chat Trigger, pré-checagem determinística, Guardrails, agente com 7 ferramentas, revalidação em código, aprovação humana no chat, execução determinística, auditoria e resposta. |
+| `01-workflow-EmilIA-S09-agente-backoffice.json` | Workflow principal, importável no n8n (37 nós): Chat Trigger, pré-checagem determinística, Guardrails, agente com 7 ferramentas, revalidação em código, aprovação humana no chat, execução determinística, auditoria e resposta. |
 | `02-subworkflow-validar-registrar-anotacao.json` | Sub-workflow da ferramenta `registrar_anotacao`: valida código/texto, filtra conteúdo clínico, impede duplicidade (24 h) e grava na planilha. |
 | `03-subworkflow-validar-acao-lembrete-briefing.json` | Sub-workflow das ferramentas `criar_lembrete` e `enviar_briefing_email`: valida data/hora explícitas, campos obrigatórios e conteúdo; apenas propõe, nunca executa. |
 | `04-system-message.md` | System Message completa e numerada (Camada 2). |
@@ -22,7 +22,7 @@ Pasta de entrega do artefato técnico da Semana 9 (disciplina Agentes de IA para
 2. **System Message**: 7 seções numeradas com proibições, regras de silêncio, uso de ferramentas, dados obrigatórios e o protocolo de aprovação.
 3. **Regras determinísticas**: Code e IF no principal (*Analisar resposta do agente*, *Já existe lembrete igual?*) e nos dois sub-workflows (código P-000, texto obrigatório, data/hora explícitas e futuras, deduplicação de anotação, filtro clínico).
 4. **Aprovação humana**: nó *Pedir aprovação no chat* (Chat → Send and Wait, tipo Approval, botões Aprovar/Negar, mostra a ferramenta e os dados). O agente não tem acesso ao Gmail nem à criação no Calendar; só os nós determinísticos depois da aprovação executam. Negar ou não responder em 30 min cancela.
-5. **Limites**: Max Iterations 8, streaming desligado, uma ferramenta por vez (System Message 4.1), saídas de erro tratadas em Calendar/Gmail, auditoria na planilha e execuções salvas.
+5. **Limites**: Max Iterations 8, streaming desligado, uma ferramenta por vez (System Message 4.1), saídas de erro tratadas em Calendar/Gmail, auditoria na planilha (via nó *Consolidar resposta*, em paralelo com a resposta, para que uma falha na planilha não derrube o atendimento) e execuções salvas.
 
 ## Como os cinco problemas da Semana 8 foram corrigidos
 
@@ -34,11 +34,13 @@ Pasta de entrega do artefato técnico da Semana 9 (disciplina Agentes de IA para
 | Conteúdo clínico na memória e nos logs | Bloqueio antes do agente (Camada 1); filtro clínico também nas anotações e nas propostas; auditoria grava categoria e motivo, não o texto clínico. |
 | Informações financeiras inconsistentes | `consultar_pacientes` é a fonte única (coluna `pendencia_financeira`); a System Message manda relatar divergências sem concluir. |
 
-## O que está pronto e o que depende da sua instância
+## O que está pronto e o que foi comprovado
 
 **Pronto nesta pasta:** os três JSONs importáveis, a lógica dos nós Code testada fora do n8n (27 casos, todos passando), a System Message, as descrições das ferramentas, as instruções, o checklist e a matriz de testes.
 
-**Depende do acesso ao n8n Cloud (não foi possível executar daqui):** importar os arquivos, selecionar credenciais, planilha, calendário e sub-workflows nos nós, e rodar os oito testes. Os JSONs foram gerados a partir das definições oficiais dos nós (pacotes `n8n-nodes-base 2.15.1` e `@n8n/n8n-nodes-langchain 2.46.4`), mas a importação em si e as execuções só podem ser comprovadas na sua instância. Nenhum print, execução ou resultado foi simulado.
+**Comprovado em uma instância n8n 2.46.4 local (04/11/2026), sem chave OpenAI e sem credenciais Google:** importação dos três JSONs; bloqueios reais dos testes 2, 3, 4 e do pedido clínico; validação determinística (data no passado, informação faltante, normalização de código/hora); aprovação concedida e negada pelos botões do chat; tratamento de falha de execução. Nos testes 5, 6 e 7 as saídas dos nós Guardrails (IA) e Agente foram fixadas (pin) por falta de chave; o teste 1 não foi executado. Prints, execuções exportadas, matriz de resultados e o relatório A–G estão na pasta `EMILIA_BLUEPRINT_SEMANA09/` do repositório. Nenhum print ou execução foi simulado.
+
+**Depende do n8n do grupo (com credenciais):** teste 1, variante de anotação duplicada do teste 5, criação real no Google Calendar (teste 6), pergunta do agente no teste 8 e as linhas na aba Auditoria.
 
 ## Primeiro passo
 

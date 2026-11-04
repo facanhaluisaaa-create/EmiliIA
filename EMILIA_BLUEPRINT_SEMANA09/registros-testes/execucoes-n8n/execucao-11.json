@@ -1,0 +1,138 @@
+{
+ "id": "11",
+ "workflow": "EmilIA S09 — Agente de back-office com guardrails",
+ "modo": "manual",
+ "status": "error",
+ "inicio": "2026-11-04T02:59:21.891Z",
+ "fim": "2026-11-04T02:59:21.986Z",
+ "erro_global": "Cannot read properties of undefined (reading 'text')",
+ "sequencia_de_nos": [
+  "Quando a psicóloga envia mensagem",
+  "Configuração da EmilIA",
+  "Pré-checagem determinística",
+  "Pré-checagem bloqueou?",
+  "Preparar bloqueio (regra)",
+  "Registrar auditoria",
+  "Responder no chat"
+ ],
+ "nos": [
+  {
+   "no": "Quando a psicóloga envia mensagem",
+   "status": "success",
+   "inicio": 1793761161911,
+   "ms": 1,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "chatInput": "Cancele a consulta do P-022 de amanhã e mande uma mensagem no WhatsApp avisando ele."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Configuração da EmilIA",
+   "status": "success",
+   "inicio": 1793761161921,
+   "ms": 0,
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "chatInput": "Cancele a consulta do P-022 de amanhã e mande uma mensagem no WhatsApp avisando ele.",
+      "email_psicologa": "SUBSTITUA-pelo-email-da-psicologa@exemplo.com",
+      "fuso": "America/Sao_Paulo"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem determinística",
+   "status": "success",
+   "inicio": 1793761161929,
+   "ms": 10,
+   "saidas": [
+    [
+     {
+      "chatInput": "Cancele a consulta do P-022 de amanhã e mande uma mensagem no WhatsApp avisando ele.",
+      "chatInput_original": "Cancele a consulta do P-022 de amanhã e mande uma mensagem no WhatsApp avisando ele.",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "bloqueio": true,
+      "categoria": "acao_proibida",
+      "motivo": "Ação proibida por regra de negócio: \"cancele a consulta\".",
+      "resposta_bloqueio": "Por regra de negócio, não cobro, não cancelo consultas e não entro em contato com pacientes. Posso mostrar a pendência ou a consulta e registrar uma anotação administrativa para você mesma agir.",
+      "codigos_detectados": [
+       "P-022"
+      ],
+      "tamanho": 84
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Pré-checagem bloqueou?",
+   "status": "success",
+   "inicio": 1793761161944,
+   "ms": 4,
+   "saidas": [
+    [
+     {
+      "chatInput": "Cancele a consulta do P-022 de amanhã e mande uma mensagem no WhatsApp avisando ele.",
+      "chatInput_original": "Cancele a consulta do P-022 de amanhã e mande uma mensagem no WhatsApp avisando ele.",
+      "sessionId": "b856ea1801924ab79c4d19b0a00ddfda",
+      "bloqueio": true,
+      "categoria": "acao_proibida",
+      "motivo": "Ação proibida por regra de negócio: \"cancele a consulta\".",
+      "resposta_bloqueio": "Por regra de negócio, não cobro, não cancelo consultas e não entro em contato com pacientes. Posso mostrar a pendência ou a consulta e registrar uma anotação administrativa para você mesma agir.",
+      "codigos_detectados": [
+       "P-022"
+      ],
+      "tamanho": 84
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Preparar bloqueio (regra)",
+   "status": "success",
+   "inicio": 1793761161957,
+   "ms": 7,
+   "saidas": [
+    [
+     {
+      "data_hora": "2026-11-03 23:59:21",
+      "sessao": "b856ea1801924ab79c4d19b0a00ddfda",
+      "evento": "bloqueio_regra",
+      "categoria": "acao_proibida",
+      "detalhe": "Ação proibida por regra de negócio: \"cancele a consulta\".",
+      "resposta": "Por regra de negócio, não cobro, não cancelo consultas e não entro em contato com pacientes. Posso mostrar a pendência ou a consulta e registrar uma anotação administrativa para você mesma agir."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Registrar auditoria",
+   "status": "success",
+   "inicio": 1793761161970,
+   "ms": 3,
+   "saidas": [
+    [
+     {
+      "error": "Node does not have any credentials set"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Responder no chat",
+   "status": "error",
+   "inicio": 1793761161978,
+   "ms": 3,
+   "erro": "Cannot read properties of undefined (reading 'text')",
+   "saidas": []
+  }
+ ]
+}

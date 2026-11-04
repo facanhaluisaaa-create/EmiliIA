@@ -1,0 +1,200 @@
+{
+  "name": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "ferramenta",
+              "type": "string"
+            },
+            {
+              "name": "codigo_paciente",
+              "type": "string"
+            },
+            {
+              "name": "data",
+              "type": "string"
+            },
+            {
+              "name": "hora",
+              "type": "string"
+            },
+            {
+              "name": "titulo",
+              "type": "string"
+            },
+            {
+              "name": "descricao",
+              "type": "string"
+            },
+            {
+              "name": "assunto",
+              "type": "string"
+            },
+            {
+              "name": "corpo",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "n060-5471fe92",
+      "name": "Quando chamado pela EmilIA",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Regra determinística: o agente só pode PROPOR. Datas e horas têm de vir explícitas; nada é inventado.\nconst j = $input.first().json;\nconst ferramenta = String(j.ferramenta ?? '').trim();\nconst norm = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\nconst codigoBruto = String(j.codigo_paciente ?? '').trim();\nconst codigo = codigoBruto ? codigoBruto.toUpperCase().replace(/^P[\\s\\-_.]?0*(\\d{1,3})$/i, (m, n) => 'P-' + String(n).padStart(3, '0')) : '';\nconst hoje = $now.setZone('America/Sao_Paulo').startOf('day');\nconst faltando = [];\n\n// data: aceita AAAA-MM-DD ou DD/MM/AAAA; nunca deduz. \"amanhã\", \"semana que vem\" etc. são rejeitados.\nlet data = String(j.data ?? '').trim();\nconst br = data.match(/^(\\d{1,2})\\/(\\d{1,2})\\/(\\d{4})$/);\nif (br) data = br[3] + '-' + br[2].padStart(2, '0') + '-' + br[1].padStart(2, '0');\nlet hora = String(j.hora ?? '').trim().replace(/h$/i, ':00').replace(/^(\\d{1,2})h(\\d{2})$/i, '$1:$2');\nif (/^\\d{1,2}:\\d{2}$/.test(hora)) hora = hora.padStart(5, '0');\n\nif (!['criar_lembrete', 'enviar_briefing_email'].includes(ferramenta)) faltando.push('ferramenta inválida');\nif (codigo && !/^P-\\d{3}$/.test(codigo)) faltando.push('codigo_paciente no formato P-000');\n\nconst CLINICO = ['diagnos','depress','ansied','transtorno','sintoma','prontuario','sentimento','emocao','medicac','remedio','laudo','suicid','crise','trauma','quadro clinico'];\nconst clinico = CLINICO.find((k) => norm([j.titulo, j.descricao, j.assunto, j.corpo].join(' ')).includes(k));\nif (clinico) faltando.push('conteúdo clínico não permitido (\"' + clinico + '\")');\n\nlet proposta = null;\nif (ferramenta === 'criar_lembrete') {\n  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(data)) faltando.push('data explícita (AAAA-MM-DD ou DD/MM/AAAA)');\n  if (!/^([01]\\d|2[0-3]):[0-5]\\d$/.test(hora)) faltando.push('hora explícita (HH:MM)');\n  const titulo = String(j.titulo ?? '').trim();\n  if (titulo.length < 3) faltando.push('titulo do lembrete');\n  if (!faltando.length) {\n    const dt = DateTime.fromISO(data + 'T' + hora, { zone: 'America/Sao_Paulo' });\n    if (!dt.isValid) faltando.push('data/hora inválidas');\n    else if (dt < hoje) faltando.push('a data está no passado');\n    else if (dt > hoje.plus({ days: 365 })) faltando.push('a data está a mais de 365 dias');\n  }\n  if (!faltando.length) proposta = { ferramenta, codigo_paciente: codigo || undefined, data, hora, titulo, descricao: String(j.descricao ?? '').trim().slice(0, 300) || undefined };\n}\nif (ferramenta === 'enviar_briefing_email') {\n  if (!codigo) faltando.push('codigo_paciente');\n  const assunto = String(j.assunto ?? '').trim();\n  const corpo = String(j.corpo ?? '').trim();\n  if (assunto.length < 3) faltando.push('assunto');\n  if (corpo.length < 10) faltando.push('corpo do briefing');\n  if (corpo.length > 2500) faltando.push('corpo acima de 2500 caracteres');\n  if (!faltando.length) proposta = { ferramenta, codigo_paciente: codigo, assunto, corpo };\n}\n\nif (faltando.length) {\n  return [{ json: { ok: false, status: 'informacao_faltante', faltando, mensagem: 'Não posso propor a ação: ' + faltando.join('; ') + '. Peça esses dados à psicóloga. Nunca invente data, hora ou conteúdo.' } }];\n}\nconst bloco = '<<ACAO_PENDENTE>>' + JSON.stringify(proposta) + '<<FIM_ACAO>>';\nreturn [{ json: { ok: true, status: 'proposta_validada', proposta, bloco_obrigatorio: bloco, instrucao: 'A ação foi validada mas NÃO executada. Explique à psicóloga o que será feito e termine a resposta reproduzindo EXATAMENTE este bloco, sem alterar nada: ' + bloco } }];"
+      },
+      "id": "n061-57e3d856",
+      "name": "Validar ação",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n062-c520d58d",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n063-133c9d03",
+      "name": "Proposta válida?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        40,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all();"
+      },
+      "id": "n064-c25e7a28",
+      "name": "Retornar proposta validada",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all();"
+      },
+      "id": "n065-b3b9b96f",
+      "name": "Retornar informação faltante",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Sub-workflow: validar ação (Camada 3 + preparação da Camada 4)\n\nEste sub-workflow NÃO cria lembrete nem envia e-mail. Ele só valida:\n- data explícita (AAAA-MM-DD ou DD/MM/AAAA), hora explícita (HH:MM), hoje ou futuro, até 365 dias (corrige o lembrete com data inventada da Semana 8);\n- código P-000; título/assunto/corpo obrigatórios; sem termos clínicos.\n\nSe estiver tudo certo, devolve um bloco <<ACAO_PENDENTE>>…<<FIM_ACAO>> que o agente deve reproduzir. O workflow principal revalida o bloco em Code e pede aprovação humana no chat antes de executar.",
+        "height": 280,
+        "width": 520,
+        "color": 5
+      },
+      "id": "n066-e0469e1e",
+      "name": "Nota",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        -140
+      ]
+    }
+  ],
+  "connections": {
+    "Quando chamado pela EmilIA": {
+      "main": [
+        [
+          {
+            "node": "Validar ação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar ação": {
+      "main": [
+        [
+          {
+            "node": "Proposta válida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Proposta válida?": {
+      "main": [
+        [
+          {
+            "node": "Retornar proposta validada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar informação faltante",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

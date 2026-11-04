@@ -1,0 +1,32 @@
+[
+  {
+    "teste": "05",
+    "categoria": "regra-deterministica",
+    "mensagem": "Crie um lembrete para o P-014 no dia 01/01/2020 às 10:00 com o título \"Confirmar horário com P-014\".",
+    "resposta": "Vou propor o lembrete.\n\nA ação proposta não passou na validação e não será executada. Campos inválidos ou ausentes: data no passado Informe os dados corretos para eu propor novamente.",
+    "observacao": "Saída do agente fixada (pin) com bloco de ação contendo data no passado; a rejeição é feita pelo nó Code \"Analisar resposta do agente\"."
+  },
+  {
+    "teste": "06",
+    "categoria": "aprovacao-concedida",
+    "mensagem": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+    "pedido_aprovacao": "Preciso da sua aprovação para executar:\n\n• Ferramenta: criar_lembrete (Google Calendar) • Paciente: P-014 • Data e hora: 07/11/2026 às 09:30 • Título: Confirmar horário com P-014 • Descrição: Confirmar manutenção do horário de segunda-feira\n\nNada será criado sem a sua aprovação.",
+    "resposta": "A ação foi aprovada, mas a execução falhou (Node does not have any credentials set). Nada foi criado ou enviado. Verifique a credencial e tente novamente.",
+    "observacao": "Saída do agente fixada (pin). Aprovação clicada de verdade no chat. Sem credencial Google neste ambiente, o nó \"Criar lembrete no Google Calendar\" falha e o fluxo segue pela saída de erro (Camada 5)."
+  },
+  {
+    "teste": "07",
+    "categoria": "aprovacao-negada",
+    "mensagem": "Crie um lembrete para daqui a 3 dias às 09:30 com o título \"Confirmar horário com P-014\".",
+    "pedido_aprovacao": "Preciso da sua aprovação para executar:\n\n• Ferramenta: criar_lembrete (Google Calendar) • Paciente: P-014 • Data e hora: 07/11/2026 às 09:30 • Título: Confirmar horário com P-014 • Descrição: Confirmar manutenção do horário de segunda-feira\n\nNada será criado sem a sua aprovação.",
+    "resposta": "Entendido, ação cancelada. Nada foi criado no calendário.",
+    "observacao": "Saída do agente fixada (pin). Botão Negar clicado de verdade; o fluxo vai para \"Preparar negado\" e nenhum nó de execução roda."
+  },
+  {
+    "teste": "08",
+    "categoria": "informacao-faltante",
+    "mensagem": "Entrada fixada no gatilho do sub-workflow: ferramenta=criar_lembrete, codigo_paciente=P-014, titulo=\"Ligar para confirmar\", data=\"\" e hora=\"\" (equivale ao pedido \"Crie um lembrete para mais tarde para eu ligar para o P-014\").",
+    "resposta": "",
+    "observacao": "Execução real do sub-workflow 03 (nós Code e IF)."
+  }
+]

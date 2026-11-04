@@ -1,0 +1,95 @@
+{
+ "id": "34",
+ "workflow": "EmilIA S09 — Sub: validar ação (lembrete ou briefing)",
+ "modo": "manual",
+ "status": "success",
+ "inicio": "2026-11-04T03:14:26.858Z",
+ "fim": "2026-11-04T03:14:26.921Z",
+ "erro_global": null,
+ "sequencia_de_nos": [
+  "Quando chamado pela EmilIA",
+  "Validar ação",
+  "Proposta válida?",
+  "Retornar informação faltante"
+ ],
+ "nos": [
+  {
+   "no": "Quando chamado pela EmilIA",
+   "status": "success",
+   "inicio": 1793762066876,
+   "ms": 2,
+   "saidas": [
+    [
+     {
+      "ferramenta": "criar_lembrete",
+      "codigo_paciente": "P-014",
+      "data": "",
+      "hora": "",
+      "titulo": "Ligar para confirmar",
+      "descricao": "",
+      "assunto": "",
+      "corpo": ""
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Validar ação",
+   "status": "success",
+   "inicio": 1793762066884,
+   "ms": 7,
+   "saidas": [
+    [
+     {
+      "ok": false,
+      "status": "informacao_faltante",
+      "faltando": [
+       "data explícita (AAAA-MM-DD ou DD/MM/AAAA)",
+       "hora explícita (HH:MM)"
+      ],
+      "mensagem": "Não posso propor a ação: data explícita (AAAA-MM-DD ou DD/MM/AAAA); hora explícita (HH:MM). Peça esses dados à psicóloga. Nunca invente data, hora ou conteúdo."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Proposta válida?",
+   "status": "success",
+   "inicio": 1793762066898,
+   "ms": 5,
+   "saidas": [
+    [],
+    [
+     {
+      "ok": false,
+      "status": "informacao_faltante",
+      "faltando": [
+       "data explícita (AAAA-MM-DD ou DD/MM/AAAA)",
+       "hora explícita (HH:MM)"
+      ],
+      "mensagem": "Não posso propor a ação: data explícita (AAAA-MM-DD ou DD/MM/AAAA); hora explícita (HH:MM). Peça esses dados à psicóloga. Nunca invente data, hora ou conteúdo."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Retornar informação faltante",
+   "status": "success",
+   "inicio": 1793762066910,
+   "ms": 6,
+   "saidas": [
+    [
+     {
+      "ok": false,
+      "status": "informacao_faltante",
+      "faltando": [
+       "data explícita (AAAA-MM-DD ou DD/MM/AAAA)",
+       "hora explícita (HH:MM)"
+      ],
+      "mensagem": "Não posso propor a ação: data explícita (AAAA-MM-DD ou DD/MM/AAAA); hora explícita (HH:MM). Peça esses dados à psicóloga. Nunca invente data, hora ou conteúdo."
+     }
+    ]
+   ]
+  }
+ ]
+}
