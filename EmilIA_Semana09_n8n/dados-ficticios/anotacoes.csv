@@ -1,0 +1,4 @@
+id,data_hora,codigo_paciente,texto,chave_dedup,origem,sessao
+A0001-20261020101500,2026-10-20 10:15:00,P-014,Pagamento de setembro ainda pendente; combinado novo prazo para 10/11,A1f3c9d2e,manual,
+A0002-20261022093000,2026-10-22 09:30:00,P-022,Pediu troca do horario de quarta para quinta a partir de novembro,A7b2e81aa,manual,
+A0003-20261028111000,2026-10-28 11:10:00,P-011,Recibo mensal de outubro enviado,A0c5d77f1,manual,

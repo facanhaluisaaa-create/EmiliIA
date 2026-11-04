@@ -1,0 +1,382 @@
+{
+  "name": "EmilIA S09 — Sub: validar e registrar anotação",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "codigo_paciente",
+              "type": "string"
+            },
+            {
+              "name": "texto",
+              "type": "string"
+            },
+            {
+              "name": "sessao",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "n045-f8e8aee3",
+      "name": "Quando chamado pela EmilIA",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -600,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Regra determinística: campos obrigatórios, formato do código e filtro de conteúdo clínico.\nconst j = $input.first().json;\nconst codigo = String(j.codigo_paciente ?? '').trim().toUpperCase().replace(/^P[\\s\\-_.]?0*(\\d{1,3})$/i, (m, n) => 'P-' + String(n).padStart(3, '0'));\nconst texto = String(j.texto ?? '').trim().replace(/\\s+/g, ' ');\nconst norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\nconst CLINICO = ['diagnos','depress','ansied','transtorno','sintoma','prontuario','sentimento','emocao','medicac','remedio','laudo','suicid','crise','trauma','quadro clinico','humor','sessao foi','na sessao'];\nconst problemas = [];\nif (!/^P-\\d{3}$/.test(codigo)) problemas.push('codigo_paciente deve estar no formato P-000');\nif (texto.length < 5) problemas.push('texto da anotação é obrigatório (mínimo 5 caracteres)');\nif (texto.length > 500) problemas.push('texto acima de 500 caracteres');\nconst clinico = CLINICO.find((k) => norm(texto).includes(k));\nif (clinico) problemas.push('conteúdo clínico não pode ser registrado (\"' + clinico + '\")');\nlet h = 5381; const base = codigo + '|' + norm(texto);\nfor (let i = 0; i < base.length; i++) h = ((h << 5) + h + base.charCodeAt(i)) >>> 0;\nconst chave = 'A' + h.toString(16).padStart(8, '0');\nreturn [{ json: { ok: problemas.length === 0, motivo: problemas.join('; '), codigo_paciente: codigo, texto, chave_dedup: chave, sessao: String(j.sessao ?? '') } }];"
+      },
+      "id": "n046-eb3f8c0b",
+      "name": "Validar anotação",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -380,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n047-6a45e8f3",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n048-ca065c96",
+      "name": "Anotação válida?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -160,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const v = $input.first().json;\nreturn [{ json: { ok: false, registrado: false, motivo: v.motivo, codigo_paciente: v.codigo_paciente } }];"
+      },
+      "id": "n049-067e494c",
+      "name": "Retornar erro",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultName": "Planilha EmilIA (selecione após importar)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultName": "Anotacoes"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "codigo_paciente",
+              "lookupValue": "={{ $json.codigo_paciente }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n050-b60896f4",
+      "name": "Buscar anotações do paciente",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        100
+      ],
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prevenção de duplicidade: mesma chave (código + texto normalizado) nas últimas 24 horas.\nconst v = $('Validar anotação').first().json;\nconst linhas = $input.all().map((i) => i.json).filter((r) => r && r.chave_dedup);\nconst agora = $now.setZone('America/Sao_Paulo');\nconst duplicada = linhas.some((r) => {\n  if (String(r.chave_dedup) !== v.chave_dedup) return false;\n  const quando = DateTime.fromFormat(String(r.data_hora || ''), 'yyyy-MM-dd HH:mm:ss', { zone: 'America/Sao_Paulo' });\n  return !quando.isValid || agora.diff(quando, 'hours').hours < 24;\n});\nreturn [{ json: { ...v, duplicada, existentes: linhas.length } }];"
+      },
+      "id": "n051-d7f1b6cf",
+      "name": "Verificar duplicidade",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n052-1e7b0eff",
+              "leftValue": "={{ $json.duplicada }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n053-b63e2eff",
+      "name": "Duplicada?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        520,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const v = $input.first().json;\nreturn [{ json: { ok: false, registrado: false, motivo: 'Anotação idêntica já registrada para ' + v.codigo_paciente + ' nas últimas 24 horas. Não registrei de novo.', codigo_paciente: v.codigo_paciente, chave_dedup: v.chave_dedup } }];"
+      },
+      "id": "n054-ab131e06",
+      "name": "Retornar duplicada",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const v = $('Verificar duplicidade').first().json;\nreturn [{ json: {\n  id: v.chave_dedup + '-' + $now.toFormat('yyyyMMddHHmmss'),\n  data_hora: $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),\n  codigo_paciente: v.codigo_paciente,\n  texto: v.texto,\n  chave_dedup: v.chave_dedup,\n  origem: 'EmilIA',\n  sessao: v.sessao,\n} }];"
+      },
+      "id": "n055-6e61d4e6",
+      "name": "Preparar linha",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultName": "Planilha EmilIA (selecione após importar)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultName": "Anotacoes"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "n056-a034c2ca",
+      "name": "Registrar na planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        980,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const linha = $('Preparar linha').first().json;\nreturn [{ json: { ok: true, registrado: true, id: linha.id, codigo_paciente: linha.codigo_paciente, texto: linha.texto, mensagem: 'Anotação administrativa registrada para ' + linha.codigo_paciente + '.' } }];"
+      },
+      "id": "n057-b40062f4",
+      "name": "Retornar sucesso",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Sub-workflow: validar e registrar anotação (Camada 3)\n\nRegras determinísticas, independentes do prompt:\n1. Código obrigatório no formato P-000 (normaliza \"p14\" → \"P-014\").\n2. Texto obrigatório (5 a 500 caracteres) e sem termos clínicos.\n3. Chave de deduplicação = código + texto normalizado. Se já existir registro igual nas últimas 24 h, NÃO registra (corrige a duplicata da Semana 8).\n\nA ferramenta do agente lê o último nó executado como resposta.",
+        "height": 260,
+        "width": 460,
+        "color": 5
+      },
+      "id": "n058-b8859d59",
+      "name": "Nota",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        -140
+      ]
+    }
+  ],
+  "connections": {
+    "Quando chamado pela EmilIA": {
+      "main": [
+        [
+          {
+            "node": "Validar anotação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar anotação": {
+      "main": [
+        [
+          {
+            "node": "Anotação válida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anotação válida?": {
+      "main": [
+        [
+          {
+            "node": "Buscar anotações do paciente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Retornar erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar anotações do paciente": {
+      "main": [
+        [
+          {
+            "node": "Verificar duplicidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar duplicidade": {
+      "main": [
+        [
+          {
+            "node": "Duplicada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Duplicada?": {
+      "main": [
+        [
+          {
+            "node": "Retornar duplicada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Preparar linha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar linha": {
+      "main": [
+        [
+          {
+            "node": "Registrar na planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar na planilha": {
+      "main": [
+        [
+          {
+            "node": "Retornar sucesso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveExecutionProgress": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}
