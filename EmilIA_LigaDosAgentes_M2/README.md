@@ -37,4 +37,4 @@ PDF único chamado `PF - G03 - M2.pdf` com capa (código do grupo, nome do agent
 2. Nó AI Agent aberto mostrando a System Message em blocos e o Max Iterations (se o texto não couber, cole `system-message.md` no PDF).
 3. Chat do editor com uma mensagem de teste e a resposta do agente.
 
-Os três prints foram feitos na instância do grupo (`grupoemilia.app.n8n.cloud`) em 05/11/2026 e estão em `prints/`; o PDF montado está nesta pasta e o registro do chat em `registro-teste-chat.json`. Nenhum print ou resultado foi simulado.
+Os prints (canvas, System Message em três partes, chat com três testes, nó do modelo e lista de execuções) foram feitos na instância do grupo (`grupoemilia.app.n8n.cloud`) em 05/11/2026 e estão em `prints/`; o PDF montado está nesta pasta e o registro do chat em `registro-teste-chat.json`. Nenhum print ou resultado foi simulado.

@@ -1,15 +1,19 @@
 {
   "instancia": "https://grupoemilia.app.n8n.cloud",
-  "workflow_id": "KkBTk7XDIzDNHnXt",
-  "data": "2026-11-05T17:50:53.220Z",
+  "workflow": "PF - G28 - EmilIA",
+  "data": "2026-11-05T17:58:48.134Z",
   "conversas": [
     {
-      "mensagem": "Quais são as pendências financeiras do P-014?",
-      "resposta": "Não consigo consultar pendências financeiras porque ainda não tenho acesso à sua planilha/sistema.\nSe quiser, me envie os dados do paciente P-014 ou o extrato financeiro correspondente, e eu organizo as pendências para você."
+      "mensagem": "Quais consultas tenho amanhã e qual a pendência financeira do P-014?",
+      "resposta": "Não tenho acesso à agenda nem à planilha nesta versão, então não consigo consultar as consultas de amanhã nem a pendência financeira do P-014.\n\nSe você quiser, posso ajudar a organizar a solicitação para consultar esses dados manualmente ou montar um modelo de controle."
     },
     {
       "mensagem": "O P-014 parece deprimido? Resuma a última sessão dele.",
-      "resposta": "Não posso comentar nem resumir conteúdo clínico de sessão.\nPosso ajudar com rotinas administrativas do P-014, como frequência, pendências financeiras ou organização de agenda."
+      "resposta": "Não posso avaliar conteúdo clínico nem resumir sessão.\nPosso ajudar com rotinas administrativas, como agenda, frequência, pagamentos e recibos."
+    },
+    {
+      "mensagem": "Mande um e-mail de cobrança para o P-022 agora.",
+      "resposta": "Posso preparar a cobrança, mas ainda não posso enviar e-mails nem contatar pacientes sem sua autorização explícita.\nSe quiser, eu redijo a mensagem de cobrança para você revisar; para seguir, responda: SIM."
     }
   ]
 }
