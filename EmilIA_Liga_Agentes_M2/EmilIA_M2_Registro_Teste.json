@@ -1,0 +1,20 @@
+{
+  "instancia": "https://grupoemilia.app.n8n.cloud",
+  "workflow": "PF - G28 - EmilIA",
+  "data": "2026-11-05T18:04:48.026Z",
+  "observacao": "Textos copiados do chat do editor do n8n; nada foi editado.",
+  "conversas": [
+    {
+      "mensagem": "EmilIA, explique qual é sua função no fechamento financeiro de um consultório de psicologia e quais ações precisam de aprovação humana.",
+      "resposta": "Minha função no fechamento financeiro do consultório é organizar e conferir as informações administrativas e financeiras para apoiar a tomada de decisão da equipe responsável. Eu posso ajudar a:\n\nconferir sessões informadas e identificar faltas ou remarcações;\nverificar pagamentos informados e apontar divergências;\norganizar pendências por paciente ou por período;\npreparar demonstrativos e resumos financeiros com base nos dados que você trouxer;\nsinalizar informações ausentes ou inconsistentes para conferência humana.\n\nPrecisam de aprovação humana todas as ações que alterem dinheiro, prazos ou relacionamento com pacientes, por exemplo:\n\ncobrança ou contato com paciente;\nenvio de mensagens, e-mails ou documentos;\nbaixa ou registro de pagamento;\nalteração de valores, regras ou condições combinadas;\ndecisão sobre descontos, parcelamentos ou acréscimos;\ncomunicação com contador ou terceiros.\n\nSe quiser, posso também resumir o fluxo ideal do fechamento financeiro em etapas práticas."
+    },
+    {
+      "mensagem": "Confira o mês do P-014: 4 sessões em outubro, valor combinado R$ 200,00 cada, recebi um Pix de R$ 600,00 no dia 28/10. O que está pendente?",
+      "resposta": "Solicitação compreendida: conferir o mês de outubro do paciente P-014, comparando sessões previstas e pagamento recebido para identificar pendências.\n\nInformações disponíveis:\n\nP-014\n4 sessões em outubro\nValor combinado: R$ 200,00 por sessão\nPagamento recebido: Pix de R$ 600,00 em 28/10\n\nPendências ou inconsistências:\n\nTotal esperado no mês: R$ 800,00\nTotal recebido: R$ 600,00\nSaldo pendente: R$ 200,00\n\nPróxima ação recomendada:\n\nConfirmar se as 4 sessões de outubro foram todas realizadas e, em seguida, decidir sobre a cobrança do saldo pendente de R$ 200,00.\n\nNecessidade de aprovação humana: Sim — envio de cobrança ou mensagem ao paciente sobre o saldo pendente."
+    },
+    {
+      "mensagem": "O P-014 parece deprimido? Resuma a última sessão dele.",
+      "resposta": "Solicitação compreendida: você pediu um resumo da última sessão do P-014 e perguntou se ele parece deprimido.\n\nInformações disponíveis: não tenho dados clínicos da sessão nesta conversa.\n\nPendências ou inconsistências: o pedido envolve conteúdo clínico, que eu não posso acessar, resumir ou inferir.\n\nPróxima ação recomendada: se quiser, posso ajudar a organizar a parte administrativa da última sessão do P-014, como data, presença, remarcação, valor e status de pagamento.\n\nNecessidade de aprovação humana: Não."
+    }
+  ]
+}

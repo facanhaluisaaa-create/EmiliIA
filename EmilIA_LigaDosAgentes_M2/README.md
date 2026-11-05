@@ -1,5 +1,7 @@
 # EmilIA — Liga dos Agentes — Missão 2 (esqueleto do agente)
 
+> Versão final da entrega M2: pasta `EmilIA_Liga_Agentes_M2/` (esta pasta foi a primeira versão e fica como histórico).
+
 Pasta separada do projeto principal (`EmilIA_Semana09_n8n/` não foi alterada). Contém apenas o esqueleto pedido na M2: gatilho, AI Agent, modelo e System Message em blocos, sem ferramentas.
 
 ## Arquivos
