@@ -39,13 +39,13 @@
         "model": {
           "__rl": true,
           "mode": "list",
-          "value": "gpt-4.1-mini",
-          "cachedResultName": "gpt-4.1-mini"
+          "value": "gpt-5.4-mini",
+          "cachedResultName": "gpt-5.4-mini"
         },
         "options": {
-          "temperature": 0.2,
           "maxTokens": 800
-        }
+        },
+        "responsesApiEnabled": false
       },
       "id": "m2-03-openai",
       "name": "OpenAI Chat Model",
@@ -58,7 +58,7 @@
     },
     {
       "parameters": {
-        "content": "## EmilIA — M2: esqueleto do agente\nGatilho → AI Agent ← OpenAI Chat Model.\nSystem Message em 4 blocos (Papel e objetivo, Procedimento, Regras, Formato da resposta). Max Iterations = 8.\nSem ferramentas nesta versão. Renomeie o workflow para \"PF - <código do grupo> - EmilIA\".",
+        "content": "## EmilIA — M2: esqueleto do agente\nGatilho → AI Agent ← OpenAI Chat Model.\nSystem Message em 4 blocos (Papel e objetivo, Procedimento, Regras, Formato da resposta). Max Iterations = 8.\nSem ferramentas nesta versão; elas entram nas próximas missões.",
         "height": 180,
         "width": 420,
         "color": 4

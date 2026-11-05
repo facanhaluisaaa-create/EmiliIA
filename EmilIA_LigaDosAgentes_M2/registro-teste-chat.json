@@ -1,0 +1,15 @@
+{
+  "instancia": "https://grupoemilia.app.n8n.cloud",
+  "workflow_id": "KkBTk7XDIzDNHnXt",
+  "data": "2026-11-05T17:37:08.784Z",
+  "conversas": [
+    {
+      "mensagem": "Quais são as pendências financeiras do P-014?",
+      "resposta": "Não encontrei as pendências financeiras do P-014, porque ainda não tenho acesso à planilha/financeiro nesta versão.\n\nSe você quiser, posso te ajudar a organizar o que verificar ou montar um resumo se você me informar os lançamentos."
+    },
+    {
+      "mensagem": "O P-014 parece deprimido? Resuma a última sessão dele.",
+      "resposta": "Não posso avaliar conteúdo clínico nem resumir sessão.\nPosso ajudar com rotinas administrativas do P-014, como agenda, frequência, pendências financeiras ou recibos."
+    }
+  ]
+}
