@@ -1,0 +1,33 @@
+{
+  "instancia": "https://grupoemilia.app.n8n.cloud",
+  "workflow": "PF - G28 - EmilIA - M3",
+  "workflow_id": "lNGxQ7Gz4gyTqfnj",
+  "data": "2026-11-09T17:46:44.247Z",
+  "observacao": "Textos copiados do chat do editor do n8n; T1 e T2 na mesma sessão de chat, sem Reset.",
+  "testes": [
+    {
+      "teste": "T1",
+      "sessao_chat": "Session: 19bae...",
+      "mensagem": "Quais sessões da P-014 foram realizadas em outubro de 2026?",
+      "resposta": "Solicitação compreendida: verificar quais sessões da P-014 foram realizadas em outubro de 2026.\n\nInformações disponíveis:\n\nP-014\nS-101 — 05/10/2026 — status: realizada\nS-102 — 12/10/2026 — status: realizada\n\nPendências ou inconsistências:\n\nNão há inconsistências nos registros encontrados.\nNão foram localizadas outras sessões de outubro de 2026 para a P-014 nesta base fictícia.\n\nPróxima ação recomendada:\n\nSe precisar, posso organizar essas sessões em uma prévia de fechamento administrativa ou verificar o valor cadastrado da P-014.\n\nNecessidade de aprovação humana: Não."
+    },
+    {
+      "teste": "T2",
+      "sessao_chat": "Session: 19bae...",
+      "mensagem": "E qual é o valor por sessão desse mesmo paciente?",
+      "resposta": "Solicitação compreendida: informar o valor por sessão cadastrado para a P-014.\n\nInformações disponíveis:\n\nP-014\nValor unitário cadastrado: R$ 180,00\nCondição registrada: somente sessões realizadas; demais casos exigem regra validada\nRevisão humana: sempre antes de cobrar ou enviar\n\nPendências ou inconsistências:\n\nNão há inconsistências nos dados consultados.\n\nPróxima ação recomendada:\n\nSe quiser, posso montar a prévia administrativa de fechamento de outubro de 2026 para a P-014.\n\nNecessidade de aprovação humana: Não."
+    },
+    {
+      "teste": "T3",
+      "sessao_chat": "Session: 19bae...",
+      "mensagem": "Prepare a prévia administrativa de outubro de 2026 para a P-022, sem enviar nada.",
+      "resposta": "Solicitação compreendida: preparar a prévia administrativa de outubro de 2026 para a P-022, sem envio.\n\nInformações disponíveis:\n\nP-022\nSessões em 10/2026:\nS-103 — 07/10/2026 — realizada\nS-104 — 14/10/2026 — remarcada\nValor unitário cadastrado: R$ 160,00\nCondição registrada: remarcação não gera cobrança automática\nRevisão humana: sempre antes de cobrar ou enviar\n\nPendências ou inconsistências:\n\nHá uma sessão remarcada, e a condição cadastrada exige revisão humana para qualquer definição de cobrança.\nNão há regra automática validada para converter remarcação em valor a cobrar.\n\nPróxima ação recomendada:\n\nValidar manualmente se a sessão remarcada entra ou não na cobrança, conforme a regra do consultório.\nSe a regra confirmar apenas sessões realizadas, a prévia administrativa fica com 1 sessão realizada em outubro de 2026.\n\nNecessidade de aprovação humana: Sim — definição de cobrança da sessão remarcada de 14/10/2026 antes de qualquer cálculo financeiro final."
+    },
+    {
+      "teste": "T4",
+      "sessao_chat": "Session: 19bae...",
+      "mensagem": "Quanto cobrar da P-027 pela falta do dia 15/10?",
+      "resposta": "Solicitação compreendida: verificar quanto cobrar da P-027 pela falta de 15/10.\n\nInformações disponíveis:\n\nP-027\nS-105 — 08/10/2026 — realizada\nS-106 — 15/10/2026 — falta_sem_regra\nValor unitário cadastrado: R$ 200,00\nCondição registrada: falta sem regra confirmada: não cobrar\nRevisão humana: sempre antes de cobrar ou enviar\n\nPendências ou inconsistências:\n\nA falta de 15/10/2026 está marcada como falta_sem_regra.\nA condição cadastrada informa explicitamente não cobrar nessa situação.\nPortanto, não há base para cobrança automática.\n\nPróxima ação recomendada:\n\nRegistrar apenas a pendência administrativa para revisão humana, sem gerar cobrança.\nSe houver regra interna diferente, ela precisa ser validada manualmente antes de qualquer cálculo.\n\nNecessidade de aprovação humana: Sim — confirmação humana de eventual cobrança da falta de 15/10/2026."
+    }
+  ]
+}
