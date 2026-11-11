@@ -67,5 +67,18 @@
     ],
     "localStorage": "{\"n8n-chat/sessionId\":\"13825b44-b51d-48b4-a929-aa471543df41\"}",
     "fim_utc": "2026-11-11T18:55:57.781Z"
+  },
+  {
+    "teste": "T06",
+    "inicio_utc": "2026-11-11T18:55:57.790Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "EmilIA, prepare o fechamento administrativo desse paciente.",
+        "resposta": "Preciso de um dado essencial antes de consultar a base: informe o código do paciente no formato P-000 e o mês/ano do fechamento administrativo."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"64e47431-9686-4f17-8f9c-b1091fcf4ace\"}",
+    "fim_utc": "2026-11-11T18:59:02.162Z"
   }
 ]
