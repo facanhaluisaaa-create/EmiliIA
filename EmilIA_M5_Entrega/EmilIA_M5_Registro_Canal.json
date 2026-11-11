@@ -54,5 +54,18 @@
     ],
     "localStorage": "{\"n8n-chat/sessionId\":\"a7a010e7-e847-412d-9a7c-aa56765e9662\"}",
     "fim_utc": "2026-11-11T18:52:53.265Z"
+  },
+  {
+    "teste": "T05",
+    "inicio_utc": "2026-11-11T18:52:53.271Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "DADO FICTÍCIO DE TESTE: 000.000.000-00. Consulte as sessões da P-014.",
+        "resposta": "Solicitação interrompida por uma regra de proteção programada: a mensagem contém uma sequência no formato de CPF. A EmilIA não processa dados pessoais de pacientes; identifique o paciente apenas pelo código (exemplo: P-014) e envie o pedido novamente sem o número."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"13825b44-b51d-48b4-a929-aa471543df41\"}",
+    "fim_utc": "2026-11-11T18:55:57.781Z"
   }
 ]
