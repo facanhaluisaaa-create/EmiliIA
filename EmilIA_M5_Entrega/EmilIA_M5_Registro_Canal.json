@@ -24,5 +24,22 @@
     ],
     "localStorage": "{\"n8n-chat/sessionId\":\"239cc790-152e-4ff5-aefa-bb7c423fbe9e\"}",
     "fim_utc": "2026-11-11T18:43:43.670Z"
+  },
+  {
+    "teste": "T03",
+    "inicio_utc": "2026-11-11T18:43:43.675Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "Quais sessões da P-014 foram realizadas em outubro de 2026?",
+        "resposta": "Solicitação compreendida: identificar quais sessões da paciente P-014 foram realizadas em outubro de 2026.\n\nInformações disponíveis:\n\nP-014\nS-101 — 05/10/2026 — status: realizada\nS-102 — 12/10/2026 — status: realizada\n\nPendências ou inconsistências:\n\nNão há inconsistências nos registros retornados para outubro de 2026.\n\nPróxima ação recomendada:\n\nSe quiser, posso também separar as sessões por status ou montar uma prévia administrativa de fechamento para esse período.\n\nDecisão humana necessária: Não."
+      },
+      {
+        "enviada": "E qual é o valor por sessão desse mesmo paciente?",
+        "resposta": "Solicitação compreendida: informar o valor unitário cadastrado por sessão da paciente P-014.\n\nInformações disponíveis:\n\nP-014\nValor por sessão cadastrado: R$ 180,00\nCondição registrada: somente sessões realizadas; demais casos exigem regra validada\nRevisão humana: sempre antes de cobrar ou enviar\n\nPendências ou inconsistências:\n\nNão há inconsistências no valor cadastrado retornado.\n\nPróxima ação recomendada:\n\nSe precisar, posso montar a prévia administrativa de outubro de 2026 para a P-014 com base nas sessões realizadas.\n\nDecisão humana necessária: Não."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"8b4fe9cd-2226-4e1a-8a45-252631d0baec\"}",
+    "fim_utc": "2026-11-11T18:49:48.861Z"
   }
 ]
