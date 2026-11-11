@@ -93,5 +93,39 @@
     ],
     "localStorage": "{\"n8n-chat/sessionId\":\"d938ecd4-9c33-438b-b664-c09f0763d8d1\"}",
     "fim_utc": "2026-11-11T19:02:06.617Z"
+  },
+  {
+    "teste": "T08",
+    "inicio_utc": "2026-11-11T19:02:06.622Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014.",
+        "resposta": "Preciso da sua aprovação para executar uma ação de teste:\n\n• Ação: registrar_confirmacao_teste (grava 1 linha na tabela de teste EmilIA_M5_Confirmacoes_Teste) • Paciente: P-014 • Identificador: DEMO-TESTE-2026-10\n\nNada será gravado sem a sua aprovação. Se negar, nenhuma linha é criada.\n\nAprovar\nNegar"
+      },
+      {
+        "acao": "clique em Negar",
+        "resposta": "Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (DEMO-TESTE-2026-10, P-014). Não vou tentar novamente."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"099ff87d-6de1-4a12-a5fc-78253463cd88\"}",
+    "fim_utc": "2026-11-11T19:08:12.460Z"
+  },
+  {
+    "teste": "T08B",
+    "inicio_utc": "2026-11-11T19:08:37.377Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014.",
+        "resposta": "Preciso da sua aprovação para executar uma ação de teste:\n\n• Ação: registrar_confirmacao_teste (grava 1 linha na tabela de teste EmilIA_M5_Confirmacoes_Teste) • Paciente: P-014 • Identificador: DEMO-TESTE-2026-10\n\nNada será gravado sem a sua aprovação. Se negar, nenhuma linha é criada.\n\nAprovar\nNegar"
+      },
+      {
+        "acao": "clique em Aprovar",
+        "resposta": "Aprovado e registrado: confirmação de teste DEMO-TESTE-2026-10 para P-014 gravada na tabela de teste EmilIA_M5_Confirmacoes_Teste."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"727b4461-174e-485d-888b-5235877641ce\"}",
+    "fim_utc": "2026-11-11T19:14:42.728Z"
   }
 ]

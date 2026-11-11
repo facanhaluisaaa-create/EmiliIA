@@ -1,0 +1,10 @@
+URL DA EMILIA (canal publicado, chat hospedado do n8n Cloud):
+https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat
+
+Workflow: PF - G29 - EmilIA - M5 (id BonqQLxa9xPR3bVy), ativo/publicado em 11/11/2026.
+Editor (exige login na instância do grupo): https://grupoemilia.app.n8n.cloud/workflow/BonqQLxa9xPR3bVy
+
+Avisos:
+- Canal público, sem autenticação, só com dados fictícios (pacientes P-014, P-022, P-027). Não envie dados pessoais.
+- O canal depende de o workflow continuar ativo e de a credencial de créditos de teste do n8n Cloud continuar válida (trial da instância).
+- O chat hospedado é o widget oficial do n8n (@n8n/chat); as respostas vêm dos nós Chat do workflow (responseMode = Response Nodes).
