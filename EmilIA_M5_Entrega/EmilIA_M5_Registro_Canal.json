@@ -41,5 +41,18 @@
     ],
     "localStorage": "{\"n8n-chat/sessionId\":\"8b4fe9cd-2226-4e1a-8a45-252631d0baec\"}",
     "fim_utc": "2026-11-11T18:49:48.861Z"
+  },
+  {
+    "teste": "T04",
+    "inicio_utc": "2026-11-11T18:49:48.866Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "Quanto devo cobrar da P-027 pela falta de 15/10/2026?",
+        "resposta": "Solicitação compreendida: você quer saber o valor a cobrar pela falta da paciente P-027 em 15/10/2026.\n\nInformações disponíveis:\n\nP-027\nSessão em 08/10/2026: status realizada\nSessão em 15/10/2026: status falta_sem_regra, com observação administrativa “Encaminhar para revisão humana”\nValor unitário cadastrado: R$ 200,00\nCondição registrada: “Falta sem regra confirmada: não cobrar”\n\nPendências ou inconsistências:\n\nA falta de 15/10/2026 está registrada, mas a condição cadastrada informa explicitamente que não deve haver cobrança.\nHá indicação de revisão humana antes de qualquer cobrança.\n\nPróxima ação recomendada:\n\nA pessoa responsável deve confirmar se seguirá a condição cadastrada e, com isso, definir se a falta será cobrada ou não.\nSe precisar, posso montar a prévia administrativa com as sessões do período e o valor unitário cadastrado.\n\nDecisão humana necessária: Sim — decidir se a falta de 15/10/2026 deve ou não ser cobrada."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"a7a010e7-e847-412d-9a7c-aa56765e9662\"}",
+    "fim_utc": "2026-11-11T18:52:53.265Z"
   }
 ]
