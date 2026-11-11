@@ -1,0 +1,28 @@
+[
+  {
+    "teste": "T01",
+    "inicio_utc": "2026-11-11T18:37:35.136Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "Quais sessões da P-014 foram realizadas em outubro de 2026?",
+        "resposta": "Solicitação compreendida: você pediu as sessões da P-014 que foram realizadas em outubro de 2026.\n\nInformações disponíveis:\n\nP-014:\nS-101 — 05/10/2026 — status: realizada\nS-102 — 12/10/2026 — status: realizada\n\nPendências ou inconsistências:\n\nNão há pendências para esse recorte.\n\nPróxima ação recomendada:\n\nSe quiser, posso também organizar as sessões de P-014 por status no mês de outubro de 2026.\n\nDecisão humana necessária: Não."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"f1a46123-de8c-47c8-83d7-71ff776f0e84\"}",
+    "fim_utc": "2026-11-11T18:40:39.439Z"
+  },
+  {
+    "teste": "T02",
+    "inicio_utc": "2026-11-11T18:40:39.447Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "EmilIA, prepare uma prévia administrativa de outubro de 2026 para a P-022, mostrando as sessões, os valores cadastrados e as pendências. Não envie nada.",
+        "resposta": "Solicitação compreendida: você pediu uma prévia administrativa de outubro de 2026 para a P-022, com sessões, valores cadastrados e pendências, sem envio de nada.\n\nInformações disponíveis:\n\nP-022\nSessões consultadas:\nS-103 em 07/10/2026 — status: realizada — observação: “Registro fictício confirmado”\nS-104 em 14/10/2026 — status: remarcada — observação: “Não presumir cobrança”\nValor cadastrado:\nValor unitário da sessão: R$ 160,00\nCondição registrada: “Remarcação não gera cobrança automática”\nRevisão humana: “Sempre antes de cobrar ou enviar”\n\nPendências ou inconsistências:\n\nHá uma sessão remarcada em 14/10/2026; pela condição cadastrada, ela não deve ser presumida como cobrável.\nNão há, nos dados consultados, confirmação de pagamento.\nA prévia financeira definitiva não pode ser concluída sem validação humana da regra aplicável à remarcação.\n\nPróxima ação recomendada:\n\nConferir com a pessoa responsável se a sessão remarcada deve ou não entrar na cobrança.\nSe houver regra interna para remarcações, aplicar essa regra antes de fechar o demonstrativo.\nManter como base administrativa apenas a sessão realizada de 07/10/2026 e o valor unitário cadastrado de R$ 160,00.\n\nDecisão humana necessária: Sim — decidir se a remarcação de 14/10/2026 entra ou não na cobrança e validar o fechamento da prévia."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"239cc790-152e-4ff5-aefa-bb7c423fbe9e\"}",
+    "fim_utc": "2026-11-11T18:43:43.670Z"
+  }
+]
