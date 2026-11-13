@@ -1,0 +1,191 @@
+{
+ "execucao": "41",
+ "modo": "webhook",
+ "status": "success",
+ "inicio": "2026-11-11T19:02:10.308Z",
+ "fim": "2026-11-11T19:05:17.020Z",
+ "teste": "T08",
+ "nos_executados": [
+  {
+   "no": "Chat Trigger (canal publicado)",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "099ff87d-6de1-4a12-a5fc-78253463cd88",
+      "chatInput": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Regra crítica (Code)",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "099ff87d-6de1-4a12-a5fc-78253463cd88",
+      "chatInput": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014.",
+      "bloqueio": false,
+      "categoria": "permitido"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Bloqueado? (IF)",
+   "status": "success",
+   "saidas": [
+    [],
+    [
+     {
+      "action": "sendMessage",
+      "sessionId": "099ff87d-6de1-4a12-a5fc-78253463cd88",
+      "chatInput": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014.",
+      "bloqueio": false,
+      "categoria": "permitido"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Guardrails de entrada",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "guardrailsInput": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014.",
+      "checks": [
+       {
+        "name": "keywords",
+        "triggered": false,
+        "info": {
+         "matchedKeywords": []
+        }
+       },
+       {
+        "name": "jailbreak",
+        "triggered": false,
+        "confidenceScore": 0.05,
+        "executionFailed": false,
+        "info": {}
+       }
+      ]
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Modelo dos Guardrails",
+   "status": "success",
+   "saidas": []
+  },
+  {
+   "no": "EmilIA — Assistente Administrativo",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "output": "A confirmação só será registrada se a pessoa responsável aprovar no chat.\n\n<<ACAO_PENDENTE>>{\"ferramenta\":\"registrar_confirmacao_teste\",\"codigo_paciente\":\"P-014\",\"identificador\":\"DEMO-TESTE-2026-10\"}<<FIM_ACAO>>"
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Simple Memory (10 interações)",
+   "status": "success",
+   "saidas": []
+  },
+  {
+   "no": "OpenAI Chat Model",
+   "status": "success",
+   "saidas": []
+  },
+  {
+   "no": "Analisar resposta do agente",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "resposta_texto": "A confirmação só será registrada se a pessoa responsável aprovar no chat.",
+      "tem_acao": true,
+      "valido": true,
+      "erro": null,
+      "acao": {
+       "ferramenta": "registrar_confirmacao_teste",
+       "codigo_paciente": "P-014",
+       "identificador": "DEMO-TESTE-2026-10"
+      },
+      "mensagem_aprovacao": "Preciso da sua aprovação para executar uma ação de teste:\n\n• Ação: registrar_confirmacao_teste (grava 1 linha na tabela de teste EmilIA_M5_Confirmacoes_Teste)\n• Paciente: P-014\n• Identificador: DEMO-TESTE-2026-10\n\nNada será gravado sem a sua aprovação. Se negar, nenhuma linha é criada."
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Há ação para aprovar?",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "resposta_texto": "A confirmação só será registrada se a pessoa responsável aprovar no chat.",
+      "tem_acao": true,
+      "valido": true,
+      "erro": null,
+      "acao": {
+       "ferramenta": "registrar_confirmacao_teste",
+       "codigo_paciente": "P-014",
+       "identificador": "DEMO-TESTE-2026-10"
+      },
+      "mensagem_aprovacao": "Preciso da sua aprovação para executar uma ação de teste:\n\n• Ação: registrar_confirmacao_teste (grava 1 linha na tabela de teste EmilIA_M5_Confirmacoes_Teste)\n• Paciente: P-014\n• Identificador: DEMO-TESTE-2026-10\n\nNada será gravado sem a sua aprovação. Se negar, nenhuma linha é criada."
+     }
+    ],
+    []
+   ]
+  },
+  {
+   "no": "Pedir aprovação no chat",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "data": {
+       "approved": false,
+       "respondedAt": "2026-11-11T19:05:11.946Z"
+      }
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Aprovado?",
+   "status": "success",
+   "saidas": [
+    [],
+    [
+     {
+      "data": {
+       "approved": false,
+       "respondedAt": "2026-11-11T19:05:11.946Z"
+      }
+     }
+    ]
+   ]
+  },
+  {
+   "no": "Responder: negado",
+   "status": "success",
+   "saidas": [
+    [
+     {
+      "sessionId": "099ff87d-6de1-4a12-a5fc-78253463cd88",
+      "action": "sendMessage",
+      "chatInput": "Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (DEMO-TESTE-2026-10, P-014). Não vou tentar novamente."
+     }
+    ]
+   ]
+  }
+ ]
+}
