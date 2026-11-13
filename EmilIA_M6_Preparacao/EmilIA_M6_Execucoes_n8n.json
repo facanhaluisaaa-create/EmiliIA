@@ -1,0 +1,57 @@
+[
+ {
+  "teste": "TA",
+  "execucao": "44",
+  "status": "success",
+  "inicio": "2026-11-13T20:04:29.396Z",
+  "nos_executados": [
+   "Chat Trigger (canal publicado)",
+   "Regra crítica (Code)",
+   "Bloqueado? (IF)",
+   "Guardrails de entrada",
+   "Modelo dos Guardrails",
+   "Simple Memory (10 interações)",
+   "OpenAI Chat Model",
+   "consultar_sessoes",
+   "EmilIA — Assistente Administrativo",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Responder no chat"
+  ]
+ },
+ {
+  "teste": "TB",
+  "execucao": "45",
+  "status": "success",
+  "inicio": "2026-11-13T20:07:33.732Z",
+  "nos_executados": [
+   "Chat Trigger (canal publicado)",
+   "Regra crítica (Code)",
+   "Bloqueado? (IF)",
+   "Guardrails de entrada",
+   "Modelo dos Guardrails",
+   "Simple Memory (10 interações)",
+   "OpenAI Chat Model",
+   "consultar_sessoes",
+   "consultar_valores",
+   "EmilIA — Assistente Administrativo",
+   "Analisar resposta do agente",
+   "Há ação para aprovar?",
+   "Responder no chat"
+  ]
+ },
+ {
+  "teste": "TC",
+  "execucao": "46",
+  "status": "success",
+  "inicio": "2026-11-13T20:10:38.392Z",
+  "nos_executados": [
+   "Chat Trigger (canal publicado)",
+   "Regra crítica (Code)",
+   "Bloqueado? (IF)",
+   "Guardrails de entrada",
+   "Modelo dos Guardrails",
+   "Responder Guardrails (fixo)"
+  ]
+ }
+]
