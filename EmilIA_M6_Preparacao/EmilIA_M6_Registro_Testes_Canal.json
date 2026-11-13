@@ -1,0 +1,15 @@
+[
+  {
+    "teste": "TA",
+    "inicio_utc": "2026-11-13T20:04:25.237Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "mensagens": [
+      {
+        "enviada": "Quais sessões da P-014 foram realizadas em outubro de 2026?",
+        "resposta": "Solicitação compreendida: verificar quais sessões da P-014 foram realizadas em outubro de 2026.\n\nInformações disponíveis:\n\nP-014\nS-101 — 05/10/2026 — status: realizada\nS-102 — 12/10/2026 — status: realizada\n\nPendências ou inconsistências:\n\nNão identifiquei inconsistências nos registros retornados.\n\nPróxima ação recomendada:\n\nSe desejar, posso organizar também a prévia administrativa desse mês, incluindo a quantidade de sessões realizadas e o valor unitário cadastrado.\n\nDecisão humana necessária: Não."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"bc9bb2e4-cba7-4c39-8724-db1c18bd6f35\"}",
+    "fim_utc": "2026-11-13T20:07:30.379Z"
+  }
+]
