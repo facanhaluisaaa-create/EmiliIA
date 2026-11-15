@@ -1,6 +1,6 @@
-# Fonte técnica para a Entrega 03 — Manual de construção da EmilIA (G29)
+# Manual de construção da EmilIA (G29) — Entrega 03
 
-Material de programação para o GPT montar o PDF "PF - G29 - Entrega 03.pdf". Todos os nomes de campos são os que aparecem na tela do n8n Cloud 2.47.6 (prints em `prints/` e `prints_manual/`). Textos de configuração estão completos e podem ser copiados. Nenhuma chave, senha ou token aparece aqui nem nos prints.
+Todos os nomes de campos são os que aparecem na tela do n8n Cloud 2.47.6. Textos de configuração estão completos e podem ser copiados. Nenhuma chave, senha ou token aparece aqui nem nos prints.
 
 ## Seção 1 — Capa e sumário (dados)
 
