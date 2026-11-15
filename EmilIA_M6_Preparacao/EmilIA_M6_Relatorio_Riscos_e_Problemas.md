@@ -10,4 +10,6 @@
 | Gravação de teste acumulada | A tabela de teste tem 1 linha (T08B). | Cada aprovação na demonstração adiciona uma linha fictícia. | Preferir demonstrar "Negar"; se demonstrar "Aprovar", apagar a linha depois na Data table (ou deixar, pois é fictícia). |
 | Dados pessoais no canal público | Canal sem login. | Alguém poderia digitar dados reais. | A regra crítica bloqueia formato de CPF e pedidos clínicos; o subtítulo avisa para não enviar dados pessoais; usar só códigos P-0xx na demonstração. |
 
-Problemas encontrados em 13/11: nenhum. Nenhuma correção foi necessária, portanto não houve nova rodada dos oito testes da M5.
+| Rascunho não publicado no editor | Em 13/11, ao abrir os nós para os prints, o editor salvou automaticamente um rascunho (só remove valores padrão e reordena posições; conexões e lógica iguais). O botão mostra "Publish" com ponto amarelo; a versão publicada de 11/11 continua rodando (conferido pela API: active = true, activeVersionId de 11/11; canal HTTP 200). | Pode parecer que o workflow está despublicado. | Não é preciso fazer nada. Se incomodar na apresentação, clicar Publish: o conteúdo é funcionalmente idêntico. Não despublicar. |
+
+Problemas encontrados em 13/11: nenhum funcional (ver linha do rascunho acima). Nenhuma correção foi necessária, portanto não houve nova rodada dos oito testes da M5.
