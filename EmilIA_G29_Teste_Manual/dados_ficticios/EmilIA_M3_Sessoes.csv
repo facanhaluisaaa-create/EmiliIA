@@ -1,0 +1,7 @@
+id_sessao,codigo_paciente,data_sessao,status,observacao_admin
+S-101,P-014,2026-10-05,realizada,Registro fictício confirmado
+S-102,P-014,2026-10-12,realizada,Registro fictício confirmado
+S-103,P-022,2026-10-07,realizada,Registro fictício confirmado
+S-104,P-022,2026-10-14,remarcada,Não presumir cobrança
+S-105,P-027,2026-10-08,realizada,Registro fictício confirmado
+S-106,P-027,2026-10-15,falta_sem_regra,Encaminhar para revisão humana

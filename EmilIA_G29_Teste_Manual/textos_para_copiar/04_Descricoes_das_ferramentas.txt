@@ -1,0 +1,8 @@
+consultar_sessoes:
+Consulte esta ferramenta quando a secretária solicitar sessões de um paciente ou período, status de sessão realizada, remarcada ou falta, ou conferência para prévia de fechamento. A base contém apenas dados administrativos fictícios: id_sessao, codigo_paciente, data_sessao, status e observacao_admin. Não use para buscar informações clínicas, notas fiscais ou pagamentos; não presuma que uma falta seja faturável. Se não houver registro, informe ausência de dados.
+
+consultar_valores:
+Consulte esta ferramenta sempre que o pedido envolver valor unitário de sessão, condição financeira cadastrada ou preparação de uma prévia. A base fictícia contém codigo_paciente, valor_sessao_brl, condicao_registrada e revisao_humana. Não use para afirmar que um pagamento foi realizado, criar cobranças ou alterar valores. Se o código estiver ausente ou a condição for ambígua, peça esclarecimento e revisão humana.
+
+Filtro (Value) nas duas ferramentas:
+={{ $fromAI('codigo_paciente', 'Código do paciente no formato P-000, por exemplo P-014', 'string') }}

@@ -1,0 +1,4 @@
+codigo_paciente,valor_sessao_brl,condicao_registrada,revisao_humana
+P-014,180,Somente sessões realizadas; demais casos exigem regra validada,Sempre antes de cobrar ou enviar
+P-022,160,Remarcação não gera cobrança automática,Sempre antes de cobrar ou enviar
+P-027,200,Falta sem regra confirmada: não cobrar,Sempre antes de cobrar ou enviar

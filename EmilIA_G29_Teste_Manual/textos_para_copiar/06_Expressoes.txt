@@ -1,0 +1,16 @@
+Prompt (User Message) do AI Agent (Bloco G):   {{ $('Regra crítica (Code)').first().json.chatInput }}
+Key da Simple Memory (Bloco G):                 {{ $('Regra crítica (Code)').first().json.sessionId }}
+Condição Bloqueado? (IF):                       {{ $json.bloqueio }}   → is true
+Condição Há ação para aprovar? (IF):            {{ $json.tem_acao && $json.valido }}   → is true
+Condição Aprovado? (IF):                        {{ $json.data.approved }}   → is true
+Text To Check (Guardrails):                     {{ $json.chatInput }}
+Message de Pedir aprovação no chat:             {{ $json.mensagem_aprovacao }}
+Message de Responder bloqueio (fixo):           {{ $json.resposta_bloqueio }}
+Message de Responder no chat (temporário G0):   {{ $json.output }}
+Message de Responder no chat (final):           {{ $('Analisar resposta do agente').first().json.resposta_texto }}
+Gravação — identificador:                       {{ $('Analisar resposta do agente').first().json.acao.identificador }}
+Gravação — codigo_paciente:                     {{ $('Analisar resposta do agente').first().json.acao.codigo_paciente }}
+Gravação — decisao:                             aprovado
+Gravação — data_hora:                           {{ $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss') }}
+Message de Responder: registrado:               {{ 'Aprovado e registrado: confirmação de teste ' + $('Analisar resposta do agente').first().json.acao.identificador + ' para ' + $('Analisar resposta do agente').first().json.acao.codigo_paciente + ' gravada na tabela de teste EmilIA_TesteManual_Confirmacoes.' }}
+Message de Responder: negado:                   {{ 'Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (' + $('Analisar resposta do agente').first().json.acao.identificador + ', ' + $('Analisar resposta do agente').first().json.acao.codigo_paciente + '). Não vou tentar novamente.' }}

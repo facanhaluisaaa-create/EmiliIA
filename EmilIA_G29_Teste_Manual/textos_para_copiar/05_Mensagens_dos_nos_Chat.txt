@@ -1,0 +1,17 @@
+[Responder bloqueio (fixo)]
+={{ $json.resposta_bloqueio }}
+
+[Responder Guardrails (fixo)]
+Não posso seguir com esse pedido: o nó Guardrails identificou uma tentativa de manipulação das instruções ou um termo não permitido. Sou a EmilIA, assistente administrativa e financeira do consultório; posso ajudar com sessões, remarcações, faltas, valores cadastrados e prévia administrativa.
+
+[Responder no chat]
+={{ $('Analisar resposta do agente').first().json.resposta_texto }}
+
+[Responder: registrado]
+={{ 'Aprovado e registrado: confirmação de teste ' + $('Analisar resposta do agente').first().json.acao.identificador + ' para ' + $('Analisar resposta do agente').first().json.acao.codigo_paciente + ' gravada na tabela de teste EmilIA_TesteManual_Confirmacoes.' }}
+
+[Responder: negado]
+={{ 'Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (' + $('Analisar resposta do agente').first().json.acao.identificador + ', ' + $('Analisar resposta do agente').first().json.acao.codigo_paciente + '). Não vou tentar novamente.' }}
+
+[Pedir aprovação no chat — Message]
+={{ $json.mensagem_aprovacao }}
