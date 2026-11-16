@@ -28,7 +28,7 @@ TESTES FINAIS (Seção 5 do manual), que eu rodarei na minha cópia quando termi
 Os resultados esperados estão no manual; você deve me ajudar a conferir e a registrar o que realmente aconteceu, inclusive se falhar.
 
 EVIDÊNCIAS QUE PRECISO DEVOLVER AO GRUPO
-Vou tirar os prints listados no CHECKLIST_evidencias.md (canvas com o nome da cópia; chat e execução de cada teste; pedido de aprovação, caminho de negação e tabela vazia no teste 3). No final, me ajude a preencher a FICHA_reproducao.md com: meu nome, confirmação de que não participei da montagem original, data, versão do manual (v2.1, 15/11/2026), identificação da cópia, blocos que consegui seguir, testes executados e resultados reais, passos confusos, ajuda que precisei, correções necessárias e nomes dos arquivos das evidências.
+Vou tirar os prints listados no CHECKLIST_evidencias.md (canvas com o nome da cópia; chat e execução de cada teste; pedido de aprovação, caminho de negação e tabela vazia no teste 3). No final, me ajude a preencher a FICHA_reproducao.md com: meu nome, confirmação de que não participei da montagem original, data, versão do manual (v2.2, 16/11/2026), identificação da cópia, blocos que consegui seguir, testes executados e resultados reais, passos confusos, ajuda que precisei, correções necessárias e nomes dos arquivos das evidências.
 
 COMO COMEÇAR
 Primeiro, confirme que leu o manual listando os oito blocos (A a H) e o teste de cada um em uma frase. Depois me pergunte: (a) se vou usar minha própria conta do n8n Cloud ou a instância do grupo com convite, e (b) se as três Data tables já existem ou se preciso criá-las. Só então comece pelo Bloco A, passo 1.

@@ -1,6 +1,6 @@
 # Manual de construção da EmilIA — Entrega 03 (versão para teste de reprodução)
 
-**Status: AGUARDANDO TESTE DE REPRODUÇÃO.** Versão do manual: 2.1, de 15/11/2026 (v2.0 corrigida após a primeira leitura do testador; todos os passos conferidos em ensaio técnico em 16/11/2026, que não substitui o teste de reprodução). Grupo G29 · Agente EmilIA — Agente Inteligente de Gestão Administrativa · Integrantes: Luísa Façanha, Maria Luiza Morelli, Lígia Silva e Matheus Barbosa.
+**Status: AGUARDANDO TESTE DE REPRODUÇÃO.** Versão do manual: 2.2, de 16/11/2026 (v2.1 corrigida na Seção 3.2 após leitura do testador; v2.0 corrigida após a primeira leitura do testador; todos os passos conferidos em ensaio técnico em 16/11/2026, que não substitui o teste de reprodução). Grupo G29 · Agente EmilIA — Agente Inteligente de Gestão Administrativa · Integrantes: Luísa Façanha, Maria Luiza Morelli, Lígia Silva e Matheus Barbosa.
 
 Quem reproduz constrói uma cópia separada chamada **`PF - G29 - teste do manual`**, começando de um workflow vazio e seguindo os blocos A a H. O agente original (`PF - G29 - EmilIA - M5`) não deve ser alterado. O JSON da pasta `referencia_backup/` serve só para conferência; importá-lo não vale como montagem.
 
@@ -34,7 +34,12 @@ Na opção B, as tabelas `EmilIA_M3_Sessoes` e `EmilIA_M3_Valores` já existem e
 
 ### 3.2 Data tables (Overview → aba Data tables → Create data table)
 
-Print: `P02_data_tables_lista.png`. Depois de criar a tabela, use "Add Column" para cada coluna e "Add Row" para cada linha (ou importe o CSV da pasta `dados_ficticios/`).
+Print: `P02_data_tables_lista.png`. Ao clicar em **Create data table** abre o diálogo "Create new data table" (print `P19_data_table_dialogo_criar.png`) com o campo **Data table name** e duas opções:
+
+- **From scratch**: cria a tabela vazia. Depois, dentro da tabela, use **Add Column** (campos Name e Type: string, number, boolean, date; print `P20_data_table_add_column_tipos.png`) para cada coluna, e **Add Row** (ou o botão +) para cada linha.
+- **Import CSV**: escolha o arquivo da pasta `dados_ficticios/`. O n8n cria as colunas a partir do cabeçalho e pode escolher o tipo sozinho. **Depois de importar, abra a tabela e confira os tipos**: todas as colunas devem ser string, exceto `valor_sessao_brl`, que deve ser number. Se um tipo vier errado (por exemplo, `data_sessao` como date), apague a coluna e recrie com Add Column no tipo certo, ou crie a tabela From scratch.
+
+Para a tabela de confirmações, use From scratch (ela começa vazia; o CSV só tem o cabeçalho).
 
 **EmilIA_M3_Sessoes** — colunas: id_sessao (string), codigo_paciente (string), data_sessao (string), status (string), observacao_admin (string). Print: `P04_data_table_sessoes_colunas.png`.
 

@@ -7,7 +7,7 @@ Marque e anexe. Prints legíveis, sem chave, senha ou dado pessoal de paciente (
 - [ ] Teste 2 (bloqueio programado): print do chat com a resposta fixa + print da execução mostrando o caminho Chat Trigger → Regra crítica → Bloqueado? → Responder bloqueio.
 - [ ] Teste 3 (aprovação negada): print do pedido de aprovação com os parâmetros e os botões; print da resposta após Negar; print da execução seguindo por Aprovado? (false) → Responder: negado; print da tabela EmilIA_TesteManual_Confirmacoes vazia.
 - [ ] Nome de quem realizou a reprodução.
-- [ ] Data e versão do manual utilizada (v2.1, 15/11/2026).
+- [ ] Data e versão do manual utilizada (v2.2, 16/11/2026).
 - [ ] Dificuldades encontradas e correções necessárias no manual (na ficha).
 - [ ] Opcional: vídeo curto da tela.
 
