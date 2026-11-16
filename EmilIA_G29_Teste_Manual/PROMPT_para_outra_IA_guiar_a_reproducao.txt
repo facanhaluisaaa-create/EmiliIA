@@ -11,7 +11,7 @@ ARQUIVOS QUE ESTOU ANEXANDO (do pacote EmilIA_G29_Teste_Manual.zip)
 - referencia_backup/ (JSON de referência: só para conferir, NÃO para importar)
 
 REGRAS QUE VOCÊ DEVE SEGUIR
-1. Use somente o manual e os textos do pacote. Não invente passos, nomes de campos, valores ou resultados. Se o manual não disser algo, diga "o manual não cobre isso" e anote como ponto a corrigir.
+1. Use somente o manual e os textos do pacote. Códigos e expressões devem ser copiados dos arquivos da pasta textos_para_copiar/, nunca do PDF (o PDF quebra linhas dentro das aspas). Não invente passos, nomes de campos, valores ou resultados. Se o manual não disser algo, diga "o manual não cobre isso" e anote como ponto a corrigir.
 2. Vá um passo por vez, na ordem do manual (Bloco A → H). Para cada passo, me diga: onde clicar, o que preencher (copiando o texto exato do pacote quando houver) e qual é o resultado esperado. Depois espere eu confirmar o que aconteceu de verdade antes de seguir.
 3. Ao fim de cada bloco, me peça para rodar o teste daquele bloco e me ajude a comparar o resultado real com o esperado. Se der diferente, me ajude a diagnosticar usando a Seção 6 (problemas comuns) antes de propor qualquer outra coisa.
 4. O workflow que eu construo se chama "PF - G29 - teste do manual". Nunca me oriente a editar, despublicar ou apagar o workflow "PF - G29 - EmilIA - M5" nem outras tabelas do grupo. A tabela de gravação é a "EmilIA_TesteManual_Confirmacoes", nova e vazia.
@@ -28,7 +28,7 @@ TESTES FINAIS (Seção 5 do manual), que eu rodarei na minha cópia quando termi
 Os resultados esperados estão no manual; você deve me ajudar a conferir e a registrar o que realmente aconteceu, inclusive se falhar.
 
 EVIDÊNCIAS QUE PRECISO DEVOLVER AO GRUPO
-Vou tirar os prints listados no CHECKLIST_evidencias.md (canvas com o nome da cópia; chat e execução de cada teste; pedido de aprovação, caminho de negação e tabela vazia no teste 3). No final, me ajude a preencher a FICHA_reproducao.md com: meu nome, confirmação de que não participei da montagem original, data, versão do manual (v2.0, 16/11/2026), identificação da cópia, blocos que consegui seguir, testes executados e resultados reais, passos confusos, ajuda que precisei, correções necessárias e nomes dos arquivos das evidências.
+Vou tirar os prints listados no CHECKLIST_evidencias.md (canvas com o nome da cópia; chat e execução de cada teste; pedido de aprovação, caminho de negação e tabela vazia no teste 3). No final, me ajude a preencher a FICHA_reproducao.md com: meu nome, confirmação de que não participei da montagem original, data, versão do manual (v2.1, 15/11/2026), identificação da cópia, blocos que consegui seguir, testes executados e resultados reais, passos confusos, ajuda que precisei, correções necessárias e nomes dos arquivos das evidências.
 
 COMO COMEÇAR
 Primeiro, confirme que leu o manual listando os oito blocos (A a H) e o teste de cada um em uma frase. Depois me pergunte: (a) se vou usar minha própria conta do n8n Cloud ou a instância do grupo com convite, e (b) se as três Data tables já existem ou se preciso criá-las. Só então comece pelo Bloco A, passo 1.

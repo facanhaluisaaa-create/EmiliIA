@@ -1,6 +1,6 @@
 # Manual de construção da EmilIA — Entrega 03 (versão para teste de reprodução)
 
-**Status: AGUARDANDO TESTE DE REPRODUÇÃO.** Versão do manual: 2.0, de 16/11/2026. Grupo G29 · Agente EmilIA — Agente Inteligente de Gestão Administrativa · Integrantes: Luísa Façanha, Maria Luiza Morelli, Lígia Silva e Matheus Barbosa.
+**Status: AGUARDANDO TESTE DE REPRODUÇÃO.** Versão do manual: 2.1, de 15/11/2026 (v2.0 corrigida após a primeira leitura do testador). Grupo G29 · Agente EmilIA — Agente Inteligente de Gestão Administrativa · Integrantes: Luísa Façanha, Maria Luiza Morelli, Lígia Silva e Matheus Barbosa.
 
 Quem reproduz constrói uma cópia separada chamada **`PF - G29 - teste do manual`**, começando de um workflow vazio e seguindo os blocos A a H. O agente original (`PF - G29 - EmilIA - M5`) não deve ser alterado. O JSON da pasta `referencia_backup/` serve só para conferência; importá-lo não vale como montagem.
 
@@ -63,6 +63,8 @@ Tempo estimado: 60 a 90 minutos.
 
 Convenção de cada passo: **Onde** · **Preencha** · **Print** · **Resultado esperado**. Cada bloco termina com um **Teste**.
 
+**Atenção ao copiar códigos e textos:** no PDF, os códigos JavaScript e as expressões podem quebrar linha no meio de um texto entre aspas. Copie sempre dos arquivos da pasta `textos_para_copiar/` (`02_Code_Regra_critica.js`, `03_Code_Analisar_resposta_do_agente.js`, `06_Expressoes.txt` etc.), nunca do PDF.
+
 Ordem de montagem: o agente começa respondendo direto no chat (modo padrão do gatilho). Os nós de resposta e o modo "Using Response Nodes" só entram no Bloco G, quando passam a existir caminhos diferentes. Algumas configurações são **temporárias** e estão marcadas; o Bloco G diz quando substituí-las.
 
 ### Bloco A — Workflow e gatilho
@@ -75,7 +77,7 @@ Ordem de montagem: o agente começa respondendo direto no chat (modo padrão do 
 
 ### Bloco B — AI Agent e modelo
 
-**Passo 3 — AI Agent.** Onde: + ao lado do gatilho → AI → AI Agent. Preencha: nome `EmilIA — Assistente Administrativo`; Source for Prompt (User Message) = `Connected Chat Trigger Node` (**temporário**; muda no passo 17); Options → Add Option → Max Iterations = `8`; Enable Streaming = desligado. Print: `M6_02_ai_agent.png` (versão final; o campo Prompt ainda será trocado). Resultado: nó do agente com os conectores Chat Model, Memory e Tool.
+**Passo 3 — AI Agent.** Onde: + ao lado do gatilho → AI → AI Agent. Preencha: nome `EmilIA — Assistente Administrativo`; Source for Prompt (User Message) = `Connected Chat Trigger Node` (**temporário**; muda no passo 16); Options → Add Option → Max Iterations = `8`; Enable Streaming = desligado. Print: `M6_02_ai_agent.png` (versão final; o campo Prompt ainda será trocado). Resultado: nó do agente com os conectores Chat Model, Memory e Tool.
 
 **Passo 4 — Modelo.** Onde: + do conector Chat Model → OpenAI Chat Model. Preencha: nome `OpenAI Chat Model`; Credential = Gateway credits (ou a credencial OpenAI criada); Model = From list → `gpt-5.4-mini`; Use Responses API = DESLIGADO; Options → Add Option → Maximum Number of Tokens = `1200`. Print: `M6_02b_chat_model_credencial.png`. Resultado: sem triângulo vermelho no nó.
 
@@ -167,7 +169,7 @@ Consulte esta ferramenta sempre que o pedido envolver valor unitário de sessão
 
 ### Bloco E — Memória
 
-**Passo 8 — Simple Memory.** Onde: + do conector Memory → Simple Memory. Preencha: nome `Simple Memory (10 interações)`; Session ID = `Connected Chat Trigger Node` (**temporário**; muda no passo 17); Context Window Length = `10`. Print: `M6_04c_simple_memory.png` (versão final, já com Define below). Resultado: nó de memória ligado ao agente.
+**Passo 8 — Simple Memory.** Onde: + do conector Memory → Simple Memory. Preencha: nome `Simple Memory (10 interações)`; Session ID = `Connected Chat Trigger Node` (**temporário**; muda no passo 16); Context Window Length = `10`. Print: `M6_04c_simple_memory.png` (versão final, já com Define below). Resultado: nó de memória ligado ao agente.
 
 **Teste E.** Na mesma sessão do Teste D (sem clicar em Reset), mensagem: `E qual é o valor por sessão desse mesmo paciente?` Resultado esperado: R$ 180,00 para P-014, sem pedir o código de novo. Onde conferir: Logs → `Simple Memory` e `consultar_valores` executados.
 
