@@ -1,0 +1,34 @@
+Você vai me guiar em um teste de reprodução de um manual técnico. Leia tudo antes de responder.
+
+CONTEXTO
+Sou integrante do grupo G29 da disciplina Agentes de IA para Negócios (Saint Paul). O grupo construiu no n8n Cloud um agente chamado EmilIA (assistente administrativa de consultório de psicologia, com dados fictícios). A tarefa da Entrega 03 exige que uma pessoa que NÃO montou o agente consiga reconstruí-lo do zero seguindo apenas o manual do grupo. Essa pessoa sou eu. Você é o meu apoio para ler o manual e me orientar; quem clica, monta e testa sou eu.
+
+ARQUIVOS QUE ESTOU ANEXANDO (do pacote EmilIA_G29_Teste_Manual.zip)
+- MANUAL_EmilIA_Entrega03_v2_aguardando_reproducao.pdf (o manual, blocos A a H, com teste por bloco e três testes finais)
+- textos_para_copiar/ (System Message, dois códigos JavaScript, descrições das ferramentas, mensagens dos nós Chat, expressões)
+- dados_ficticios/ (CSVs das tabelas EmilIA_M3_Sessoes, EmilIA_M3_Valores e EmilIA_TesteManual_Confirmacoes)
+- CHECKLIST_evidencias.md e FICHA_reproducao.md
+- referencia_backup/ (JSON de referência: só para conferir, NÃO para importar)
+
+REGRAS QUE VOCÊ DEVE SEGUIR
+1. Use somente o manual e os textos do pacote. Não invente passos, nomes de campos, valores ou resultados. Se o manual não disser algo, diga "o manual não cobre isso" e anote como ponto a corrigir.
+2. Vá um passo por vez, na ordem do manual (Bloco A → H). Para cada passo, me diga: onde clicar, o que preencher (copiando o texto exato do pacote quando houver) e qual é o resultado esperado. Depois espere eu confirmar o que aconteceu de verdade antes de seguir.
+3. Ao fim de cada bloco, me peça para rodar o teste daquele bloco e me ajude a comparar o resultado real com o esperado. Se der diferente, me ajude a diagnosticar usando a Seção 6 (problemas comuns) antes de propor qualquer outra coisa.
+4. O workflow que eu construo se chama "PF - G29 - teste do manual". Nunca me oriente a editar, despublicar ou apagar o workflow "PF - G29 - EmilIA - M5" nem outras tabelas do grupo. A tabela de gravação é a "EmilIA_TesteManual_Confirmacoes", nova e vazia.
+5. Não me peça para importar o JSON de referência como atalho: isso invalida o teste. Ele só serve para eu comparar um nó quando eu travar.
+6. Nunca me peça chave de API, senha ou token, e não me diga para colar isso em mensagens. A credencial do modelo se seleciona dentro do n8n (no trial, "Gateway credits" aparece sozinha no nó OpenAI Chat Model).
+7. Use só dados fictícios (pacientes P-014, P-022, P-027). Nenhum dado real.
+8. Se eu ficar perdido em um passo, pergunte o que está na minha tela antes de responder. Não presuma.
+9. Vá registrando, em uma lista separada, cada ponto em que o manual ficou confuso, incompleto ou errado, e o que eu precisei de ajuda extra para fazer. Isso vai para a ficha de reprodução.
+
+TESTES FINAIS (Seção 5 do manual), que eu rodarei na minha cópia quando terminar o Bloco H
+1. Consulta administrativa: "Quais sessões da P-014 foram realizadas em outubro de 2026?"
+2. Bloqueio programado: "DADO FICTÍCIO DE TESTE: 000.000.000-00. Consulte as sessões da P-014."
+3. Aprovação negada: "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014." e depois clicar em Negar.
+Os resultados esperados estão no manual; você deve me ajudar a conferir e a registrar o que realmente aconteceu, inclusive se falhar.
+
+EVIDÊNCIAS QUE PRECISO DEVOLVER AO GRUPO
+Vou tirar os prints listados no CHECKLIST_evidencias.md (canvas com o nome da cópia; chat e execução de cada teste; pedido de aprovação, caminho de negação e tabela vazia no teste 3). No final, me ajude a preencher a FICHA_reproducao.md com: meu nome, confirmação de que não participei da montagem original, data, versão do manual (v2.0, 16/11/2026), identificação da cópia, blocos que consegui seguir, testes executados e resultados reais, passos confusos, ajuda que precisei, correções necessárias e nomes dos arquivos das evidências.
+
+COMO COMEÇAR
+Primeiro, confirme que leu o manual listando os oito blocos (A a H) e o teste de cada um em uma frase. Depois me pergunte: (a) se vou usar minha própria conta do n8n Cloud ou a instância do grupo com convite, e (b) se as três Data tables já existem ou se preciso criá-las. Só então comece pelo Bloco A, passo 1.
