@@ -1,0 +1,32 @@
+[
+  {
+    "teste": "canal",
+    "inicio_utc": "2026-11-16T01:30:26.971Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-ensaio-manual/chat",
+    "mensagens": [
+      {
+        "enviada": "Quais sessões da P-014 foram realizadas em outubro de 2026?",
+        "resposta": "Solicitação compreendida: você quer saber quais sessões da P-014 foram realizadas em outubro de 2026.\n\nInformações disponíveis:\n\nP-014\nS-101 — 05/10/2026 — status: realizada\nS-102 — 12/10/2026 — status: realizada\n\nPendências ou inconsistências:\n\nNão há pendências para esta consulta.\n\nPróxima ação recomendada:\n\nSe quiser, posso também organizar as sessões de P-014 por status ou preparar uma prévia administrativa do mês.\n\nDecisão humana necessária: Não."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"de99fc3d-d699-43a4-99ce-f9d438d4d07e\"}",
+    "fim_utc": "2026-11-16T01:33:31.029Z"
+  },
+  {
+    "teste": "T08",
+    "inicio_utc": "2026-11-16T01:34:33.745Z",
+    "canal": "https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-ensaio-manual/chat",
+    "mensagens": [
+      {
+        "enviada": "EmilIA, registre a confirmação do demonstrativo de teste de outubro de 2026 para a P-014.",
+        "resposta": "Preciso da sua aprovação para executar uma ação de teste:\n\n• Ação: registrar_confirmacao_teste (grava 1 linha na tabela de teste EmilIA_Ensaio_Confirmacoes) • Paciente: P-014 • Identificador: DEMO-TESTE-2026-10\n\nNada será gravado sem a sua aprovação. Se negar, nenhuma linha é criada.\n\nAprovar\nNegar"
+      },
+      {
+        "acao": "clique em Negar",
+        "resposta": "Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (DEMO-TESTE-2026-10, P-014). Não vou tentar novamente."
+      }
+    ],
+    "localStorage": "{\"n8n-chat/sessionId\":\"5178a199-b36d-481a-b939-20daa20b4d1a\"}",
+    "fim_utc": "2026-11-16T01:40:38.777Z"
+  }
+]

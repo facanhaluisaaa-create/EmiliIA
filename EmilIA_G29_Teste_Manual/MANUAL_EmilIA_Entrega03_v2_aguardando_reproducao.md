@@ -1,6 +1,6 @@
 # Manual de construção da EmilIA — Entrega 03 (versão para teste de reprodução)
 
-**Status: AGUARDANDO TESTE DE REPRODUÇÃO.** Versão do manual: 2.1, de 15/11/2026 (v2.0 corrigida após a primeira leitura do testador). Grupo G29 · Agente EmilIA — Agente Inteligente de Gestão Administrativa · Integrantes: Luísa Façanha, Maria Luiza Morelli, Lígia Silva e Matheus Barbosa.
+**Status: AGUARDANDO TESTE DE REPRODUÇÃO.** Versão do manual: 2.1, de 15/11/2026 (v2.0 corrigida após a primeira leitura do testador; todos os passos conferidos em ensaio técnico em 16/11/2026, que não substitui o teste de reprodução). Grupo G29 · Agente EmilIA — Agente Inteligente de Gestão Administrativa · Integrantes: Luísa Façanha, Maria Luiza Morelli, Lígia Silva e Matheus Barbosa.
 
 Quem reproduz constrói uma cópia separada chamada **`PF - G29 - teste do manual`**, começando de um workflow vazio e seguindo os blocos A a H. O agente original (`PF - G29 - EmilIA - M5`) não deve ser alterado. O JSON da pasta `referencia_backup/` serve só para conferência; importá-lo não vale como montagem.
 
@@ -184,7 +184,7 @@ A habilidade "Prévia administrativa de fechamento" são os 7 passos numerados d
 Aqui o workflow passa a ter vários caminhos de resposta. Por isso o gatilho muda para "Using Response Nodes" e cada caminho termina em um nó Chat.
 
 **Passo 9 — Mudar o modo de resposta e criar o primeiro nó Chat.** Onde: nó Chat Trigger → Options → Add Field → Response Mode = `Using Response Nodes`. Depois, + à direita do AI Agent → AI → Chat → Operation `Send a Message`; nome `Responder no chat`; Message = `{{ $json.output }}` (**temporário**; muda no passo 19). Print: `P12_no_chat_send_responder_no_chat.png` (versão final). Resultado: o agente só responde no chat através desse nó.
-Teste G1: repita `Quais sessões da P-014 foram realizadas em outubro de 2026?`. Esperado: mesma resposta do Teste D, agora entregue pelo nó `Responder no chat` (aparece no Logs). *Observação de verificação: no agente original o nó Chat foi criado já com a expressão final; a expressão temporária `$json.output` usa o campo `output` que o AI Agent devolve em todas as execuções registradas.*
+Teste G1: repita `Quais sessões da P-014 foram realizadas em outubro de 2026?`. Esperado: mesma resposta do Teste D, agora entregue pelo nó `Responder no chat` (aparece no Logs). *Verificado em ensaio técnico de 16/11/2026: este passo intermediário funciona (ver `ensaio_tecnico/RELATORIO_ensaio_tecnico.md`).*
 
 **Passo 10 — Regra crítica (Code).** Onde: passe o mouse sobre a linha entre o gatilho e o agente → + → Core → Code. Preencha: nome `Regra crítica (Code)`; Mode = `Run Once for All Items`; Language = `JavaScript`; JavaScript = código abaixo (`textos_para_copiar/02_Code_Regra_critica.js`). Print: `M6_05a_regra_critica_code.png`. Resultado: Chat Trigger → Code → AI Agent.
 
