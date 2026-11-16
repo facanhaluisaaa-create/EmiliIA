@@ -1,0 +1,26 @@
+[
+  {
+    "t": 49,
+    "cena": "Cena 1: canvas do workflow"
+  },
+  {
+    "t": 65,
+    "cena": "Cena 2: chat publicado, consulta"
+  },
+  {
+    "t": 97,
+    "cena": "Cena 3: Executions, consulta"
+  },
+  {
+    "t": 119,
+    "cena": "Cena 4: chat, bloqueio por CPF"
+  },
+  {
+    "t": 146,
+    "cena": "Cena 4b: Executions, bloqueio"
+  },
+  {
+    "t": 173,
+    "cena": "Cena 5: canvas final"
+  }
+]

@@ -1,0 +1,26 @@
+[
+ [
+  0,
+  "Cena 1: canvas do workflow"
+ ],
+ [
+  15.2,
+  "Cena 2: consulta no chat publicado"
+ ],
+ [
+  41.44,
+  "Cena 3: execução da consulta (Executions)"
+ ],
+ [
+  68.24,
+  "Cena 4: bloqueio por CPF no chat"
+ ],
+ [
+  90.63999999999999,
+  "Cena 4b: execução do bloqueio (Executions)"
+ ],
+ [
+  116.27999999999999,
+  "Cena 5: canvas final"
+ ]
+]
