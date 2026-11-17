@@ -56,7 +56,7 @@
     "WS wss://grupoemilia.app.n8n.cloud/chat?sessionId=ui-c6d601e2-bc6f-4a5d-9b3c-701de2680a8b&executionId=103&isPublic=true&token=<resumeToken>",
     "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
     "WS wss://grupoemilia.app.n8n.cloud/chat?sessionId=ui-c6d601e2-bc6f-4a5d-9b3c-701de2680a8b&executionId=104&isPublic=true&token=<resumeToken>",
-    "GET https://grupoemilia.app.n8n.cloud/webhook-waiting/104/m5-aprovacao?approved=false&signature=9918aa1447019197e78c2f2a51ab8d44e4ad1d941d9a105a09c40e78b431ddae",
+    "GET https://grupoemilia.app.n8n.cloud/webhook-waiting/104/m5-aprovacao?approved=false&signature=<assinatura>",
     "GET https://grupoemilia.app.n8n.cloud/healthz",
     "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat"
    ],

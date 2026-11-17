@@ -109,7 +109,7 @@ const results = {};
   const n8nReqs = requests.filter(r => r.url.includes('grupoemilia.app.n8n.cloud'));
   const hasAuthHeader = n8nReqs.some(r => /authorization|api-key|x-n8n/i.test(JSON.stringify(r)));
   const html = fs.readFileSync('serve/index.html', 'utf8');
-  const secretPatterns = [/xazbiw/i, /sk-[A-Za-z0-9]{20,}/, /n8n_api_[A-Za-z0-9]+/, /student27@/i, /"password"\s*:\s*"[^"]{6,}"/];
+  const secretPatterns = [/sk-[A-Za-z0-9]{20,}/, /n8n_api_[A-Za-z0-9]+/, /@saintpaul\.edu\.br/i, /"password"\s*:\s*"[^"]{6,}"/, /emailOrLdapLoginId/];
   const leaks = secretPatterns.filter(p => p.test(html)).map(String);
   results.D = { hosts, n8nRequests: n8nReqs.map(r => `${r.method} ${r.url.replace(/token=[^&]+/, 'token=<resumeToken>')}`).slice(0, 12), hasAuthHeader, leaksInHtml: leaks, ok: leaks.length === 0 && !hasAuthHeader };
   L('D hosts:', hosts.join(', ')); L('D leaks:', leaks.length, 'auth header:', hasAuthHeader);
