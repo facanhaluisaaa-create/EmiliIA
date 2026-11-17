@@ -1,0 +1,278 @@
+{
+ "name": "PF - G29 - EmilIA - Resumo diário por e-mail",
+ "nodes": [
+  {
+   "id": "rd-sched",
+   "name": "Todo dia às 7h",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1.2,
+   "position": [
+    0,
+    0
+   ],
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "days",
+       "daysInterval": 1,
+       "triggerAtHour": 7
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "rd-hook",
+   "name": "Link de prévia do e-mail",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    0,
+    220
+   ],
+   "webhookId": "d9500355-f838-477f-a776-9067bfa8f857",
+   "parameters": {
+    "httpMethod": "GET",
+    "path": "emilia-g29-resumo-do-dia",
+    "responseMode": "responseNode",
+    "options": {}
+   }
+  },
+  {
+   "id": "rd-data",
+   "name": "Definir o dia",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    240,
+    110
+   ],
+   "parameters": {
+    "jsCode": "// Define o dia do resumo: no agendamento das 7h é hoje; no link de prévia aceita ?data=AAAA-MM-DD.\nconst j = $input.first().json;\nconst viaLink = Boolean(j.headers || j.query);\nconst pedido = String((j.query && j.query.data) || '');\nconst hoje = $now.setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd');\nconst data = /^\\d{4}-\\d{2}-\\d{2}$/.test(pedido) ? pedido : hoje;\nreturn [{ json: { data, origem: viaLink ? 'previa' : 'agendado' } }];"
+   }
+  },
+  {
+   "id": "rd-get",
+   "name": "Buscar sessões do dia",
+   "type": "n8n-nodes-base.dataTable",
+   "typeVersion": 1.1,
+   "position": [
+    480,
+    110
+   ],
+   "alwaysOutputData": true,
+   "parameters": {
+    "operation": "get",
+    "dataTableId": {
+     "__rl": true,
+     "mode": "list",
+     "value": "VKEXG8x5GFalslKg",
+     "cachedResultName": "EmilIA_M3_Sessoes"
+    },
+    "matchType": "allConditions",
+    "filters": {
+     "conditions": [
+      {
+       "keyName": "data_sessao",
+       "condition": "eq",
+       "keyValue": "={{ $json.data }}"
+      }
+     ]
+    },
+    "returnAll": true
+   }
+  },
+  {
+   "id": "rd-montar",
+   "name": "Montar e-mail da agenda",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    720,
+    110
+   ],
+   "parameters": {
+    "jsCode": "// Monta o e-mail da agenda do dia no estilo da EmilIA. Só dados administrativos fictícios.\nconst data = $('Definir o dia').first().json.data;\nconst sessoes = $input.all().map(i => i.json).filter(r => r && r.id_sessao).sort((a, b) => String(a.horario).localeCompare(String(b.horario)));\nconst d = DateTime.fromISO(data, { zone: 'America/Sao_Paulo' }).setLocale('pt-BR');\nconst t0 = d.toFormat(\"cccc, dd 'de' LLLL 'de' yyyy\"); const titulo = t0.charAt(0).toUpperCase() + t0.slice(1);\nconst ativas = sessoes.filter(s => ['agendada', 'confirmada', 'realizada'].includes(String(s.status).toLowerCase()));\nconst fora = sessoes.filter(s => !ativas.includes(s));\nconst pend = ativas.filter(s => ['pendente', 'atrasado'].includes(String(s.status_pagamento).toLowerCase()));\nconst brl = v => 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');\nconst cor = { confirmada: '#3F7D5A', agendada: '#4C6F8F', realizada: '#65776C', cancelada: '#B04A3A', remarcada: '#B8862B', falta: '#B04A3A' };\nconst linha = s => '<tr><td style=\"padding:10px 12px;border-bottom:1px solid #E3E6E0;font-weight:600;white-space:nowrap\">' + s.horario + '</td>'\n  + '<td style=\"padding:10px 12px;border-bottom:1px solid #E3E6E0\">' + s.nome_paciente + ' <span style=\"color:#8E9B93\">(' + s.codigo_paciente + ')</span></td>'\n  + '<td style=\"padding:10px 12px;border-bottom:1px solid #E3E6E0\">' + (s.tipo_atendimento || '') + '</td>'\n  + '<td style=\"padding:10px 12px;border-bottom:1px solid #E3E6E0;color:' + (cor[String(s.status).toLowerCase()] || '#1D2924') + '\">' + s.status + '</td>'\n  + '<td style=\"padding:10px 12px;border-bottom:1px solid #E3E6E0\">' + (s.status_pagamento || '') + '</td></tr>';\nconst tabela = rows => '<table style=\"width:100%;border-collapse:collapse;font-size:14px\"><tr style=\"text-align:left;color:#65776C;font-size:11px;text-transform:uppercase;letter-spacing:.06em\"><th style=\"padding:8px 12px\">Hora</th><th style=\"padding:8px 12px\">Paciente</th><th style=\"padding:8px 12px\">Tipo</th><th style=\"padding:8px 12px\">Status</th><th style=\"padding:8px 12px\">Pagamento</th></tr>' + rows.map(linha).join('') + '</table>';\nconst corpo = ativas.length ? tabela(ativas) : '<p style=\"color:#65776C\">Nenhuma sessão ativa neste dia.</p>';\nconst html = '<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>EmilIA · Agenda do dia</title>'\n + '<link href=\"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap\" rel=\"stylesheet\"></head>'\n + '<body style=\"margin:0;background:#F5F5F0;font-family:Inter,Arial,sans-serif;color:#1D2924\"><div style=\"max-width:680px;margin:0 auto;padding:24px 16px\">'\n + '<div style=\"background:#1D2924;border-radius:16px 16px 0 0;padding:22px 26px;display:flex;align-items:center;gap:20px\"><img src=\"__LOGO__\" alt=\"emilIA\" style=\"height:56px\"><div><div style=\"font-family:Cormorant Garamond,Georgia,serif;font-size:26px;color:#F5F5F0\">Agenda do dia</div><div style=\"color:#C7D2C2;font-size:13px\">' + titulo + '</div></div></div>'\n + '<div style=\"background:#fff;border:1px solid #E3E6E0;border-top:none;border-radius:0 0 16px 16px;padding:22px 26px\">'\n + '<p style=\"margin:0 0 16px\">Bom dia! Hoje são <b>' + ativas.length + '</b> sessão(ões) na agenda' + (pend.length ? ', <b>' + pend.length + '</b> com pagamento pendente ou atrasado' : '') + '.</p>'\n + corpo\n + (fora.length ? '<p style=\"margin:18px 0 6px;color:#65776C;font-size:12px;text-transform:uppercase;letter-spacing:.06em\">Canceladas, remarcadas ou faltas</p>' + tabela(fora) : '')\n + '<p style=\"margin:20px 0 0;padding:12px 14px;background:#EEF2EC;border-radius:10px;font-size:13px;color:#2A3A33\">Resumo administrativo gerado pela EmilIA a partir da agenda. Nenhuma cobrança ou mensagem foi enviada a pacientes: confirmações e cobranças continuam com a equipe.</p>'\n + '</div><p style=\"text-align:center;color:#8E9B93;font-size:11px;margin-top:14px\">EmilIA · Grupo G29 · dados 100% fictícios</p></div></body></html>';\nconst assunto = 'EmilIA · Agenda de ' + d.toFormat('cccc, dd/MM') + ' · ' + ativas.length + ' paciente(s)';\nreturn [{ json: { assunto, html: html.replace('__LOGO__', 'https://raw.githubusercontent.com/facanhaluisaaa-create/EmiliIA/main/apps/web/public/brand/logo-light.png'), total: ativas.length, data } }];"
+   }
+  },
+  {
+   "id": "rd-if",
+   "name": "É prévia?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    960,
+    110
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "c1",
+       "leftValue": "={{ $('Definir o dia').first().json.origem === 'previa' }}",
+       "rightValue": "",
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   }
+  },
+  {
+   "id": "rd-resp",
+   "name": "Mostrar prévia",
+   "type": "n8n-nodes-base.respondToWebhook",
+   "typeVersion": 1.1,
+   "position": [
+    1200,
+    0
+   ],
+   "parameters": {
+    "respondWith": "text",
+    "responseBody": "={{ $json.html }}",
+    "options": {
+     "responseHeaders": {
+      "entries": [
+       {
+        "name": "Content-Type",
+        "value": "text/html; charset=utf-8"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "id": "rd-gmail",
+   "name": "Enviar e-mail (Gmail)",
+   "type": "n8n-nodes-base.gmail",
+   "typeVersion": 2.1,
+   "position": [
+    1200,
+    220
+   ],
+   "disabled": true,
+   "parameters": {
+    "resource": "message",
+    "operation": "send",
+    "sendTo": "DEFINA-O-EMAIL-DA-EQUIPE@exemplo.com",
+    "subject": "={{ $json.assunto }}",
+    "emailType": "html",
+    "message": "={{ $json.html }}",
+    "options": {
+     "appendAttribution": false
+    }
+   },
+   "webhookId": "d5233c36-0b9b-4136-862f-1459f403d032"
+  },
+  {
+   "id": "rd-nota",
+   "name": "Nota",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -300
+   ],
+   "parameters": {
+    "width": 760,
+    "height": 230,
+    "content": "## PF - G29 - EmilIA - Resumo diário por e-mail\nWorkflow separado do agente. Todo dia às 7h busca as sessões do dia na tabela EmilIA_M3_Sessoes e monta um e-mail com horário, paciente, tipo, status e pagamento.\n\nO link de prévia (Webhook) mostra o e-mail no navegador; aceita ?data=AAAA-MM-DD.\n\nPara ENVIAR: criar credencial Gmail (Sign in with Google), selecionar no nó \"Enviar e-mail (Gmail)\", trocar o destinatário, ligar o nó e publicar."
+   }
+  }
+ ],
+ "connections": {
+  "Todo dia às 7h": {
+   "main": [
+    [
+     {
+      "node": "Definir o dia",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Link de prévia do e-mail": {
+   "main": [
+    [
+     {
+      "node": "Definir o dia",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Definir o dia": {
+   "main": [
+    [
+     {
+      "node": "Buscar sessões do dia",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Buscar sessões do dia": {
+   "main": [
+    [
+     {
+      "node": "Montar e-mail da agenda",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Montar e-mail da agenda": {
+   "main": [
+    [
+     {
+      "node": "É prévia?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "É prévia?": {
+   "main": [
+    [
+     {
+      "node": "Mostrar prévia",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Enviar e-mail (Gmail)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "saveManualExecutions": true,
+  "saveDataSuccessExecution": "all",
+  "saveDataErrorExecution": "all",
+  "timezone": "America/Sao_Paulo"
+ }
+}
