@@ -108,9 +108,9 @@ export function LoginPage() {
               )}
               {isDemo && (
                 <div className="grid gap-2 sm:grid-cols-2">
-                  <Button type="button" size="lg" onClick={() => quickLogin("emilia")} loading={busy}>Entrar como Emília</Button>
-                  <Button type="button" size="lg" variant="secondary" onClick={() => quickLogin("ligia")} loading={busy}>Entrar como Lígia</Button>
-                  <p className="text-xs text-ink-muted sm:col-span-2">Emília vê tudo, inclusive a área clínica. Lígia vê apenas o administrativo. Nada sai do seu navegador.</p>
+                  <Button type="button" size="lg" onClick={() => quickLogin("ligia")} loading={busy}>Entrar como assistente (Lígia)</Button>
+                  <Button type="button" size="lg" variant="secondary" onClick={() => quickLogin("emilia")} loading={busy}>Entrar como psicóloga (Emília)</Button>
+                  <p className="text-xs text-ink-muted sm:col-span-2">A assistente vê o administrativo: agenda, pacientes, financeiro, documentos, comunicação e a EmilIA. A psicóloga vê tudo isso e também a área clínica, os usuários e as integrações.</p>
                 </div>
               )}
               <Input

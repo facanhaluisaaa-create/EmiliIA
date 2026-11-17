@@ -55,7 +55,7 @@ export function resetDemo(): void {
   save();
 }
 
-const ROLE_LABELS = { psychologist: "Psicóloga responsável", secretary: "Secretaria administrativa" };
+const ROLE_LABELS = { psychologist: "Psicóloga responsável", secretary: "Assistente administrativa" };
 const ADMIN = ["dashboard:read", "patients:read", "patients:write", "agenda:read", "agenda:write", "finance:read", "finance:write", "documents:read", "documents:write", "communication:read", "communication:send", "reports:read", "settings:read"];
 const PERMS = { psychologist: [...ADMIN, "integrations:manage", "users:manage", "audit:read", "clinical:read", "clinical:write", "clinical:grant"], secretary: [...ADMIN, "audit:read"] };
 
