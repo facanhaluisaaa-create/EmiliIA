@@ -21,6 +21,7 @@ import {
   type ChatMessage,
   type StoredConversation,
 } from "./n8nChat";
+import { AgendaDoDiaTab, PacientesDeHojeCard } from "./AgendaDoDia";
 import { BRIDGE_WORKFLOW, requestSessionToken, speechSupported, startAvatar, startDictation, type AvatarHandle, type AvatarStatus } from "./liveAvatar";
 
 /* ---------------- base fictícia de referência (mesma dos testes M3–M6) ---------------- */
@@ -41,6 +42,7 @@ const PACIENTES = ["P-014", "P-022", "P-027"] as const;
 
 const TABS = [
   { key: "visao", label: "Visão geral", icon: Activity },
+  { key: "agenda", label: "Agenda do dia", icon: CalendarCheck2 },
   { key: "sessoes", label: "Sessões", icon: CalendarCheck2 },
   { key: "valores", label: "Valores", icon: Wallet },
   { key: "chat", label: "Assistente EmilIA", icon: Bot },
@@ -169,7 +171,8 @@ export function AssistantPage() {
       </div>
 
       <SandboxNotice />
-      {tab === "visao" && <OverviewTab c={c} goChat={() => setTab("chat")} />}
+      {tab === "visao" && <OverviewTab c={c} goChat={() => setTab("chat")} goAgenda={() => setTab("agenda")} />}
+      {tab === "agenda" && <AgendaDoDiaTab />}
       {tab === "sessoes" && <SessionsTab c={c} ask={askAndOpenChat} />}
       {tab === "valores" && <ValuesTab c={c} ask={askAndOpenChat} />}
       {tab === "chat" && <ChatTab c={c} />}
@@ -180,7 +183,7 @@ export function AssistantPage() {
 }
 
 /* ---------------- Visão geral ---------------- */
-function OverviewTab({ c, goChat }: { c: Conversation; goChat: () => void }) {
+function OverviewTab({ c, goChat, goAgenda }: { c: Conversation; goChat: () => void; goAgenda: () => void }) {
   const [host, setHost] = useState<"checking" | "reachable" | "unreachable">("checking");
   const check = useCallback(() => { setHost("checking"); void probeHost().then(setHost); }, []);
   useEffect(check, [check]);
@@ -190,6 +193,7 @@ function OverviewTab({ c, goChat }: { c: Conversation; goChat: () => void }) {
 
   return (
     <div className="grid gap-4 lg:grid-cols-3">
+      <PacientesDeHojeCard onVerTudo={goAgenda} />
       <Card className="p-5 lg:col-span-2">
         <div className="flex items-start justify-between gap-3">
           <div>

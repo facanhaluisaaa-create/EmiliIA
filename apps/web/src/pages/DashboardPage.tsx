@@ -1,6 +1,7 @@
 import { AlertCircle, ArrowRight, Cake, CalendarCheck2, CalendarClock, CalendarPlus, CircleDollarSign, ClipboardList, Clock, HelpCircle, MessageSquareText, Sparkles, UserPlus, Video, MapPin, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { PacientesDeHojeCard } from "@/features/assistant/AgendaDoDia";
 import { APPOINTMENT_TONE, Badge } from "@/components/ui/Badge";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { DemoBanner } from "@/components/ui/DemoBanner";
@@ -155,6 +156,7 @@ const PENDING_ICON: Record<string, React.ReactNode> = {
 export function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     api<DashboardData>("/dashboard")
@@ -187,6 +189,11 @@ export function DashboardPage() {
           </Link>
         </div>
       </header>
+
+      {/* Pacientes do dia vindos do n8n (agente EmilIA) */}
+      <div className="grid">
+        <PacientesDeHojeCard onVerTudo={() => navigate("/assistente?aba=agenda")} />
+      </div>
 
       {/* Ações rápidas */}
       <nav aria-label="Ações rápidas" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -250,7 +257,7 @@ export function DashboardPage() {
         {/* Agenda do dia */}
         <Card className="lg:col-span-2 animate-rise">
           <CardHeader
-            title="Agenda de hoje"
+            title="Agenda de hoje · cadastro do site (demonstração)"
             subtitle={data ? `${data.today.length} consulta${data.today.length === 1 ? "" : "s"} · ${longToday().split(",")[0]}` : undefined}
             action={
               <Link to="/agenda" className="flex items-center gap-1 text-xs font-medium text-forest hover:underline">
