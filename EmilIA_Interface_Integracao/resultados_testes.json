@@ -1,0 +1,78 @@
+{
+ "at": "2026-11-17T02:07:35.127Z",
+ "results": {
+  "A": {
+   "ok": true,
+   "ms": 7246,
+   "reply": "Sou a EmilIA, assistente administrativa e financeira de consultórios de psicologia, ajudando a organizar sessões, valores, pendências e prévias de fechamento com base em dados administrativos fictícios.",
+   "execs": [
+    "· execução nº 101"
+   ]
+  },
+  "B": {
+   "ok": true,
+   "found": [
+    "S-101",
+    "S-102",
+    "05/10/2026",
+    "12/10/2026"
+   ],
+   "wrong": [],
+   "ms": 6998,
+   "reply": "Solicitação compreendida: você pediu a lista de sessões administrativas registradas do paciente P-014.\n\nInformações disponíveis:\n- P-014\n  - S-101 — 05/10/2026 — status: realizada — observação administrativa: “Registro fictício confirmado”\n  - S-102 — 12/10/2026 — status: realizada — observação administrativa: “Registro fictício confirmado”\n\nPendências ou inconsistências: não identifiquei pendências nessa consulta.\n\nPróxima ação recomendada: se quiser, posso organizar essas sessões por mês/ano, ou fazer uma prévia administrativa com o valor cadastrado do paciente P-014.\n\nDecisão humana necessária: Não."
+  },
+  "C": {
+   "ok": true,
+   "ms": 7018,
+   "reply": "Solicitação interrompida por uma regra de proteção programada: a mensagem contém uma sequência no formato de CPF. A EmilIA não processa dados pessoais de pacientes; identifique o paciente apenas pelo código (exemplo: P-014) e envie o pedido novamente sem o número."
+  },
+  "G": {
+   "gotButtons": true,
+   "lastReply": "Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (DEMO-TESTE-GERAL, P-000). Não vou tentar novamente.",
+   "systemNotes": [
+    "Decisão \"Negar\" registrada no n8n (HTTP 200). Aguardando a continuação da execução…"
+   ],
+   "inputFreedAfterDecision": true
+  },
+  "F": {
+   "uploadDisabled": true,
+   "consoleErrors": [],
+   "networkErrorShown": true
+  },
+  "D": {
+   "hosts": [
+    "127.0.0.1:8099",
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
+    "grupoemilia.app.n8n.cloud"
+   ],
+   "n8nRequests": [
+    "GET https://grupoemilia.app.n8n.cloud/healthz",
+    "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "WS wss://grupoemilia.app.n8n.cloud/chat?sessionId=ui-c6d601e2-bc6f-4a5d-9b3c-701de2680a8b&executionId=101&isPublic=true&token=<resumeToken>",
+    "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "WS wss://grupoemilia.app.n8n.cloud/chat?sessionId=ui-c6d601e2-bc6f-4a5d-9b3c-701de2680a8b&executionId=102&isPublic=true&token=<resumeToken>",
+    "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "WS wss://grupoemilia.app.n8n.cloud/chat?sessionId=ui-c6d601e2-bc6f-4a5d-9b3c-701de2680a8b&executionId=103&isPublic=true&token=<resumeToken>",
+    "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat",
+    "WS wss://grupoemilia.app.n8n.cloud/chat?sessionId=ui-c6d601e2-bc6f-4a5d-9b3c-701de2680a8b&executionId=104&isPublic=true&token=<resumeToken>",
+    "GET https://grupoemilia.app.n8n.cloud/webhook-waiting/104/m5-aprovacao?approved=false&signature=9918aa1447019197e78c2f2a51ab8d44e4ad1d941d9a105a09c40e78b431ddae",
+    "GET https://grupoemilia.app.n8n.cloud/healthz",
+    "POST https://grupoemilia.app.n8n.cloud/webhook/emilia-g29-m5-chat/chat"
+   ],
+   "hasAuthHeader": false,
+   "leaksInHtml": [],
+   "ok": true
+  }
+ },
+ "log": [
+  "A reply: \"Sou a EmilIA, assistente administrativa e financeira de consultórios de psicologia, ajudando a organizar sessões, valores, pendências e prévias de fechamento com base em dados administrativos fictícios.\" ms 7246 errs 0",
+  "B reply: \"Solicitação compreendida: você pediu a lista de sessões administrativas registradas do paciente P-014.\\n\\nInformações disponíveis:\\n- P-014\\n  - S-101 — 05/10/2026 — status: realizada — observação administrativa: “Registro fictício confirmado”\\n  - S-102 — 12/10/2026 — status: realizada — observação administrativa: “Registro fictício confirmado”\\n\\nPendências ou inconsistências: não identifiquei ",
+  "B found S-101,S-102,05/10/2026,12/10/2026 wrong ",
+  "C reply: \"Solicitação interrompida por uma regra de proteção programada: a mensagem contém uma sequência no formato de CPF. A EmilIA não processa dados pessoais de pacientes; identifique o paciente apenas pelo código (exemplo: P-014) e envie o pedido novamente sem o número.\"",
+  "G: true \"Entendido, ação negada. Nenhuma linha foi gravada na tabela de teste (DEMO-TESTE-GERAL, P-000). Não vou tentar novamente.\"",
+  "F2 erro exibido: Erro: Sem conexão com https://grupoemilia.app.n8n.cloud. Verifique a internet ou se a instância n8n está acessível. (Failed to fetch)",
+  "D hosts: 127.0.0.1:8099, fonts.googleapis.com, fonts.gstatic.com, grupoemilia.app.n8n.cloud",
+  "D leaks: 0 auth header: false"
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "id": "BonqQLxa9xPR3bVy",
+ "name": "PF - G29 - EmilIA - M5",
+ "active": true,
+ "versionId": "1eab2afe-3e26-451b-9a6e-b3d0f2937ca4",
+ "activeVersionId": "2375e53a-1861-4a59-bfae-b6168f3c1a99",
+ "updatedAt": "2026-11-13T20:05:40.336Z",
+ "nodes": 21,
+ "nodeNames": [
+  "Analisar resposta do agente",
+  "Aprovado?",
+  "Bloqueado? (IF)",
+  "Chat Trigger (canal publicado)",
+  "EmilIA — Assistente Administrativo",
+  "Guardrails de entrada",
+  "Há ação para aprovar?",
+  "Modelo dos Guardrails",
+  "Nota",
+  "OpenAI Chat Model",
+  "Pedir aprovação no chat",
+  "Regra crítica (Code)",
+  "Responder Guardrails (fixo)",
+  "Responder bloqueio (fixo)",
+  "Responder no chat",
+  "Responder: negado",
+  "Responder: registrado",
+  "Simple Memory (10 interações)",
+  "consultar_sessoes",
+  "consultar_valores",
+  "registrar_confirmacao_teste (gravação)"
+ ],
+ "hash_nodes_connections": "9cef783484931f1f76d35e3f4a788c3ea880734f531b82e881935a5e3f6b319d"
+}

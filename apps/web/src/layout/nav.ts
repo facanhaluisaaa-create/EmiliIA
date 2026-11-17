@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Bot,
   HelpCircle,
   CalendarDays,
   FolderOpen,
@@ -27,6 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
   { to: "/documentos", label: "Documentos", icon: FolderOpen, permission: "documents:read" },
   { to: "/comunicacao", label: "Comunicação", icon: MessageSquareText, permission: "communication:read" },
   { to: "/relatorios", label: "Relatórios", icon: BarChart3, permission: "reports:read" },
+  { to: "/assistente", label: "Assistente EmilIA", icon: Bot, permission: "dashboard:read" },
   { to: "/configuracoes", label: "Configurações", icon: Settings, permission: "settings:read" },
   { to: "/ajuda", label: "Ajuda", icon: HelpCircle, permission: "dashboard:read" },
 ];

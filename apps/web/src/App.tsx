@@ -17,6 +17,7 @@ import { PatientDetailPage } from "./features/patients/PatientDetailPage";
 import { PatientsPage } from "./features/patients/PatientsPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { SheetsImportPage } from "./features/integrations/SheetsImportPage";
+import { AssistantPage } from "./features/assistant/AssistantPage";
 
 export function App() {
   const Router = isDemo ? HashRouter : BrowserRouter;
@@ -36,6 +37,7 @@ export function App() {
                 <Route path="/documentos" element={<DocumentsPage />} />
                 <Route path="/comunicacao" element={<CommunicationPage />} />
                 <Route path="/relatorios" element={<ReportsPage />} />
+                <Route path="/assistente" element={<AssistantPage />} />
                 <Route path="/configuracoes" element={<SettingsPage />} />
                 <Route path="/configuracoes/planilha" element={<SheetsImportPage />} />
                 <Route path="/ajuda" element={<HelpPage />} />

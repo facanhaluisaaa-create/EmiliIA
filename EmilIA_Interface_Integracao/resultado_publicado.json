@@ -1,0 +1,14 @@
+{
+ "url": "https://claude.ai/artifact/PTzVt4a5StsTYdA2SnMoCo",
+ "frames": [
+  "https://claude.ai/artifact/PTzVt4a5StsTYdA2SnMoCo",
+  "about:blank",
+  "https://b5edd2a9-c091-4734-990d-a3659a37e974.frame.claudeusercontent.com/_f/1794881293-ae4b/?__frame_v=manifest.4b16803badf4203a.json#/entrar"
+ ],
+ "reply": "Teste a partir do site publicado: qual é o valor da sessão do paciente P-022?",
+ "errs": [
+  "Erro: Sem conexão com https://grupoemilia.app.n8n.cloud. Verifique a internet ou se a instância n8n está acessível. (Failed to fetch)"
+ ],
+ "execs": [],
+ "n8nRequests": []
+}
