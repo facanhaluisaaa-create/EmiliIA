@@ -1,0 +1,24 @@
+id_sessao,codigo_paciente,data_sessao,status,observacao_admin
+S-101,P-014,2026-10-05,realizada,Registro fictício confirmado
+S-102,P-014,2026-10-12,realizada,Registro fictício confirmado
+S-103,P-022,2026-10-07,realizada,Registro fictício confirmado
+S-104,P-022,2026-10-14,remarcada,Não presumir cobrança
+S-105,P-027,2026-10-08,realizada,Registro fictício confirmado
+S-106,P-027,2026-10-15,falta_sem_regra,Encaminhar para revisão humana
+S-107,P-014,2026-11-03,realizada,Registro fictício confirmado
+S-108,P-014,2026-11-10,realizada,Registro fictício confirmado
+S-109,P-014,2026-11-17,realizada,Registro fictício confirmado
+S-110,P-014,2026-11-24,agendada,Sessão futura: não cobrar antes de realizada
+S-111,P-022,2026-11-04,realizada,Registro fictício confirmado
+S-112,P-022,2026-11-11,falta_sem_regra,Encaminhar para revisão humana
+S-113,P-022,2026-11-18,agendada,Sessão futura: não cobrar antes de realizada
+S-114,P-027,2026-11-05,realizada,Registro fictício confirmado
+S-115,P-027,2026-11-12,remarcada,Não presumir cobrança
+S-116,P-027,2026-11-19,agendada,Sessão futura: não cobrar antes de realizada
+S-117,P-031,2026-11-02,realizada,Registro fictício confirmado
+S-118,P-031,2026-11-09,realizada,Registro fictício confirmado
+S-119,P-031,2026-11-16,realizada,Registro fictício confirmado
+S-120,P-031,2026-11-23,agendada,Sessão futura: não cobrar antes de realizada
+S-121,P-035,2026-11-06,realizada,Registro fictício confirmado
+S-122,P-035,2026-11-13,realizada,Registro fictício confirmado
+S-123,P-035,2026-11-20,agendada,Sessão futura: não cobrar antes de realizada
