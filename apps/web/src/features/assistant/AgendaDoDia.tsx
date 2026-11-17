@@ -29,6 +29,8 @@ export interface SessaoDia {
 }
 type Fonte = { tipo: "ao-vivo"; em: string } | { tipo: "copia"; em: string } | { tipo: "sem-dados" };
 
+/** Horários de atendimento (segunda a sábado; 12:00 é almoço), os mesmos informados ao agente no n8n. */
+export const HORARIOS = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
 const SNAP = snapshot as { sincronizado_em: string; dias: Record<string, SessaoDia[]> };
 const ATIVOS = ["agendada", "confirmada", "realizada"];
 const TOM: Record<string, "good" | "info" | "sage" | "bad" | "warn" | "neutral"> = { confirmada: "good", agendada: "info", realizada: "sage", cancelada: "bad", remarcada: "warn", falta: "bad" };
@@ -157,6 +159,7 @@ export function AgendaDoDiaTab() {
           <Resumo rotulo="Canceladas, remarcadas ou faltas" valor={fora.length} />
         </div>
       </Card>
+      <GradeHorarios data={data} sessoes={sessoes} />
       {fonte.tipo === "copia" && (
         <Alert tone="warn">Dentro do claude.ai a página não pode consultar o n8n ao vivo; esta é a cópia salva da tabela do n8n na hora indicada. Na cópia integrada (arquivo aberto no Chrome), a agenda vem ao vivo.</Alert>
       )}
@@ -175,5 +178,32 @@ function Resumo({ rotulo, valor, tom }: { rotulo: string; valor: number; tom?: "
       <p className="text-[11px] font-medium uppercase tracking-wide text-ink-muted">{rotulo}</p>
       <p className={cn("mt-1 text-2xl font-semibold", tom === "warn" && "text-status-warn")}>{valor}</p>
     </div>
+  );
+}
+
+function GradeHorarios({ data, sessoes }: { data: string; sessoes: SessaoDia[] }) {
+  const domingo = new Date(data + "T12:00:00Z").getUTCDay() === 0;
+  const ocup = new Map(sessoes.filter((s) => ATIVOS.includes(s.status.toLowerCase())).map((s) => [s.horario, s]));
+  const livres = HORARIOS.filter((h) => !ocup.has(h));
+  return (
+    <Card className="p-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className="text-xl">Horários do dia</h2>
+        <p className="text-xs text-ink-muted">{domingo ? "Domingo: consultório fechado." : `${livres.length} livre(s): ${livres.join(", ") || "nenhum"}`}</p>
+      </div>
+      {!domingo && (
+        <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+          {HORARIOS.map((h) => {
+            const s = ocup.get(h);
+            return (
+              <li key={h} className={cn("rounded-xl border px-3 py-2", s ? "border-line bg-cream/70" : "border-[#CFE3D7] bg-[#EAF3EE]")}>
+                <p className="text-sm font-semibold">{h}</p>
+                <p className={cn("truncate text-[11px]", s ? "text-ink-muted" : "font-medium text-status-good")} title={s ? `${s.nome_paciente} (${s.codigo_paciente})` : "Livre"}>{s ? s.nome_paciente.split(" ")[0] + " · " + s.status : "Livre"}</p>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </Card>
   );
 }
