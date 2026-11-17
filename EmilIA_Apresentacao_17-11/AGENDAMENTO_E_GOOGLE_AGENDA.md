@@ -40,3 +40,8 @@ Nova ferramenta só de leitura no agente: **consultar_agenda_do_dia** (filtra a 
 Horário de atendimento informado ao agente: segunda a sábado, 08h–11h e 13h–20h (12h almoço).
 Teste real (execução 188): "Quais horários estão disponíveis para consulta no dia 27/11?" → livres 08:00, 10:00, 13:00, 16:00 e 19:00 — igual à planilha.
 Regressão depois da mudança (execuções 189–194): consultas da Giovana e do Leonardo, bloqueio de CPF e agendamento com Negar, todos corretos.
+
+## Atualização 15h45 — horário ocupado → horário livre
+O agente agora consulta a agenda do dia antes de propor qualquer agendamento. Testes reais (execuções 233–242):
+- "Agende o Leonardo na sexta 27/11 às 9h." → "horário ocupado por Bruno Menezes Rangel (PAC-013)" + lista dos livres (ou a trava em código: "Não agendei: já existe sessão de…").
+- "Então agende o Leonardo às 8h." → botões Aprovar/Negar (2 de 2). Sem repetir o nome ("Então agende às 8h") funcionou 1 de 2: na apresentação, repetir o nome.
