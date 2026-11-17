@@ -34,3 +34,9 @@ O nó **Google Agenda: criar evento** já está montado, mas **desligado** (não
 ## Boa pergunta para a demo
 `Agende uma sessão online para o Gustavo Gomes na quarta-feira 25/11/2026 às 10:00.` → Aprovar → mostrar a linha nova na tabela de sessões.
 Depois: `Agende uma sessão presencial para o Tiago Zanetti na quarta-feira 25/11/2026 às 10:00.` → "Não agendei: horário ocupado".
+
+## Atualização 15h — horários livres do dia
+Nova ferramenta só de leitura no agente: **consultar_agenda_do_dia** (filtra a tabela de sessões pela data).
+Horário de atendimento informado ao agente: segunda a sábado, 08h–11h e 13h–20h (12h almoço).
+Teste real (execução 188): "Quais horários estão disponíveis para consulta no dia 27/11?" → livres 08:00, 10:00, 13:00, 16:00 e 19:00 — igual à planilha.
+Regressão depois da mudança (execuções 189–194): consultas da Giovana e do Leonardo, bloqueio de CPF e agendamento com Negar, todos corretos.
