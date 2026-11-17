@@ -20,7 +20,8 @@
   --chat--header--background: #1D2924;
   --chat--header--color: #F5F5F0;
   --chat--header--border-bottom: 1px solid rgba(255,255,255,0.08);
-  --chat--header--padding: 1.1rem 1.5rem;
+  --chat--header--padding: 0.9rem 1.5rem;
+  --chat--header-height: auto;
   --chat--heading--font-size: 1.9rem;
   --chat--subtitle--font-size: 0.82rem;
   --chat--subtitle--line-height: 1.5;
@@ -75,3 +76,9 @@ body { background: #F5F5F0; }
 .chat-message-from-user { border-bottom-right-radius: 0.4rem; }
 .chat-powered-by { display: none; }
 textarea, .chat-input textarea { font-family: 'Inter', system-ui, sans-serif; }
+
+/* Logotipo da EmilIA no cabeçalho (versão clara, do repositório do projeto) */
+.chat-header { position: relative; padding-left: 200px !important; min-height: 96px; gap: 0.35rem !important; }
+.chat-header::before { content: ""; position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); width: 150px; height: 64px; background: url("https://raw.githubusercontent.com/facanhaluisaaa-create/EmiliIA/main/apps/web/public/brand/logo-light.png") no-repeat left center / contain; }
+.chat-header h1 { margin: 0; line-height: 1.1; font-size: 1.7rem; }
+.chat-header p { margin: 0; }
