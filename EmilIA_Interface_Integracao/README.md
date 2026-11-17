@@ -128,3 +128,20 @@ Mensagens prontas para copiar: "Quais são as sessões do paciente P-014?" · "Q
 - O chat consome execuções do plano trial do n8n (1000/mês; trial expira em 19/11/2026). Em dia de apresentação, abrir o arquivo integrado antes e testar uma mensagem.
 - O visualizador do claude.ai bloqueia a rede do artefato; se um link público com chat ativo for necessário, a cópia integrada precisa ser hospedada em um site estático (por exemplo GitHub Pages do repositório), o que exige ativar o recurso nas configurações do GitHub — não foi feito por depender de decisão da equipe.
 - Upload de arquivos continua desabilitado até autorização expressa da equipe.
+
+---
+
+## 9. Avatar ao vivo (HeyGen LiveAvatar) — adicionado em 17/11/2026, sem substituir nada
+
+**Fato verificado:** a API antiga "Interactive Avatar" da HeyGen (api.heygen.com/v1/streaming.create_token) foi desligada e responde 404. O produto atual da HeyGen para avatar em tempo real é o **LiveAvatar** (app.liveavatar.com), com SDK web oficial `@heygen/liveavatar-web-sdk` 0.0.20.
+
+**Como foi montado**
+- Workflow NOVO no n8n: `PF - G29 - EmilIA - Voz (ponte LiveAvatar)` (id 9zWW4GraKAgSATHR), ativo. Webhook `POST /webhook/emilia-g29-liveavatar-token` → Code "Validar pedido" → HTTP Request `POST https://api.liveavatar.com/v1/sessions/token` com a credencial `LiveAvatar API Key (G29)` (cabeçalho X-API-KEY) → responde `{ok, session_id, session_token}`. Export em `EmilIA_Voz_Ponte_LiveAvatar_workflow.json`.
+- O agente `PF - G29 - EmilIA - M5` **não foi tocado**.
+- Interface: nova aba **Avatar ao vivo** na área Assistente EmilIA. Pede o token à ponte, abre a sessão pelo SDK (vídeo WebRTC), manda a mensagem ao agente pelo caminho normal e faz o avatar **repetir** a resposta (`avatar.speak_text`). Microfone do avatar mudo, para o LLM interno do LiveAvatar não responder sozinho. Ditado opcional pelo navegador (Chrome/Edge, pt-BR).
+- Segurança: a chave fica só na credencial do n8n. Padrão é o **modo sandbox** (gratuito, avatar Wayne, ~1 min). Sessão real (consome créditos) exige o **código de apresentação** definido no nó "Validar pedido" (valor inicial `G29-DEFINIR-NO-N8N`, troque no editor).
+
+**Estado dos testes**
+- Ponte testada de ponta a ponta com a chave de exemplo: a recusa "Invalid API key" do LiveAvatar chega até a interface (print `prints/V2-avatar-sem-chave.png`). Pedido de sessão real sem código → HTTP 403. CORS ok.
+- **Não testado ainda:** a sessão real do avatar (vídeo e fala), porque exige a chave de API da equipe. Falta: criar a chave em app.liveavatar.com (menu Developers), colar na credencial `LiveAvatar API Key (G29)` no n8n e rodar o teste.
+- Plano gratuito do LiveAvatar (site, 17/11/2026): 10 créditos/mês, 2 créditos por minuto no modo FULL, 1 sessão por vez, máximo de 2 min por sessão, marca d'água. Sandbox não consome créditos.

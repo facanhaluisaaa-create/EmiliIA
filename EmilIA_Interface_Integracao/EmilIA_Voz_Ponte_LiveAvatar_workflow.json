@@ -1,0 +1,235 @@
+{
+ "name": "PF - G29 - EmilIA - Voz (ponte LiveAvatar)",
+ "nodes": [
+  {
+   "id": "voz-webhook",
+   "name": "Webhook (pedido de token)",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 2.1,
+   "position": [
+    0,
+    0
+   ],
+   "webhookId": "056f3c21-5f76-41cb-9b29-e209282d435a",
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "emilia-g29-liveavatar-token",
+    "responseMode": "responseNode",
+    "options": {
+     "allowedOrigins": "*"
+    }
+   }
+  },
+  {
+   "id": "voz-validar",
+   "name": "Validar pedido",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    260,
+    0
+   ],
+   "parameters": {
+    "jsCode": "\n// Ponte segura: valida o pedido da interface e monta o corpo para o LiveAvatar.\n// A chave de API NUNCA passa por aqui: fica na credencial do nó HTTP Request.\nconst CODIGO_APRESENTACAO = 'G29-DEFINIR-NO-N8N'; // troque no editor do n8n; sessões reais (com créditos) exigem este código\nconst WAYNE_SANDBOX = 'dd73ea75-1218-4ef3-92ce-606d5f7fbc0a'; // único avatar do modo sandbox (gratuito, ~1 min)\nconst AVATAR_PADRAO = '65f9e3c9-d48b-4118-b73a-4ae2e3cbb8f0'; // avatar público de exemplo da documentação; pode ser trocado\nconst body = ($input.first().json.body) || {};\nconst sandbox = body.is_sandbox !== false; // padrão: sandbox (não consome créditos)\nif (!sandbox && String(body.codigo_apresentacao || '') !== CODIGO_APRESENTACAO) {\n  return [{ json: { ok: false, erro: 'Código de apresentação inválido: sessão real (com créditos) não autorizada.' } }];\n}\nconst dur = Math.min(Math.max(parseInt(body.max_session_duration || (sandbox ? 60 : 120), 10) || 60, 30), 600);\nconst tokenBody = {\n  mode: 'FULL',\n  avatar_id: sandbox ? WAYNE_SANDBOX : (String(body.avatar_id || '').trim() || AVATAR_PADRAO),\n  is_sandbox: sandbox,\n  max_session_duration: dur,\n  avatar_persona: { language: String(body.language || 'pt') },\n};\nreturn [{ json: { ok: true, is_sandbox: sandbox, tokenBody } }];\n"
+   }
+  },
+  {
+   "id": "voz-if",
+   "name": "Pedido válido?",
+   "type": "n8n-nodes-base.if",
+   "typeVersion": 2.2,
+   "position": [
+    520,
+    0
+   ],
+   "parameters": {
+    "conditions": {
+     "options": {
+      "caseSensitive": true,
+      "leftValue": "",
+      "typeValidation": "strict",
+      "version": 2
+     },
+     "conditions": [
+      {
+       "id": "c1",
+       "leftValue": "={{ $json.ok }}",
+       "rightValue": true,
+       "operator": {
+        "type": "boolean",
+        "operation": "true",
+        "singleValue": true
+       }
+      }
+     ],
+     "combinator": "and"
+    },
+    "options": {}
+   }
+  },
+  {
+   "id": "voz-http",
+   "name": "LiveAvatar: criar token de sessão",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4.2,
+   "position": [
+    800,
+    -120
+   ],
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.liveavatar.com/v1/sessions/token",
+    "authentication": "genericCredentialType",
+    "genericAuthType": "httpHeaderAuth",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={{ JSON.stringify($json.tokenBody) }}",
+    "options": {
+     "response": {
+      "response": {
+       "neverError": true,
+       "responseFormat": "json"
+      }
+     }
+    }
+   },
+   "credentials": {
+    "httpHeaderAuth": {
+     "id": "ew3UbGV0eRLPj3ZW",
+     "name": "LiveAvatar API Key (G29)"
+    }
+   }
+  },
+  {
+   "id": "voz-montar",
+   "name": "Montar resposta",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    1060,
+    -120
+   ],
+   "parameters": {
+    "jsCode": "\nconst j = $input.first().json;\nconst d = j.data || {};\nif (d.session_token) {\n  return [{ json: { ok: true, session_id: d.session_id, session_token: d.session_token, is_sandbox: $('Validar pedido').first().json.is_sandbox, max_session_duration: $('Validar pedido').first().json.tokenBody.max_session_duration } }];\n}\nreturn [{ json: { ok: false, erro: 'LiveAvatar recusou o pedido de token.', detalhe: j.message || j.detail || j.error || JSON.stringify(j).slice(0, 300), code: j.code } }];\n"
+   }
+  },
+  {
+   "id": "voz-resp-ok",
+   "name": "Responder (token)",
+   "type": "n8n-nodes-base.respondToWebhook",
+   "typeVersion": 1.1,
+   "position": [
+    1320,
+    -120
+   ],
+   "parameters": {
+    "respondWith": "json",
+    "responseBody": "={{ JSON.stringify($json) }}",
+    "options": {}
+   }
+  },
+  {
+   "id": "voz-resp-neg",
+   "name": "Responder (recusado)",
+   "type": "n8n-nodes-base.respondToWebhook",
+   "typeVersion": 1.1,
+   "position": [
+    800,
+    140
+   ],
+   "parameters": {
+    "respondWith": "json",
+    "responseBody": "={{ JSON.stringify($json) }}",
+    "options": {
+     "responseCode": 403
+    }
+   }
+  },
+  {
+   "id": "voz-nota",
+   "name": "Nota",
+   "type": "n8n-nodes-base.stickyNote",
+   "typeVersion": 1,
+   "position": [
+    0,
+    -320
+   ],
+   "parameters": {
+    "width": 900,
+    "height": 220,
+    "content": "## PF - G29 - EmilIA - Voz (ponte LiveAvatar)\nWorkflow NOVO e separado do agente (PF - G29 - EmilIA - M5), que não foi alterado.\n\nFunção: a interface pede aqui um token de sessão do LiveAvatar (HeyGen). A chave de API fica só na credencial \"LiveAvatar API Key (G29)\" do nó HTTP Request e nunca vai ao navegador.\n\nPadrão: modo sandbox (gratuito, avatar Wayne, ~1 min). Sessão real (consome créditos) só com o código de apresentação definido no nó \"Validar pedido\"."
+   }
+  }
+ ],
+ "connections": {
+  "Webhook (pedido de token)": {
+   "main": [
+    [
+     {
+      "node": "Validar pedido",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Validar pedido": {
+   "main": [
+    [
+     {
+      "node": "Pedido válido?",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Pedido válido?": {
+   "main": [
+    [
+     {
+      "node": "LiveAvatar: criar token de sessão",
+      "type": "main",
+      "index": 0
+     }
+    ],
+    [
+     {
+      "node": "Responder (recusado)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "LiveAvatar: criar token de sessão": {
+   "main": [
+    [
+     {
+      "node": "Montar resposta",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Montar resposta": {
+   "main": [
+    [
+     {
+      "node": "Responder (token)",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ },
+ "settings": {
+  "executionOrder": "v1",
+  "saveManualExecutions": true,
+  "saveDataSuccessExecution": "all",
+  "saveDataErrorExecution": "all",
+  "timezone": "America/Sao_Paulo"
+ }
+}

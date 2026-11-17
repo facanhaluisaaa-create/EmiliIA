@@ -1,4 +1,4 @@
-import { Activity, Bot, CalendarCheck2, ExternalLink, FileSpreadsheet, FlaskConical, Lock, RefreshCw, Send, ShieldCheck, Trash2, Upload, Wallet, Wifi, WifiOff } from "lucide-react";
+import { Activity, Bot, CalendarCheck2, ExternalLink, FileSpreadsheet, FlaskConical, Lock, Mic, MicOff, RefreshCw, Send, ShieldCheck, Square, Trash2, Upload, Video, Wallet, Wifi, WifiOff } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Alert } from "@/components/ui/Alert";
@@ -21,6 +21,7 @@ import {
   type ChatMessage,
   type StoredConversation,
 } from "./n8nChat";
+import { BRIDGE_WORKFLOW, requestSessionToken, speechSupported, startAvatar, startDictation, type AvatarHandle, type AvatarStatus } from "./liveAvatar";
 
 /* ---------------- base fictícia de referência (mesma dos testes M3–M6) ---------------- */
 const SESSOES = [
@@ -43,6 +44,7 @@ const TABS = [
   { key: "sessoes", label: "Sessões", icon: CalendarCheck2 },
   { key: "valores", label: "Valores", icon: Wallet },
   { key: "chat", label: "Assistente EmilIA", icon: Bot },
+  { key: "avatar", label: "Avatar ao vivo", icon: Video },
   { key: "arquivos", label: "Arquivos e dados", icon: FileSpreadsheet },
 ] as const;
 type TabKey = (typeof TABS)[number]["key"];
@@ -171,6 +173,7 @@ export function AssistantPage() {
       {tab === "sessoes" && <SessionsTab c={c} ask={askAndOpenChat} />}
       {tab === "valores" && <ValuesTab c={c} ask={askAndOpenChat} />}
       {tab === "chat" && <ChatTab c={c} />}
+      {tab === "avatar" && <AvatarTab c={c} />}
       {tab === "arquivos" && <FilesTab />}
     </div>
   );
@@ -512,6 +515,133 @@ function FilesTab() {
         <Button variant="secondary" className="mt-4 w-full" disabled title="Desabilitado: exige autorização da equipe"><Upload className="h-4 w-4" aria-hidden /> Enviar arquivo (desabilitado)</Button>
         <Alert tone="warn" className="mt-3">Nenhum upload real está habilitado. Enviar arquivos ao agente exigiria autorização da equipe e revisão de privacidade; nesta demonstração a função é apenas ilustrativa.</Alert>
       </Card>
+    </div>
+  );
+}
+
+/* ---------------- Avatar ao vivo (HeyGen LiveAvatar) ---------------- */
+const STATUS_LABEL: Record<AvatarStatus, { text: string; tone: "neutral" | "sage" | "good" | "warn" | "bad" | "info" }> = {
+  parado: { text: "parado", tone: "neutral" },
+  "pedindo-token": { text: "pedindo token à ponte no n8n…", tone: "info" },
+  conectando: { text: "conectando ao LiveAvatar…", tone: "info" },
+  pronto: { text: "pronto para falar", tone: "good" },
+  falando: { text: "falando", tone: "sage" },
+  encerrado: { text: "sessão encerrada", tone: "warn" },
+  erro: { text: "erro", tone: "bad" },
+};
+
+function AvatarTab({ c }: { c: Conversation }) {
+  const [sandbox, setSandbox] = useState(true);
+  const [codigo, setCodigo] = useState("");
+  const [status, setStatus] = useState<AvatarStatus>("parado");
+  const [detail, setDetail] = useState<string>("");
+  const [text, setText] = useState("");
+  const [dictating, setDictating] = useState(false);
+  const [sessionInfo, setSessionInfo] = useState<{ id: string; sandbox: boolean; max: number } | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const handleRef = useRef<AvatarHandle | null>(null);
+  const stopDictRef = useRef<(() => void) | null>(null);
+  const spokenRef = useRef<Set<string>>(new Set());
+  const active = status === "pronto" || status === "falando" || status === "conectando";
+
+  // Fala cada resposta nova do agente enquanto o avatar está ativo.
+  useEffect(() => {
+    if (!handleRef.current || !(status === "pronto" || status === "falando")) return;
+    const last = c.conv.messages[c.conv.messages.length - 1];
+    if (last && last.sender === "bot" && !spokenRef.current.has(last.id) && last.text.trim()) {
+      spokenRef.current.add(last.id);
+      handleRef.current.speak(last.text);
+    }
+  }, [c.conv.messages, status]);
+
+  useEffect(() => () => { void handleRef.current?.stop(); stopDictRef.current?.(); }, []);
+
+  const start = async () => {
+    setDetail(""); setStatus("pedindo-token");
+    const t = await requestSessionToken({ sandbox, codigo });
+    if (!t.ok || !t.session_token) { setStatus("erro"); setDetail(`${t.erro ?? "falha ao obter token"}${t.detalhe ? ` (${t.detalhe})` : ""}`); return; }
+    setSessionInfo({ id: t.session_id ?? "", sandbox: Boolean(t.is_sandbox), max: t.max_session_duration ?? 0 });
+    if (!videoRef.current) { setStatus("erro"); setDetail("elemento de vídeo indisponível"); return; }
+    spokenRef.current = new Set(c.conv.messages.map((m) => m.id));
+    handleRef.current = startAvatar(t.session_token, videoRef.current, { status: (s, d) => { setStatus(s); if (d) setDetail(d); if (s === "encerrado" || s === "erro") handleRef.current = null; } });
+  };
+  const stop = async () => { await handleRef.current?.stop(); handleRef.current = null; setStatus("encerrado"); };
+  const send = () => { const t = text.trim(); if (!t || c.busy) return; c.send(t); setText(""); };
+  const toggleDictation = () => {
+    if (dictating) { stopDictRef.current?.(); return; }
+    setDictating(true);
+    stopDictRef.current = startDictation({
+      partial: (t) => setText(t),
+      final: (t) => setText(t),
+      error: (m) => setDetail(m),
+      end: () => { setDictating(false); stopDictRef.current = null; },
+    });
+  };
+  const lastBot = [...c.conv.messages].reverse().find((m) => m.sender === "bot");
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-5">
+      <Card className="flex flex-col lg:col-span-3">
+        <CardHeader title="Avatar ao vivo" subtitle="HeyGen LiveAvatar falando as respostas reais do agente n8n" action={<Badge tone={STATUS_LABEL[status].tone}>{STATUS_LABEL[status].text}</Badge>} />
+        <div className="px-5 pb-5 sm:px-6">
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-forest">
+            <video ref={videoRef} autoPlay playsInline className="h-full w-full object-cover" />
+            {!active && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-sage-300">
+                <Video className="h-8 w-8" strokeWidth={1.5} aria-hidden />
+                <p className="text-sm">{status === "encerrado" ? "Sessão encerrada. Inicie outra quando quiser." : "O vídeo do avatar aparece aqui."}</p>
+              </div>
+            )}
+          </div>
+          {detail && <Alert tone={status === "erro" ? "bad" : "info"} className="mt-3">{detail}</Alert>}
+          <div className="mt-4 flex flex-wrap items-end gap-3">
+            {!active ? (
+              <>
+                <label className="flex items-center gap-2 text-sm text-ink">
+                  <input type="checkbox" checked={sandbox} onChange={(e) => setSandbox(e.target.checked)} className="h-4 w-4 rounded border-line text-forest" />
+                  Modo sandbox (gratuito, avatar Wayne, ~1 min)
+                </label>
+                {!sandbox && (
+                  <input value={codigo} onChange={(e) => setCodigo(e.target.value)} placeholder="Código de apresentação" aria-label="Código de apresentação" className="h-10 rounded-xl border border-line bg-white px-3 text-sm" />
+                )}
+                <Button onClick={() => void start()} disabled={status === "pedindo-token"} loading={status === "pedindo-token"}><Video className="h-4 w-4" aria-hidden /> Iniciar avatar</Button>
+              </>
+            ) : (
+              <>
+                <Button variant="secondary" onClick={() => handleRef.current?.interrupt()} disabled={status !== "falando"}><Square className="h-3.5 w-3.5" aria-hidden /> Interromper fala</Button>
+                <Button variant="secondary" onClick={() => lastBot && handleRef.current?.speak(lastBot.text)} disabled={!lastBot || status !== "pronto"}>Falar a última resposta</Button>
+                <Button variant="danger" onClick={() => void stop()}>Encerrar sessão</Button>
+              </>
+            )}
+          </div>
+          {sessionInfo && active && <p className="mt-2 text-[11px] text-ink-faint">sessão {sessionInfo.id.slice(0, 8)}… · {sessionInfo.sandbox ? "sandbox (sem créditos)" : "real (consome créditos)"} · limite {sessionInfo.max}s</p>}
+        </div>
+      </Card>
+
+      <div className="space-y-4 lg:col-span-2">
+        <Card className="p-5">
+          <h2 className="text-xl">Falar com a EmilIA</h2>
+          <p className="mt-0.5 text-xs text-ink-muted">O texto vai ao agente real no n8n; a resposta aparece no chat e o avatar a fala.</p>
+          <textarea value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} rows={3} disabled={c.busy} placeholder={dictating ? "Ouvindo… fale agora" : "Digite ou use o microfone"} aria-label="Mensagem para o avatar" className="mt-3 w-full resize-none rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-sage-500 focus:ring-0 disabled:bg-cream" />
+          <div className="mt-2 flex gap-2">
+            <Button variant={dictating ? "danger" : "secondary"} onClick={toggleDictation} disabled={!speechSupported() || c.busy} title={speechSupported() ? "Ditado pelo navegador (pt-BR)" : "Reconhecimento de voz indisponível neste navegador"}>
+              {dictating ? <MicOff className="h-4 w-4" aria-hidden /> : <Mic className="h-4 w-4" aria-hidden />} {dictating ? "Parar" : "Ditar"}
+            </Button>
+            <Button onClick={send} disabled={!text.trim() || c.busy} loading={c.busy} className="flex-1"><Send className="h-4 w-4" aria-hidden /> Enviar ao agente</Button>
+          </div>
+          {lastBot && <div className="mt-3 rounded-xl border border-line bg-cream/60 p-3 text-xs text-ink"><p className="mb-1 font-medium text-sage-500">Última resposta do agente{lastBot.executionId ? ` · execução nº ${lastBot.executionId}` : ""}</p><p className="whitespace-pre-wrap">{lastBot.text}</p></div>}
+          {!speechSupported() && <p className="mt-2 text-[11px] text-ink-faint">Ditado disponível só no Chrome e Edge.</p>}
+        </Card>
+        <Card className="p-5">
+          <h2 className="text-xl">Como está montado</h2>
+          <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-ink">
+            <li>A interface pede um token de sessão a um workflow novo no n8n: <span className="font-medium">{BRIDGE_WORKFLOW}</span>. A chave da HeyGen/LiveAvatar fica só lá.</li>
+            <li>O SDK oficial do LiveAvatar abre o vídeo (WebRTC). O microfone do avatar fica mudo: ele não responde sozinho.</li>
+            <li>Sua mensagem segue o caminho normal do agente (regra crítica, Guardrails, aprovação). O avatar apenas repete a resposta, palavra por palavra.</li>
+          </ol>
+          <Alert tone="info" className="mt-3">O workflow original do agente não foi alterado. Aprovações continuam só pelos botões do chat.</Alert>
+        </Card>
+      </div>
     </div>
   );
 }
